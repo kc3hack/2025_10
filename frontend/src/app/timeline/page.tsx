@@ -1,5 +1,6 @@
 import React from 'react';
 import PostList from '@/components/PostList';
+import FloatingActionButton from '@/components/FloatingActionButton';
 
 export default function page() {
   // 投稿のサンプル
@@ -55,6 +56,7 @@ export default function page() {
       <div className='relative'>
         <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg'></PostList>
       </div>
+      <FloatingActionButton />
     </div>
   );
 }
