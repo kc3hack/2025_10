@@ -17,3 +17,5 @@ build:
 down:
 	docker compose down
 
+sb:
+	cd frontend && npm run storybook
