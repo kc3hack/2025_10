@@ -3,7 +3,7 @@ import { z } from '@hono/zod-openapi';
 // リクエストの型
 export const deletePostSchema = z.object({
   post_id: z.string().openapi({
-    example: '',
+    example: '8e21e23a-eb9f-11ef-9ce7-0242ac130002',
     description: '投稿id',
   }),
   user_icon: z.string().openapi({
@@ -15,6 +15,5 @@ export const deletePostSchema = z.object({
 
 // レスポンスの型
 export const deletePostResponseSchema = z.object({
-  statusCode: z.number(),
-  response: z.string(),
+  message: z.string(),
 });

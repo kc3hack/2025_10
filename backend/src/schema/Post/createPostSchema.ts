@@ -10,7 +10,7 @@ export const createPostSchema = z.object({
     example: '短歌です　短歌です短　短歌です　短歌です短　短歌です短',
     description: '短歌',
   }),
-  image_path: z.string().openapi({
+  image_path: z.string().optional().openapi({
     example: 'icon_path.png',
     description: '添付画像のパス',
   }),
@@ -27,6 +27,5 @@ export const createPostSchema = z.object({
 
 // レスポンスの型
 export const createPostResponseSchema = z.object({
-  statusCode: z.number(),
-  response: z.string(),
+  message: z.string(),
 });
