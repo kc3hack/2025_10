@@ -1,9 +1,10 @@
 // クライアントコンポーネント
 'use client';
 
+import React from 'react';
+import Image from 'next/image';
 import { PostTypes } from '@/types/postTypes';
 import { TankaTypes } from '@/types/tankaTypes';
-import React from 'react';
 
 // props の型定義
 type PostProps = {
@@ -25,6 +26,19 @@ export default function Post({ post, className }: PostProps) {
 
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
+      {/* プロフィールアイコン */}
+      <div className='flex mb-3 items-center'>
+        <Image
+          src={post.user.iconUrl !== '' ? post.user.iconUrl : '/iconDefault.png'}
+          height={40}
+          width={40}
+          alt='Icon'
+          className='rounded-full cursor-pointer hover:brightness-75'
+        />
+        <div className='ml-2 items-center cursor-pointer'>
+          <p className='text-lg hover:underline text-black'>{post.user.name}</p>
+        </div>
+      </div>
       {/* アイコン以外 */}
       <div
         className={`flex justify-center items-start relative w-full aspect-[4/3] overflow-hidden mx-auto ${

@@ -49,7 +49,7 @@ export default function page() {
   ];
 
   return (
-    <div className='relative min-h-screen bg-white'>
+    <div className='bg-white min-h-screen relative '>
       {/* 背景画像の設定 */}
       <div className="absolute inset-0 bg-[url('/bg.jpg')] bg-cover bg-center bg-fixed opacity-20" />
       <div className='relative'>
