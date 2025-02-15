@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { PostTypes } from '@/types/postTypes';
 import { TankaTypes } from '@/types/tankaTypes';
 import ImageModal from '@/components/ImageModal';
+import MiyabiButton from '@/components/MiyabiButton';
 import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
 
 // props の型定義
@@ -82,6 +83,7 @@ export default function Post({ post, className }: PostProps) {
         {formatDateKanji(post.date)}
         <div className='ml-auto flex items-center'>
           <p className='text-sm mr-2'>{post.miyabi.toLocaleString()}</p>
+          <MiyabiButton size='small' className='mr-0' />
         </div>
       </div>
       {/* 拡大表示が有効の場合，モーダルを表示する */}
