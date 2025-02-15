@@ -2,9 +2,11 @@
 'use client';
 
 import React from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { PostTypes } from '@/types/postTypes';
 import { TankaTypes } from '@/types/tankaTypes';
+import ImageModal from '@/components/ImageModal';
 
 // props の型定義
 type PostProps = {
@@ -23,6 +25,8 @@ export default function Post({ post, className }: PostProps) {
   const tanka = parseTanka(post.tanka);
   // 投稿に画像が含まれるか
   const hasImage = Boolean(post.imageUrl);
+  // 画像の拡大表示状態
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
@@ -44,6 +48,10 @@ export default function Post({ post, className }: PostProps) {
         className={`flex justify-center items-start relative w-full aspect-[4/3] overflow-hidden mx-auto ${
           hasImage ? 'cursor-pointer' : ''
         }`}
+        // 画像をクリックすると拡大表示を有効化
+        onClick={() => {
+          if (hasImage) setModalOpen(true);
+        }}
       >
         <Image
           src={post.imageUrl !== '' ? post.imageUrl : '/imageDefault.png'}
@@ -75,6 +83,8 @@ export default function Post({ post, className }: PostProps) {
           <p className='text-sm mr-2'>{post.miyabi.toLocaleString()}</p>
         </div>
       </div>
+      {/* 拡大表示が有効の場合，モーダルを表示する */}
+      {modalOpen && <ImageModal imageUrl={post.imageUrl} setModalOpen={setModalOpen} />}
     </div>
   );
 }
