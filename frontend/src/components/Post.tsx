@@ -8,6 +8,7 @@ import { PostTypes } from '@/types/postTypes';
 import { TankaTypes } from '@/types/tankaTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
+import DropDownButton from './DropDownButton';
 import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
 
 // props の型定義
@@ -44,6 +45,7 @@ const Post = ({ post, className }: PostProps) => {
         <div className='ml-2 items-center cursor-pointer'>
           <p className='text-lg hover:underline text-black'>{post.user.name}</p>
         </div>
+        <DropDownButton className='flex ml-auto w-7 h-7 items-center justify-center rounded-full bg-transparent hover:bg-black/25'></DropDownButton>
       </div>
       {/* アイコン以外 */}
       <div
