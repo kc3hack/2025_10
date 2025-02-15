@@ -45,6 +45,12 @@ export default function Post({ post, className }: PostProps) {
           hasImage ? 'cursor-pointer' : ''
         }`}
       >
+        <Image
+          src={post.imageUrl !== '' ? post.imageUrl : '/imageDefault.png'}
+          fill
+          alt='Image'
+          className={`object-cover rounded-xl ${hasImage ? 'filter brightness-50' : ''}`}
+        />
         <div className='absolute top-1/2 transform -translate-y-1/2 flex justify-center items-start'>
           <p
             className={`self-end font-shinryu ${
