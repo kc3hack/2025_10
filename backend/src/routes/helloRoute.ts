@@ -1,14 +1,9 @@
 import { z } from '@hono/zod-openapi';
 import { createRoute } from '@hono/zod-openapi';
 import { helloResponseSchema, helloSchema } from '../schema/helloSchema.js';
+import { errorResponseSchema } from '../middleware/errorHandler.js';
 
 type helloSchema = z.infer<typeof helloSchema>;
-
-const errorResponseSchema = z.object({
-  message: z.string(),
-  statusCode: z.number(),
-  error: z.string(),
-});
 
 export const helloRoute = createRoute({
   method: 'post',

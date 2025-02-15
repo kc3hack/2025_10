@@ -14,7 +14,16 @@ export const helloSchema = z.object({
 
 // レスポンスの型
 export const helloResponseSchema = z.object({
-  message: z.string(),
-  id: z.number(),
-  password: z.string(),
+  message: z.string().openapi({
+    example: 'Hello Hono!',
+    description: 'メッセージサンプル',
+  }),
+  id: z.number().openapi({
+    example: 1,
+    description: 'ユーザーIDをそのまま返す',
+  }),
+  password: z.string().openapi({
+    example: 'password',
+    description: 'パスワードをそのまま返す',
+  }),
 });
