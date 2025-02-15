@@ -20,14 +20,41 @@ type PostProps = {
 export default function Post({ post, className }: PostProps) {
   // 短歌をパースする
   const tanka = parseTanka(post.tanka);
+  // 投稿に画像が含まれるか
+  const hasImage = Boolean(post.imageUrl);
 
   return (
-    <div className={`${className} border-b border-gray-500 p-4 text-black`}>
-      <p
-        className={`inline-block align-top font-shinryu text-3xl whitespace-pre-line [writing-mode:vertical-rl] [text-orientation:upright]`}
+    <div className={`${className} border-b border-gray-500 p-4`}>
+      {/* アイコン以外 */}
+      <div
+        className={`flex justify-center items-start relative w-full aspect-[4/3] overflow-hidden mx-auto ${
+          hasImage ? 'cursor-pointer' : ''
+        }`}
       >
-        {tanka}
-      </p>
+        <div className='absolute top-1/2 transform -translate-y-1/2 flex justify-center items-start'>
+          <p
+            className={`self-end font-shinryu ${
+              hasImage ? 'text-white' : 'text-black'
+            } text-base mr-3 [writing-mode:vertical-rl] [text-orientation:upright]`}
+          >
+            {post.user.name}
+          </p>
+          <p
+            className={`inline-block align-top font-shinryu ${
+              hasImage ? 'text-white' : 'text-black'
+            } text-3xl whitespace-pre-line [writing-mode:vertical-rl] [text-orientation:upright]`}
+          >
+            {tanka}
+          </p>
+        </div>
+      </div>
+      <p className='w-full mt-3 whitespace-pre-line break-words text-black'>{post.original}</p>
+      <div className='flex mt-3 items-center text-black'>
+        {post.date.toLocaleString()}
+        <div className='ml-auto flex items-center'>
+          <p className='text-sm mr-2'>{post.miyabi.toLocaleString()}</p>
+        </div>
+      </div>
     </div>
   );
 }

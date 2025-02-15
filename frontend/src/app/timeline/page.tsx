@@ -52,7 +52,9 @@ export default function page() {
     <div className='relative min-h-screen bg-white'>
       {/* 背景画像の設定 */}
       <div className="absolute inset-0 bg-[url('/bg.jpg')] bg-cover bg-center bg-fixed opacity-20" />
-      <PostList posts={posts}></PostList>
+      <div className='relative'>
+        <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg'></PostList>
+      </div>
     </div>
   );
 }
