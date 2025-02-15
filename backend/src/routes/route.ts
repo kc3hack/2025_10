@@ -1,10 +1,8 @@
-import type { OpenAPIHono } from '@hono/zod-openapi';
+import { OpenAPIHono } from '@hono/zod-openapi';
 import { helloRoute } from './helloRoute.js';
 import helloWorldHandler from '../controllers/helloHandler.js';
 
-export function setupRoutes(app: OpenAPIHono) {
-  app.openapi(helloRoute, helloWorldHandler);
+const router = new OpenAPIHono();
 
-  // 他のルートをここに追加
-  // 例) app.openapi(helloRoute, helloWorldHandler);
-}
+export default router.openapi(helloRoute, helloWorldHandler);
+// .openapi(helloRoute, helloWorldHandler); //こういう感じで足していく

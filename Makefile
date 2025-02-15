@@ -7,3 +7,15 @@ back:
 install:
 	cd frontend && npm install
 	cd backend && npm install
+
+up:
+	docker compose up
+
+build:
+	docker compose up --build
+
+down:
+	docker compose down
+
+sb:
+	cd frontend && npm run storybook
