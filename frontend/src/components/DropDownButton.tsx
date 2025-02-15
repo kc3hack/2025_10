@@ -1,16 +1,31 @@
 // クライアントコンポーネント
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
+
+// 各項目の型定義
+export interface DropDownItem {
+  label: string;
+  onClick: () => void;
+  icon: ReactNode;
+  color?: string;
+  className?: string;
+}
 
 // props の型定義
 interface DropDownButtonProps {
   className?: string;
-  //onClick?: () => void;
+  items: DropDownItem[];
 }
 
-const DropDownButton = ({ className }: DropDownButtonProps) => {
+/**
+ * DropDownButtonとそのメニューを表示するコンポーネント
+ * @component DropDownButton
+ * @param {DropDownButtonProps} props - ボタンに関するプロパティを含むオブジェクト
+ * @return {JSX.Element} DropDownButtonを表示するReactコンポーネント
+ */
+const DropDownButton = ({ className, items }: DropDownButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -30,12 +45,6 @@ const DropDownButton = ({ className }: DropDownButtonProps) => {
     setIsOpen((prev) => !prev);
   };
 
-  const options = [
-    { label: '投稿を削除', onClick: () => console.log('aaa') },
-    { label: '投稿者をブロック', onClick: () => console.log('bbb') },
-    { label: '投稿者をミュート', onClick: () => console.log('ccc') },
-  ];
-
   return (
     <div className={`${className} relative inline-block`} ref={containerRef}>
       <button
@@ -45,14 +54,19 @@ const DropDownButton = ({ className }: DropDownButtonProps) => {
         <BsThreeDots size={20} />
       </button>
       {isOpen && (
-        <ul className='absolute top-3 right-0 w-64 h-fit mt-4 mx-3 p-0 border-2 rounded-xl bg-white shadow-md z-50'>
-          {options.map((option) => (
+        <ul className='absolute top-3 right-0 w-64 h-fit mt-4 mx-3 p-0 border-2 rounded-xl bg-white border-orange-200 shadow-md z-50'>
+          {items.map((item) => (
             <li
-              key={option.label}
-              className='mx-1 my-1 hover:bg-gray-400 hover:cursor-pointer'
-              onClick={option.onClick}
+              key={item.label}
+              onClick={item.onClick}
+              className={`flex mx-1 my-1 items-center hover:bg-gray-100 rounded-md hover:cursor-pointer ${
+                item.className ?? ''
+              }`}
             >
-              <a>{option.label}</a>
+              <span style={{ color: item.color ?? 'inherit' }}>{item.icon}</span>
+              <span style={{ color: item.color ?? 'inherit' }} className='ml-1'>
+                {item.label}
+              </span>
             </li>
           ))}
         </ul>

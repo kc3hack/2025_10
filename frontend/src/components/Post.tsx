@@ -8,8 +8,9 @@ import { PostTypes } from '@/types/postTypes';
 import { TankaTypes } from '@/types/tankaTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
-import DropDownButton from './DropDownButton';
+import DropDownButton, { DropDownItem } from './DropDownButton';
 import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
+import { MdDeleteForever } from 'react-icons/md';
 
 // props の型定義
 type PostProps = {
@@ -31,6 +32,16 @@ const Post = ({ post, className }: PostProps) => {
   // 画像の拡大表示状態
   const [modalOpen, setModalOpen] = useState(false);
 
+  const dropMenuItems: DropDownItem[] = [
+    {
+      label: '投稿を削除',
+      onClick: () => console.log('aaa'),
+      className: '',
+      icon: <MdDeleteForever />,
+      color: 'red',
+    },
+  ];
+
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
       {/* プロフィールアイコン */}
@@ -45,7 +56,7 @@ const Post = ({ post, className }: PostProps) => {
         <div className='ml-2 items-center cursor-pointer'>
           <p className='text-lg hover:underline text-black'>{post.user.name}</p>
         </div>
-        <DropDownButton className='flex ml-auto w-7 h-7 items-center justify-center rounded-full bg-transparent hover:bg-black/25'></DropDownButton>
+        <DropDownButton className='flex ml-auto' items={dropMenuItems}></DropDownButton>
       </div>
       {/* アイコン以外 */}
       <div
