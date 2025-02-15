@@ -10,7 +10,7 @@ interface SampleData {
   password: string;
 }
 
-const client = hc<AppType>('http://localhost:8080');
+const client = hc<AppType>('http://backend:8080');
 
 // サンプルデータを取得する関数
 const postSampleData = async (): Promise<SampleData | null> => {
