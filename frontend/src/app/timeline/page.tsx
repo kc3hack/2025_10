@@ -2,7 +2,7 @@ import React from 'react';
 import PostList from '@/components/PostList';
 import FloatingActionButton from '@/components/FloatingActionButton';
 
-export default function page() {
+const page = () => {
   // 投稿のサンプル
   const posts = [
     {
@@ -59,4 +59,6 @@ export default function page() {
       <FloatingActionButton />
     </div>
   );
-}
+};
+
+export default page;

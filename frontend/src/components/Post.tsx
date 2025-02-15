@@ -22,7 +22,7 @@ type PostProps = {
  * @param {PostProps} props - 投稿データを含むオブジェクト
  * @return {JSX.Element} 投稿を表示するReactコンポーネント
  */
-export default function Post({ post, className }: PostProps) {
+const Post = ({ post, className }: PostProps) => {
   // 短歌をパースする
   const tanka = parseTanka(post.tanka);
   // 投稿に画像が含まれるか
@@ -90,7 +90,7 @@ export default function Post({ post, className }: PostProps) {
       {modalOpen && <ImageModal imageUrl={post.imageUrl} setModalOpen={setModalOpen} />}
     </div>
   );
-}
+};
 
 /**
  * 短歌をパースして，改行と全角空白を追加する．
@@ -102,3 +102,5 @@ const parseTanka = (tanka: TankaTypes): string => {
   const parsedTanka: string = `${tanka.line1}\n\u3000${tanka.line2}\n\u3000\u3000${tanka.line3}\n${tanka.line4}\n\u3000${tanka.line5}`;
   return parsedTanka;
 };
+
+export default Post;
