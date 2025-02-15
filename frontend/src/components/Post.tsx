@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { PostTypes } from '@/types/postTypes';
 import { TankaTypes } from '@/types/tankaTypes';
 import ImageModal from '@/components/ImageModal';
+import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
 
 // props の型定義
 type PostProps = {
@@ -78,7 +79,7 @@ export default function Post({ post, className }: PostProps) {
       </div>
       <p className='w-full mt-3 whitespace-pre-line break-words text-black'>{post.original}</p>
       <div className='flex mt-3 items-center text-black'>
-        {post.date.toLocaleString()}
+        {formatDateKanji(post.date)}
         <div className='ml-auto flex items-center'>
           <p className='text-sm mr-2'>{post.miyabi.toLocaleString()}</p>
         </div>
