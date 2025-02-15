@@ -3,12 +3,10 @@ import { swaggerUI } from '@hono/swagger-ui';
 import { serve } from '@hono/node-server';
 import { cors } from 'hono/cors';
 import { env } from './config/env.js';
-import { setupRoutes } from './routes/route.js';
+import router from './routes/route.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
-const app = new OpenAPIHono();
-
-setupRoutes(app);
+const app = new OpenAPIHono().route('/', router);
 
 // CORS設定
 const frontendUrl = env.FRONTEND_URL;
