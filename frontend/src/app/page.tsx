@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-      <h1>Tankalizer</h1>
+      <h1 className='font-shinryu'>Tankalizer</h1>
     </div>
   );
 }

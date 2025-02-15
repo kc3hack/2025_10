@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Noto_Serif_JP } from 'next/font/google';
+import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+
+import TypekitLoader from '@/loader/TypekitLoader';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -9,11 +11,6 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
-const notoSerifJP = Noto_Serif_JP({
-  variable: '--font-noto-serif-jp',
   subsets: ['latin'],
 });
 
@@ -29,11 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ja'>
-      <body
-        className={`${notoSerifJP.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <TypekitLoader />
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
     </html>
   );
 }
