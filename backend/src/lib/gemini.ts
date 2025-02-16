@@ -2,6 +2,13 @@ import type { Context } from 'hono';
 import { env } from '../config/env.js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
+const getGeminiTextKari = async (originalText: string): Promise<string[]> => {
+  // Geminiで短歌生成
+
+  // ["短歌の1行目", "短歌の2行目", "短歌の3行目", "短歌の4行目", "短歌の5行目"]
+  return [];
+};
+
 const getGeminiText = async (c: Context) => {
   try {
     // POSTメソッド以外は拒否
