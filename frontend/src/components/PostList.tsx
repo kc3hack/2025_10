@@ -5,10 +5,10 @@ import { PostTypes } from '@/types/postTypes';
 import Post from '@/components/Post';
 
 // props の型定義
-type PostListProps = {
+interface PostListProps {
   posts: PostTypes[];
   className?: string;
-};
+}
 
 /**
  * 投稿のリストを表示するコンポーネント

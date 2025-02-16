@@ -13,10 +13,10 @@ import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
 
 // props の型定義
-type PostProps = {
+interface PostProps {
   post: PostTypes;
   className?: string;
-};
+}
 
 /**
  * 単一の投稿を表示するコンポーネント

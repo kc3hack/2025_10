@@ -4,10 +4,10 @@
 import Image from 'next/image';
 
 // props の型定義
-type ImageModalProps = {
+interface ImageModalProps {
   imageUrl: string;
   setModalOpen: (open: boolean) => void;
-};
+}
 
 /**
  * 画像のモーダルを表示するコンポーネント
