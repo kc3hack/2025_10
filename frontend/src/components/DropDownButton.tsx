@@ -48,7 +48,7 @@ const DropDownButton = ({ className, items }: DropDownButtonProps) => {
   return (
     <div className={`${className} relative inline-block`} ref={containerRef}>
       <button
-        className='flex mx-auto w-7 h-7 items-center justify-center rounded-full bg-transparent hover:bg-black/25'
+        className='flex mx-auto w-7 h-7 items-center justify-center rounded-full bg-transparent hover:bg-black/5'
         onClick={() => toggleDropDown()}
       >
         <BsThreeDots size={20} />

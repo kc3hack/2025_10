@@ -102,10 +102,12 @@ const Timeline = () => {
 
       {/* タイムライン */}
       <div className='pt-12'>
-        <div className='fixed flex w-full justify-center items-center'>
-          <SideMenu user={user} className='w-fit pt-5 transform -translate-x-96 hidden lg:block' />
-        </div>
-        <div>
+        <div className='relative max-w-lg mx-auto'>
+          <SideMenu
+            user={user}
+            className='hidden lg:block absolute top-5'
+            style={{ left: '-12rem' }}
+          />
           <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' />
           {isLoading && <p className='text-center py-3'>投稿を取得中...</p>}
           <div ref={targetRef} className='h-px' />
