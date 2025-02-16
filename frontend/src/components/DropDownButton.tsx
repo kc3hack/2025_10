@@ -54,11 +54,14 @@ const DropDownButton = ({ className, items }: DropDownButtonProps) => {
         <BsThreeDots size={20} />
       </button>
       {isOpen && (
-        <ul className='absolute top-3 right-0 w-64 h-fit mt-4 mx-3 p-0 border-2 rounded-xl bg-white border-orange-200 shadow-md z-50'>
+        <ul className='absolute top-3 right-0 w-64 h-fit mt-4 mx-3 p-0 border-2 rounded-xl bg-white border-gray-200 shadow-md z-50'>
           {items.map((item) => (
             <li
               key={item.label}
-              onClick={item.onClick}
+              onClick={() => {
+                item.onClick();
+                setIsOpen(false);
+              }}
               className={`flex mx-1 my-1 items-center hover:bg-gray-100 rounded-md hover:cursor-pointer ${
                 item.className ?? ''
               }`}
