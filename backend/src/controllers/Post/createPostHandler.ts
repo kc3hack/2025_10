@@ -26,6 +26,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     return c.json(
       {
         message: '投稿しました．',
+        tanka: 'tanka',
       },
       200
     );

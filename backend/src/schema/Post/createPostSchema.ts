@@ -28,4 +28,5 @@ export const createPostSchema = z.object({
 // レスポンスの型
 export const createPostResponseSchema = z.object({
   message: z.string(),
+  tanka: z.string(),
 });
