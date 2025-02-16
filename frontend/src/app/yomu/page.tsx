@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './page.module.scss';
@@ -42,6 +42,7 @@ const Page = (): React.ReactNode => {
  */
 const SignedInPage = (): React.ReactNode => {
   const [text, setText] = useState('');
+  const [canPost, setCanPost] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const session = useSession();
 
@@ -53,7 +54,17 @@ const SignedInPage = (): React.ReactNode => {
     e.target.style.height = `${e.target.scrollHeight}px`;
 
     setText(e.target.value);
+    setCanPost(e.target.value.length >= MIN_LENGTH && e.target.value.length <= MAX_LENGTH);
   };
+
+  const yesCallback = useCallback(() => {
+    setIsDialogOpen(false);
+    router.push('/timeline'); // 「はい」を押したらタイムラインに戻る
+  }, [router]);
+
+  const noCallback = useCallback(() => {
+    setIsDialogOpen(false);
+  }, []);
 
   return (
     <div className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
@@ -89,28 +100,20 @@ const SignedInPage = (): React.ReactNode => {
           ></textarea>
         </div>
         <button
-          className={`absolute bottom-10 left-1/2 -translate-x-1/2 z-30 w-16 h-16 border-2 border-transparent shadow-lg bg-orange-400 hover:bg-orange-500 text-4xl font-bold text-white font-shinryu rounded-full`}
+          className={`absolute bottom-10 left-1/2 -translate-x-1/2 z-30 w-16 h-16 border-2 border-transparent shadow-lg bg-orange-400 hover:bg-orange-500 text-4xl font-bold text-white font-shinryu rounded-full ${
+            canPost ? '' : 'opacity-50'
+          }`}
+          disabled={!canPost}
         >
           詠
         </button>
-        <p
-          className={
-            text.length < MIN_LENGTH || text.length > MAX_LENGTH ? 'text-red-500' : 'text-green-500'
-          }
-        >
-          {text.length}
-        </p>
+        <p className={canPost ? 'text-green-500' : 'text-red-500'}>{text.length}</p>
         <Dialog
           isOpen={isDialogOpen}
           description='ページを離れると下書きは保存されません。よろしいですか？'
           isOnlyOK={false}
-          yesCallback={() => {
-            setIsDialogOpen(false);
-            router.push('/timeline'); // 「はい」を押したらタイムラインに戻る
-          }}
-          noCallback={() => {
-            setIsDialogOpen(false);
-          }}
+          yesCallback={yesCallback}
+          noCallback={noCallback}
           yesText='OK'
           noText='キャンセル'
         />
