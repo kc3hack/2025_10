@@ -22,9 +22,9 @@ app.use(
 app.doc('/docs/json', {
   openapi: '3.1.0',
   info: {
-    title: 'My API',
+    title: 'Tankalizer API',
     version: '1.0.0',
-    description: 'My API description',
+    description: 'Tankalizer API description',
   },
 });
 
