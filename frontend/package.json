@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.13.0",
+    "hono": "^4.7.1",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
