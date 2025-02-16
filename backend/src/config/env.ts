@@ -7,6 +7,7 @@ dotenv.config();
 const envSchema = z.object({
   FRONTEND_URL: z.string().url(),
   PORT: z.coerce.number().optional(),
+  GEMINI_API_KEY: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
