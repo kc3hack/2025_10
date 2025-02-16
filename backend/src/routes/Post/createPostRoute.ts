@@ -13,6 +13,7 @@ const errorResponseSchema = z.object({
 export const createPostRoute = createRoute({
   method: 'post',
   path: '/post',
+  tags: ['Post'],
   request: {
     body: {
       required: true,
