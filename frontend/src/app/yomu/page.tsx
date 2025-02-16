@@ -7,6 +7,9 @@ import styles from './page.module.scss';
 import { VscClose } from 'react-icons/vsc';
 import Dialog from '@/components/Dialog';
 
+const MAX_LENGTH = 140; // 最大文字数
+const MIN_LENGTH = 40; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
+
 const Page = () => {
   const [text, setText] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -33,7 +36,7 @@ const Page = () => {
       <div className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
         <div className='max-w-[40rem] h-[30rem] bg-white rounded-lg shadow-lg p-8 mx-auto w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2'>
           <div
-            className='block size-8 hover:opacity-70 mb-4'
+            className='block size-8 hover:opacity-70 mb-4 cursor-pointer'
             onClick={() => {
               if (text.length > 0) {
                 // 下書きがあるときは警告を出す
@@ -68,7 +71,13 @@ const Page = () => {
           >
             詠
           </button>
-          <p className={text.length < 40 || text.length > 140 ? 'text-red-500' : 'text-green-500'}>
+          <p
+            className={
+              text.length < MIN_LENGTH || text.length > MAX_LENGTH
+                ? 'text-red-500'
+                : 'text-green-500'
+            }
+          >
             {text.length}
           </p>
           <Dialog
