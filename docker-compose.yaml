@@ -1,3 +1,6 @@
+volumes:
+  node_modules:
+
 services:
   frontend:
     build:
@@ -8,7 +11,7 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
-      - /app/node_modules
+      - node_modules:/app/node_modules
     depends_on:
       - backend
     env_file:
@@ -22,6 +25,6 @@ services:
       - "8080:8080"
     volumes:
       - ./backend:/app
-      - /app/node_modules
+      - node_modules:/app/node_modules
     env_file:
       - ./backend/.env
