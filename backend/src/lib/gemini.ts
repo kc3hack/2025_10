@@ -1,5 +1,6 @@
 import type { Context } from 'hono';
 import { env } from '../config/env.js';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const getGeminiText = async (c: Context) => {
   try {
@@ -23,8 +24,6 @@ const getGeminiText = async (c: Context) => {
     if (!prompt) {
       return c.json({ error: 'Prompt is required' }, 400);
     }
-
-    const { GoogleGenerativeAI } = await import('@google/generative-ai');
 
     const apiKey = env.GEMINI_API_KEY;
     if (!apiKey) {
