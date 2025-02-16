@@ -11,6 +11,10 @@ import { createMiyabiRoute } from './Miyabi/createMiyabiRoute.js';
 import createMiyabiHandler from '../controllers/Miyabi/createMiyabiHandler.js';
 import { deleteMiyabiRoute } from './Miyabi/deleteMiyabiRoute.js';
 import deleteMiyabiHandler from '../controllers/Miyabi/deleteMiyabiHandler.js';
+import { sampleS3UploadRoute } from './sampleS3Route.js';
+import sampleS3UploadHandler from '../controllers/sampleS3UploadHandler.js';
+import { sampleS3DownloadRoute } from './sampleS3Route.js';
+import sampleS3DownloadHandler from '../controllers/sampleS3DownloadHandler.js';
 
 const router = new OpenAPIHono();
 
@@ -21,3 +25,6 @@ export default router
   .openapi(getPostRoute, getPostHandler)
   .openapi(createMiyabiRoute, createMiyabiHandler)
   .openapi(deleteMiyabiRoute, deleteMiyabiHandler);
+  .openapi(sampleS3UploadRoute, sampleS3UploadHandler)
+  .openapi(sampleS3DownloadRoute, sampleS3DownloadHandler);
+// .openapi(helloRoute, helloWorldHandler); //こういう感じで足していく

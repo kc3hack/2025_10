@@ -13,6 +13,9 @@ const envSchema = z.object({
   RDB_NAME: z.string(),
   POSTS_TABLE_NAME: z.string(),
   MIYABI_TABLE_NAME: z.string(),
+  S3_ACCESS_KEY_ID: z.string(),
+  S3_SECRET_ACCESS_KEY: z.string(),
+  S3_BUCKET_NAME: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
