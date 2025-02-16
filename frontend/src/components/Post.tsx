@@ -8,9 +8,10 @@ import { PostTypes } from '@/types/postTypes';
 import { TankaTypes } from '@/types/tankaTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
-import DropDownButton, { DropDownItem } from './DropDownButton';
+import DropDownButton from './DropDownButton';
 import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
+import ConfirmationDialog from './ConfirmationDialog';
 
 // props の型定義
 interface PostProps {
@@ -31,16 +32,8 @@ const Post = ({ post, className }: PostProps) => {
   const hasImage = Boolean(post.imageUrl);
   // 画像の拡大表示状態
   const [modalOpen, setModalOpen] = useState(false);
-
-  const dropMenuItems: DropDownItem[] = [
-    {
-      label: '投稿を削除',
-      onClick: () => console.log('aaa'),
-      className: '',
-      icon: <MdDeleteForever />,
-      color: 'red',
-    },
-  ];
+  // 削除確認ダイアログの表示状態
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
@@ -56,7 +49,18 @@ const Post = ({ post, className }: PostProps) => {
         <div className='ml-2 items-center cursor-pointer'>
           <p className='text-lg hover:underline text-black'>{post.user.name}</p>
         </div>
-        <DropDownButton className='flex ml-auto' items={dropMenuItems}></DropDownButton>
+        <DropDownButton
+          className='flex ml-auto'
+          items={[
+            {
+              label: '投稿を削除',
+              onClick: () => setDialogOpen(true),
+              className: '',
+              icon: <MdDeleteForever />,
+              color: 'red',
+            },
+          ]}
+        ></DropDownButton>
       </div>
       {/* アイコン以外 */}
       <div
@@ -101,6 +105,15 @@ const Post = ({ post, className }: PostProps) => {
       </div>
       {/* 拡大表示が有効の場合，モーダルを表示する */}
       {modalOpen && <ImageModal imageUrl={post.imageUrl} setModalOpen={setModalOpen} />}
+      {/* ダイアログ表示が有効の場合，ダイアログを表示する */}
+      {dialogOpen && (
+        <ConfirmationDialog
+          message='この投稿を削除しますか？'
+          option1={{ label: 'いいえ', onClick: () => console.log('いいえ') }}
+          option2={{ label: 'はい', color: 'red', onClick: () => console.log('はい') }}
+          setDialogOpen={setDialogOpen}
+        />
+      )}
     </div>
   );
 };
