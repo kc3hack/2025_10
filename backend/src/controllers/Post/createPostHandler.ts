@@ -4,6 +4,7 @@ import db from '../db.js';
 import { createPostSchema } from '../../schema/Post/createPostSchema.js';
 import type { createPostRoute } from '../../routes/Post/createPostRoute.js';
 import { env } from '../../config/env.js';
+import generateTanka from '../../lib/gemini.js';
 
 type createPostSchema = z.infer<typeof createPostSchema>;
 
@@ -12,11 +13,14 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     // 受け取ったjsonを各変数に格納
     const {
       original,
-      tanka,
       image_path = null,
       user_name,
       user_icon,
     } = await c.req.json<createPostSchema>();
+
+    const tankaArray = await generateTanka(original);
+    const tanka = JSON.stringify(tankaArray);
+    console.log(tanka);
 
     // ここからDBのpostテーブルへ情報登録
     const sql = `insert into ${env.POSTS_TABLE_NAME} (original, tanka, image_path, user_name, user_icon) values (:original, :tanka, :image_path, :user_name, :user_icon)`;
@@ -26,7 +30,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     return c.json(
       {
         message: '投稿しました．',
-        tanka: 'tanka',
+        tanka: tankaArray,
       },
       200
     );

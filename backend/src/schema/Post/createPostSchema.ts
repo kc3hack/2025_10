@@ -6,10 +6,6 @@ export const createPostSchema = z.object({
     example: 'これは投稿の原文です．今日からハッカソンの開発期間がスタートしました．',
     description: '原文',
   }),
-  tanka: z.string().openapi({
-    example: '短歌です　短歌です短　短歌です　短歌です短　短歌です短',
-    description: '短歌',
-  }),
   image_path: z.string().optional().openapi({
     example: 'icon_path.png',
     description: '添付画像のパス',
@@ -28,5 +24,5 @@ export const createPostSchema = z.object({
 // レスポンスの型
 export const createPostResponseSchema = z.object({
   message: z.string(),
-  tanka: z.string(),
+  tanka: z.array(z.string()),
 });
