@@ -31,23 +31,23 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
           "properties": {
             "line1": {
               "type": "string",
-              "description": "短歌の1行目, 5文字程度"
+              "description": "短歌の1句目, 5文字程度"
             },
             "line2": {
               "type": "string",
-              "description": "短歌の2行目, 7文字程度"
+              "description": "短歌の2句目, 7文字程度"
             },
             "line3": {
               "type": "string",
-              "description": "短歌の3行目, 5文字程度"
+              "description": "短歌の3句目, 5文字程度"
             },
             "line4": {
               "type": "string",
-              "description": "短歌の4行目, 7文字程度"
+              "description": "短歌の4句目, 7文字程度"
             },
             "line5": {
               "type": "string",
-              "description": "短歌の5行目, 7文字程度"
+              "description": "短歌の5句目, 7文字程度"
             }
           },
           "required": ["line1", "line2", "line3", "line4", "line5"]
