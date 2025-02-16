@@ -12,6 +12,7 @@ type sampleUploadSchema = z.infer<typeof sampleUploadSchema>;
 export const sampleS3UploadRoute = createRoute({
   method: 'post',
   path: '/s3/upload',
+  tags: ['sample'],
   request: {
     body: {
       required: true,
@@ -39,6 +40,7 @@ type sampleDownloadSchema = z.infer<typeof sampleDownloadSchema>;
 export const sampleS3DownloadRoute = createRoute({
   method: 'post',
   path: '/s3/download',
+  tags: ['sample'],
   request: {
     body: {
       required: true,
