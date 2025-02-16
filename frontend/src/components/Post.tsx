@@ -82,14 +82,14 @@ const Post = ({ post, className }: PostProps) => {
           <p
             className={`self-end font-shinryu ${
               hasImage ? 'text-white' : 'text-black'
-            } text-base mr-3 [writing-mode:vertical-rl] [text-orientation:upright]`}
+            } text-base lg:text-lg mr-3 [writing-mode:vertical-rl] [text-orientation:upright]`}
           >
             {post.user.name}
           </p>
           <p
             className={`inline-block align-top font-shinryu ${
               hasImage ? 'text-white' : 'text-black'
-            } text-3xl whitespace-pre-line [writing-mode:vertical-rl] [text-orientation:upright]`}
+            } text-2xl lg:text-3xl whitespace-pre-line [writing-mode:vertical-rl] [text-orientation:upright]`}
           >
             {tanka}
           </p>
