@@ -26,7 +26,7 @@ const createMiyabiHandler: RouteHandler<typeof createMiyabiRoute, {}> = async (c
       );
     }
 
-    // ここからDBのpostテーブルへ情報登録
+    // ここからDBのmiyabiテーブルへ追加処理
     const sql = `insert into ${env.MIYABI_TABLE_NAME} (user_icon, post_id) values (:user_icon, :post_id)`;
     await db.query(sql, { user_icon, post_id });
 

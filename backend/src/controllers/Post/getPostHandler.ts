@@ -13,7 +13,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
     const latest_post_id = await db.query(
       `SELECT id FROM ${env.POSTS_TABLE_NAME} ORDER BY created_at DESC LIMIT 1;`
     );
-    // 受け取ったjsonを各変数に格納
+    // 受け取ったjsonを各変数に格納 (post_idが指定なしなら，最新の投稿idになる)
     const {
       limit,
       my_icon,
@@ -36,6 +36,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
     }
 
     // 入力のpost_idがundifinedなら最新の投稿から取得，そうでなければその投稿よりも古いものを取得
+    // sql文中の比較条件切り替え
     let symbol;
     if (post_id == latest_post_id[0].id) {
       symbol = '<=';
@@ -52,7 +53,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
     }
 
     let results;
-    // ここからDBのpostテーブルへ情報登録
+    // ここからDBのpostテーブルから情報取得
     const sql = `
       SELECT 
         post.id, 
@@ -76,8 +77,9 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       ORDER BY post.created_at DESC 
       LIMIT :limit
     `;
-    console.log(user_icon);
+
     results = await db.query(sql, { limit, my_icon, post_id, user_icon });
+    // is_miyabiをtrue or falseで返すための処理
     results = results.map((row: any) => ({
       ...row,
       is_miyabi: row.is_miyabi ? true : false,
