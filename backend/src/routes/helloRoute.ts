@@ -8,6 +8,7 @@ type helloSchema = z.infer<typeof helloSchema>;
 export const helloRoute = createRoute({
   method: 'post',
   path: '/hello',
+  tags: ['sample'],
   request: {
     body: {
       required: true,
