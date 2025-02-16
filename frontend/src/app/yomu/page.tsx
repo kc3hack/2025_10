@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './page.module.scss';
 import { VscClose } from 'react-icons/vsc';
-import Link from 'next/link';
+import Dialog from '@/components/Dialog';
 
 const Page = () => {
   const [text, setText] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const router = useRouter();
 
   // テキストエリアの高さを自動で調整する
   const resizeTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -28,9 +32,20 @@ const Page = () => {
 
       <div className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
         <div className='max-w-[40rem] h-[30rem] bg-white rounded-lg shadow-lg p-8 mx-auto w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2'>
-          <Link href='/timeline' className='block size-8 hover:opacity-70 mb-4'>
+          <div
+            className='block size-8 hover:opacity-70 mb-4'
+            onClick={() => {
+              if (text.length > 0) {
+                // 下書きがあるときは警告を出す
+                setIsDialogOpen(true);
+              } else {
+                // 無いときはそのままタイムラインに戻る
+                router.push('/timeline');
+              }
+            }}
+          >
             <VscClose className='size-full' />
-          </Link>
+          </div>
           <div className='flex items-center gap-4'>
             <Image
               // src={post.user.iconUrl !== '' ? post.user.iconUrl : '/iconDefault.png'}
@@ -56,6 +71,20 @@ const Page = () => {
           <p className={text.length < 40 || text.length > 140 ? 'text-red-500' : 'text-green-500'}>
             {text.length}
           </p>
+          <Dialog
+            isOpen={isDialogOpen}
+            description='ページを離れると下書きは保存されません。よろしいですか？'
+            isOnlyOK={false}
+            yesCallback={() => {
+              setIsDialogOpen(false);
+              router.push('/timeline'); // 「はい」を押したらタイムラインに戻る
+            }}
+            noCallback={() => {
+              setIsDialogOpen(false);
+            }}
+            yesText='OK'
+            noText='キャンセル'
+          />
         </div>
       </div>
     </div>
