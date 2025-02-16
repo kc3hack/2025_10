@@ -10,17 +10,38 @@ type createPostSchema = z.infer<typeof createPostSchema>;
 
 const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Context) => {
   try {
-    // 受け取ったjsonを各変数に格納
-    const {
-      original,
-      image_path = null,
-      user_name,
-      user_icon,
-    } = await c.req.json<createPostSchema>();
+    // 受け取ったデータを各変数に格納
+    const formData = await c.req.formData();
+    const originalValue = formData.get('original');
+    const image = formData.get('image') || null;
+    const user_name = formData.get('user_name');
+    const user_icon = formData.get('user_icon');
+
+    if (!originalValue || typeof originalValue !== 'string') {
+      console.log('if');
+      return c.json(
+        {
+          message: 'originalはstringである必要があります．',
+          statusCode: 400,
+          error: 'Bad Request',
+        },
+        400
+      );
+    }
+    const original = originalValue;
+
+    //console.log(image);
 
     const tankaArray = await generateTanka(original);
     const tanka = JSON.stringify(tankaArray);
+
+    const image_path = 'test.png';
+
+    console.log(original);
     console.log(tanka);
+    console.log(image);
+    console.log(user_name);
+    console.log(user_icon);
 
     // ここからDBのpostテーブルへ情報登録
     const sql = `insert into ${env.POSTS_TABLE_NAME} (original, tanka, image_path, user_name, user_icon) values (:original, :tanka, :image_path, :user_name, :user_icon)`;
