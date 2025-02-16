@@ -43,7 +43,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       symbol = '<';
     }
 
-    // user_iconがnullなら
+    // user_iconがnullなら追加条件なし，nullでないならユーザを限定する条件を追加
     let user_query;
     if (user_icon == null) {
       user_query = '';
@@ -78,6 +78,10 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
     `;
     console.log(user_icon);
     results = await db.query(sql, { limit, my_icon, post_id, user_icon });
+    results = results.map((row: any) => ({
+      ...row,
+      is_miyabi: row.is_miyabi ? true : false,
+    }));
 
     // レスポンス
     return c.json(
