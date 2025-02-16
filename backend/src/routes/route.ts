@@ -24,7 +24,7 @@ export default router
   .openapi(deletePostRoute, deletePostHandler)
   .openapi(getPostRoute, getPostHandler)
   .openapi(createMiyabiRoute, createMiyabiHandler)
-  .openapi(deleteMiyabiRoute, deleteMiyabiHandler);
+  .openapi(deleteMiyabiRoute, deleteMiyabiHandler)
   .openapi(sampleS3UploadRoute, sampleS3UploadHandler)
   .openapi(sampleS3DownloadRoute, sampleS3DownloadHandler);
 // .openapi(helloRoute, helloWorldHandler); //こういう感じで足していく
