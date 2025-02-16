@@ -1,0 +1,17 @@
+# mainブランチにはdevelopブランチからのPRのみを許可する
+
+name: check branch
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check_branch:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR is from develop
+        if: github.event.pull_request.head.ref != 'develop'
+        run: exit 1
