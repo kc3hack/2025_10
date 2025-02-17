@@ -10,7 +10,7 @@ export const errorResponseSchema = z.object({
 
 export const errorHandler = (err: Error, c: Context) => {
   const errorResponse: ErrorResponse = {
-    message: 'Internal Server Error',
+    message: 'Internal Server Error: ' + err.message,
     statusCode: 500,
     error: 'InternalServerError',
   };

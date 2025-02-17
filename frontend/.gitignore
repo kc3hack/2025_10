@@ -42,3 +42,5 @@ yarn-error.log*
 next-env.d.ts
 
 *storybook.log
+
+/public/iconDefault.png
