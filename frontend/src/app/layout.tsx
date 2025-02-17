@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Noto_Serif_JP } from 'next/font/google';
 import './globals.css';
+import { SessionProvider } from 'next-auth/react';
 
 import TypekitLoader from '@/loader/TypekitLoader';
 
@@ -32,11 +33,13 @@ export default function RootLayout({
   return (
     <html lang='ja'>
       <TypekitLoader />
-      <body
-        className={`${notoSerifJP.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <SessionProvider>
+        <body
+          className={`${notoSerifJP.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+        </body>
+      </SessionProvider>
     </html>
   );
 }

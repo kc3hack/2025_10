@@ -16,6 +16,7 @@ const errorResponseSchema = z.object({
 export const createMiyabiRoute = createRoute({
   method: 'post',
   path: '/miyabi',
+  tags: ['Miyabi'],
   request: {
     body: {
       required: true,
