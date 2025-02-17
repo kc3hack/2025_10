@@ -8,6 +8,7 @@ import { VscClose } from 'react-icons/vsc';
 import Dialog from '@/components/Dialog';
 import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { judgeImage } from '@/lib/JudgeImage';
 
 const MAX_LENGTH = 140; // 最大文字数
 const MIN_LENGTH = 40; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
@@ -37,6 +38,11 @@ const Page = (): React.ReactNode => {
   );
 };
 
+interface UploadedFile {
+  file: File;
+  filePath: string;
+}
+
 /**
  * ログインしている時に表示されるページ
  */
@@ -45,14 +51,13 @@ const SignedInPage = (): React.ReactNode => {
   const [canPost, setCanPost] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const session = useSession();
+  const [file, setFile] = useState<UploadedFile | null>(null);
+
+  const [isDragActive, setIsDragActive] = useState(false);
 
   const router = useRouter();
 
-  // テキストエリアの高さを自動で調整する
-  const resizeTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.target.style.height = 'auto';
-    e.target.style.height = `${e.target.scrollHeight}px`;
-
+  const onChangeTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
     setCanPost(e.target.value.length >= MIN_LENGTH && e.target.value.length <= MAX_LENGTH);
   };
@@ -66,13 +71,37 @@ const SignedInPage = (): React.ReactNode => {
     setIsDialogOpen(false);
   }, []);
 
+  const onDrop = (e: React.DragEvent<HTMLTextAreaElement>): void => {
+    e.preventDefault();
+    if (e.dataTransfer.files.length !== 1) {
+      console.log('ファイルは1つだけアップロードしてください');
+      return;
+    }
+
+    const file = e.dataTransfer.files[0];
+
+    if (!judgeImage(file)) {
+      console.log('画像ファイルをアップロードしてください');
+      return;
+    }
+
+    const render = new FileReader();
+    render.readAsDataURL(file);
+    render.onload = () => {
+      setFile({ file, filePath: render.result as string });
+      console.log('upload');
+    };
+  };
+
   return (
     <div className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
-      <div className='max-w-[40rem] h-[30rem] bg-white rounded-lg shadow-lg p-8 mx-auto w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2'>
+      <div
+        className={`max-w-[40rem] min-h-[30rem] bg-white rounded-lg shadow-lg p-8 mx-auto w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2`}
+      >
         <div
           className='block size-8 hover:opacity-70 mb-4 cursor-pointer'
           onClick={() => {
-            if (text.length > 0) {
+            if (text.length > 0 || file) {
               // 下書きがあるときは警告を出す
               setIsDialogOpen(true);
             } else {
@@ -83,24 +112,42 @@ const SignedInPage = (): React.ReactNode => {
         >
           <VscClose className='size-full' />
         </div>
-        <div className='flex items-center gap-4'>
+        <div className='flex items-start gap-4'>
           <Image
             src={session.data?.user?.image ?? ''}
             height={50}
             width={50}
             alt='Icon'
-            className='rounded-full -mt-5'
+            className='rounded-full'
           />
           <textarea
-            className='w-full resize-none overflow-hidden p-3 outline-none md:text-lg'
+            className={`w-full resize-none overflow-hidden p-3 outline-none md:text-lg border-2 border-dotted rounded-lg ${
+              isDragActive ? 'border-red-400' : 'border-opacity-0 border-gray-300'
+            } ${file ? '' : 'h-[20rem]'}`}
             placeholder='いま何してんの？'
             onChange={(e) => {
-              resizeTextArea(e);
+              onChangeTextArea(e);
+            }}
+            onDrop={(e) => {
+              onDrop(e);
+              setIsDragActive(false);
+            }}
+            onDragEnter={() => {
+              setIsDragActive(true);
+            }}
+            onDragLeave={() => {
+              setIsDragActive(false);
             }}
           ></textarea>
         </div>
+        {file && (
+          <div className='mx-auto relative w-1/2 aspect-square mb-4'>
+            <Image src={file.filePath} alt='upload' fill className='object-contain rounded' />
+            <p className='absolute bottom-0 left-0'>{file.file.name}</p>
+          </div>
+        )}
         <button
-          className={`absolute bottom-10 left-1/2 -translate-x-1/2 z-30 w-16 h-16 border-2 border-transparent shadow-lg bg-orange-400 hover:bg-orange-500 text-4xl font-bold text-white font-shinryu rounded-full ${
+          className={`block mx-auto w-16 h-16 border-2 border-transparent shadow-lg bg-orange-400 hover:bg-orange-500 text-4xl font-bold text-white font-shinryu rounded-full ${
             canPost ? '' : 'opacity-50'
           }`}
           disabled={!canPost}
