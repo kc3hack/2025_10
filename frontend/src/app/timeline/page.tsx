@@ -22,7 +22,7 @@ const Timeline = () => {
   // これ以上取得できる投稿があるかのフラグ
   const [hasMore, setHasMore] = useState(true);
   // ログインしているユーザを保持するState
-  const [user, setUser] = useState({ name: 'Name', bio: 'bio', iconUrl: '/iconDefault.png' });
+  const [user] = useState({ name: 'Name', bio: 'bio', iconUrl: '/iconDefault.png' });
   // ハンバーガーメニューの開閉状態
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 

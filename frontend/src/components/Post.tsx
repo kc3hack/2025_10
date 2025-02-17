@@ -11,7 +11,7 @@ import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
 import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
-import ConfirmationDialog from './ConfirmationDialog';
+import Dialog from './Dialog';
 
 // props の型定義
 interface PostProps {
@@ -107,11 +107,20 @@ const Post = ({ post, className }: PostProps) => {
       {modalOpen && <ImageModal imageUrl={post.imageUrl} setModalOpen={setModalOpen} />}
       {/* ダイアログ表示が有効の場合，ダイアログを表示する */}
       {dialogOpen && (
-        <ConfirmationDialog
-          message='この投稿を削除しますか？'
-          option1={{ label: 'いいえ', onClick: () => console.log('いいえ') }}
-          option2={{ label: 'はい', color: 'red', onClick: () => console.log('はい') }}
-          setDialogOpen={setDialogOpen}
+        <Dialog
+          isOpen={dialogOpen}
+          title='投稿の削除'
+          description='この投稿を削除しますか？'
+          yesCallback={() => {
+            console.log('はい');
+            setDialogOpen(false);
+          }}
+          noCallback={() => {
+            console.log('いいえ');
+            setDialogOpen(false);
+          }}
+          yesText='はい'
+          noText='いいえ'
         />
       )}
     </div>
