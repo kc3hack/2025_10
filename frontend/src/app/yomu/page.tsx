@@ -10,9 +10,17 @@ import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { judgeImage } from '@/lib/JudgeImage';
 import { postYomu } from './postActions';
+import Loading from '@/components/Loading';
 
 const MAX_LENGTH = 140; // 最大文字数
 const MIN_LENGTH = 40; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
+
+enum PostStatus {
+  INITIAL = 'initial',
+  POSTING = 'posting',
+  SUCCESS = 'success',
+  ERROR = 'error',
+}
 
 const Page = (): React.ReactNode => {
   const session = useSession();
@@ -49,10 +57,12 @@ interface UploadedFile {
  */
 const SignedInPage = (): React.ReactNode => {
   const [text, setText] = useState('');
-  const [canPost, setCanPost] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [canPost, setCanPost] = useState(false); // 投稿可能か: 文字数から計算する
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // 下書き削除のダイアログの表示状態
   const session = useSession();
   const [file, setFile] = useState<UploadedFile | null>(null);
+
+  const [postStatus, setPostStatus] = useState<PostStatus>(PostStatus.INITIAL);
 
   const [isDragActive, setIsDragActive] = useState(false);
 
@@ -99,6 +109,7 @@ const SignedInPage = (): React.ReactNode => {
   };
 
   const onClickYomuButton = async () => {
+    setPostStatus(PostStatus.POSTING);
     console.log('投稿');
     const res = await postYomu({
       originalText: text,
@@ -107,95 +118,112 @@ const SignedInPage = (): React.ReactNode => {
       userIconPath: session.data?.user?.image ?? '',
     });
 
+    if (res.message !== '投稿に成功しました') {
+      setPostStatus(PostStatus.ERROR);
+      return;
+    }
+
     console.log(res);
+    setPostStatus(PostStatus.SUCCESS);
   };
 
   return (
-    <div className='fixed left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2'>
-      <div
-        className={`mx-auto min-h-[30rem] w-11/12 max-w-[40rem] rounded-lg bg-white p-8 shadow-lg md:w-3/4 lg:w-2/3 xl:w-1/2`}
-      >
+    <>
+      <main className='fixed left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2'>
         <div
-          className='mb-4 block size-8 cursor-pointer hover:opacity-70'
-          onClick={() => {
-            if (text.length > 0 || file) {
-              // 下書きがあるときは警告を出す
-              setIsDialogOpen(true);
-            } else {
-              // 無いときはそのままタイムラインに戻る
-              router.push('/timeline');
-            }
-          }}
+          className={`mx-auto min-h-[30rem] w-11/12 max-w-[40rem] rounded-lg bg-white p-8 shadow-lg md:w-3/4 lg:w-2/3 xl:w-1/2`}
         >
-          <VscClose className='size-full' />
-        </div>
-        <div className='flex items-start gap-4'>
-          <Image
-            src={session.data?.user?.image ?? ''}
-            height={50}
-            width={50}
-            alt='Icon'
-            className='rounded-full'
-          />
-          <textarea
-            className={`w-full resize-none overflow-hidden rounded-lg border-2 border-dotted p-3 outline-none md:text-lg ${
-              isDragActive ? 'border-red-400' : 'border-gray-300/0'
-            } ${file ? '' : 'h-80'}`}
-            placeholder='いま何してんの？'
-            onChange={(e) => {
-              onChangeTextArea(e);
+          <div
+            className='mb-4 block size-8 cursor-pointer hover:opacity-70'
+            onClick={() => {
+              if (text.length > 0 || file) {
+                // 下書きがあるときは警告を出す
+                setIsDialogOpen(true);
+              } else {
+                // 無いときはそのままタイムラインに戻る
+                router.push('/timeline');
+              }
             }}
-            onDrop={(e) => {
-              onDrop(e);
-              setIsDragActive(false);
-            }}
-            onDragEnter={() => {
-              setIsDragActive(true);
-            }}
-            onDragLeave={() => {
-              setIsDragActive(false);
-            }}
-          ></textarea>
-        </div>
-        {file && (
-          <div className='relative mx-auto mb-4 aspect-square w-1/2'>
-            <div className='absolute right-1 top-1 z-10 rounded-lg bg-white/40 hover:bg-white/70'>
-              <VscClose className='size-8 cursor-pointer hover:opacity-70' onClick={onDeleteFile} />
-            </div>
-            <Image src={file.filePath} alt='upload' fill className='rounded object-contain' />
-            <p className='absolute bottom-0 left-0'>{file.file.name}</p>
+          >
+            <VscClose className='size-full' />
           </div>
-        )}
-        <p className={`${canPost ? 'text-green-500' : 'text-red-500'} text-right`}>
-          {text.length}文字
-        </p>
-        <button
-          className={`mx-auto block size-16 rounded-full border-2 border-transparent bg-orange-400 font-shinryu text-4xl font-bold text-white shadow-lg  ${
-            canPost ? 'hover:bg-orange-500' : 'opacity-50'
-          }`}
-          disabled={!canPost}
-          onClick={onClickYomuButton}
-        >
-          詠
-        </button>
-
-        {!canPost && (
-          <p className='mt-2 text-center text-sm text-red-500'>
-            ※{MIN_LENGTH}文字以上{MAX_LENGTH}文字以内で投稿できます。
+          <div className='gap-4 md:flex md:items-start'>
+            <Image
+              src={session.data?.user?.image ?? ''}
+              height={50}
+              width={50}
+              alt='Icon'
+              className='rounded-full'
+            />
+            <textarea
+              className={`w-full resize-none overflow-hidden rounded-lg border-2 border-dotted p-3 outline-none md:text-lg ${
+                isDragActive ? 'border-red-400' : 'border-gray-300/0'
+              } ${file ? '' : 'h-80'}`}
+              placeholder='いま何してんの？'
+              onChange={(e) => {
+                onChangeTextArea(e);
+              }}
+              onDrop={(e) => {
+                onDrop(e);
+                setIsDragActive(false);
+              }}
+              onDragEnter={() => {
+                setIsDragActive(true);
+              }}
+              onDragLeave={() => {
+                setIsDragActive(false);
+              }}
+            ></textarea>
+          </div>
+          {file && (
+            <div className='relative mx-auto mb-4 aspect-square w-1/2'>
+              <div className='absolute right-1 top-1 z-10 rounded-lg bg-white/40 hover:bg-white/70'>
+                <VscClose
+                  className='size-8 cursor-pointer hover:opacity-70'
+                  onClick={onDeleteFile}
+                />
+              </div>
+              <Image src={file.filePath} alt='upload' fill className='rounded object-contain' />
+              <p className='absolute bottom-0 left-0'>{file.file.name}</p>
+            </div>
+          )}
+          <p className={`${canPost ? 'text-green-500' : 'text-red-500'} text-right`}>
+            {text.length}文字
           </p>
-        )}
+          <button
+            className={`mx-auto block size-16 rounded-full border-2 border-transparent bg-orange-400 font-shinryu text-4xl font-bold text-white shadow-lg  ${
+              canPost ? 'hover:bg-orange-500' : 'opacity-50'
+            }`}
+            disabled={!canPost}
+            onClick={onClickYomuButton}
+          >
+            詠
+          </button>
 
-        <Dialog
-          isOpen={isDialogOpen}
-          description='ページを離れると下書きは保存されません。よろしいですか？'
-          isOnlyOK={false}
-          yesCallback={yesCallback}
-          noCallback={noCallback}
-          yesText='OK'
-          noText='キャンセル'
-        />
-      </div>
-    </div>
+          {!canPost && (
+            <p className='mt-2 text-center text-sm text-red-500'>
+              ※{MIN_LENGTH}文字以上{MAX_LENGTH}文字以内で投稿できます。
+            </p>
+          )}
+
+          <Dialog
+            isOpen={isDialogOpen}
+            description='ページを離れると下書きは保存されません。よろしいですか？'
+            isOnlyOK={false}
+            yesCallback={yesCallback}
+            noCallback={noCallback}
+            yesText='OK'
+            noText='キャンセル'
+          />
+        </div>
+      </main>
+
+      {postStatus === PostStatus.POSTING && (
+        <div className='fixed z-20 size-full bg-black/30'>
+          <Loading className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2' isCenter />
+        </div>
+      )}
+    </>
   );
 };
 
@@ -204,7 +232,7 @@ const SignedInPage = (): React.ReactNode => {
  */
 const NotSignedInPage = (): React.ReactNode => {
   return (
-    <div className='fixed left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2'>
+    <main className='fixed left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2'>
       <div className='mx-auto h-[30rem] w-11/12 max-w-[40rem] rounded-lg bg-white p-8 shadow-lg md:w-3/4 lg:w-2/3 xl:w-1/2'>
         <Link
           href='/timeline'
@@ -223,7 +251,7 @@ const NotSignedInPage = (): React.ReactNode => {
           </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
