@@ -7,7 +7,7 @@ export const createPostSchema = z.object({
     description: '原文',
   }),
   image: z
-    .custom((val) => val === null || val instanceof Blob)
+    .custom((val) => val === null || val instanceof Blob || val == '')
     .optional()
     .openapi({
       type: 'string',

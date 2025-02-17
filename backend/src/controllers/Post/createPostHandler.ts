@@ -20,6 +20,8 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     const user_name = formData.get('user_name');
     const user_icon = formData.get('user_icon');
 
+    //console.log(image);
+
     if (!originalValue || typeof originalValue !== 'string') {
       console.log('if');
       return c.json(
@@ -36,7 +38,12 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     const tankaArray = await generateTanka(original);
     const tanka = JSON.stringify(tankaArray);
 
-    const image_path = await uploadFile(image);
+    let image_path;
+    if (image == null) {
+      image_path = null;
+    } else {
+      image_path = await uploadFile(image);
+    }
 
     //console.log(original);
     //console.log(tanka);
