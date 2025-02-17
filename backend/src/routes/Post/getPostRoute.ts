@@ -13,6 +13,7 @@ const errorResponseSchema = z.object({
 export const getPostRoute = createRoute({
   method: 'post',
   path: '/timeline',
+  tags: ['Post'],
   request: {
     body: {
       required: true,

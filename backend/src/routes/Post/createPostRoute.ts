@@ -13,11 +13,12 @@ const errorResponseSchema = z.object({
 export const createPostRoute = createRoute({
   method: 'post',
   path: '/post',
+  tags: ['Post'],
   request: {
     body: {
       required: true,
       content: {
-        'application/json': {
+        'multipart/form-data': {
           schema: createPostSchema,
         },
       },
@@ -32,6 +33,14 @@ export const createPostRoute = createRoute({
       },
       description: 'Successful response',
     },
+    400: {
+      content: {
+        'application/json': {
+          schema: errorResponseSchema,
+        },
+      },
+      description: 'Bad Request Error response',
+    },
     500: {
       content: {
         'application/json': {
@@ -45,6 +54,10 @@ export const createPostRoute = createRoute({
 
 export type createPostRouteResponse200 = z.infer<
   (typeof createPostRoute.responses)['200']['content']['application/json']['schema']
+>;
+
+export type createPostRouteResponse400 = z.infer<
+  (typeof createPostRoute.responses)['400']['content']['application/json']['schema']
 >;
 
 export type createPostRouteResponse500 = z.infer<

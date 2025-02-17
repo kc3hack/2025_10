@@ -30,10 +30,8 @@ const ConfirmationDialog = ({
   setDialogOpen,
 }: ConfirmationDialogProps) => {
   return (
-    <div
-      className={`${className} fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50`}
-    >
-      <div className='w-fit h-fit p-4 bg-white rounded-xl'>
+    <div className={`${className} fixed inset-0 z-50 flex items-center justify-center bg-black/50`}>
+      <div className='size-fit rounded-xl bg-white p-4'>
         {message}
         <div className='mt-5 flex items-center justify-end'>
           <button
@@ -42,7 +40,7 @@ const ConfirmationDialog = ({
               setDialogOpen(false);
             }}
             style={{ color: option1.color ?? 'inherit' }}
-            className='px-1 rounded-lg hover:bg-gray-100'
+            className='rounded-lg px-1 hover:bg-gray-100'
           >
             {option1.label}
           </button>
@@ -52,7 +50,7 @@ const ConfirmationDialog = ({
               setDialogOpen(false);
             }}
             style={{ color: option2.color ?? 'inherit' }}
-            className='ml-2 mr-1 px-1 rounded-lg hover:bg-gray-100'
+            className='ml-2 mr-1 rounded-lg px-1 hover:bg-gray-100'
           >
             {option2.label}
           </button>

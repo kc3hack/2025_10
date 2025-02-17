@@ -13,6 +13,7 @@ const errorResponseSchema = z.object({
 export const deletePostRoute = createRoute({
   method: 'delete',
   path: '/post',
+  tags: ['Post'],
   request: {
     body: {
       required: true,

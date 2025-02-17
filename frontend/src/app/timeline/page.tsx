@@ -1,10 +1,14 @@
 'use client';
 
+import React from 'react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { PostTypes } from '@/types/postTypes';
 import PostList from '@/components/PostList';
 import fetchPosts from '@/app/timeline/actions/fetchPosts';
 import FloatingActionButton from '@/components/FloatingActionButton';
+import { MdOutlineMenu } from 'react-icons/md';
+import SideMenu from '@/components/SideMenu';
+import Image from 'next/image';
 
 const LIMIT = 10;
 
@@ -17,6 +21,10 @@ const Timeline = () => {
   const [isLoading, setIsLoading] = useState(false);
   // これ以上取得できる投稿があるかのフラグ
   const [hasMore, setHasMore] = useState(true);
+  // ログインしているユーザを保持するState
+  const [user] = useState({ name: 'Name', bio: 'bio', iconUrl: '/iconDefault.png' });
+  // ハンバーガーメニューの開閉状態
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   //IntersectionObserverを保持するためのref
   const observer = useRef<IntersectionObserver | null>(null);
@@ -76,14 +84,50 @@ const Timeline = () => {
 
   return (
     <div className='relative min-h-screen'>
-      <div className="absolute inset-0 bg-[url('/bg.jpg')] bg-cover bg-center bg-fixed opacity-20" />
-      <div className='relative'>
-        <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' />
-        {isLoading && <p className='text-center my-3'>投稿を取得中...</p>}
-        <div ref={targetRef} className='h-px' />
-        {!hasMore && <p className='text-center my-3'>これ以上投稿はありません</p>}
+      {/* ヘッダ */}
+      <div className='fixed top-0 z-40 flex h-12 w-full items-center justify-center bg-white font-kokuryu text-2xl'>
+        <MdOutlineMenu
+          onClick={() => {
+            setIsMenuOpen(true);
+            console.log('open');
+          }}
+          className='absolute left-3 lg:hidden'
+        />
+        <div className=''>Tankalizer</div>
       </div>
+
+      {/* 背景画像 */}
+      <div className='fixed left-0 top-0 z-[-1] h-screen w-full opacity-20'>
+        <Image src='/bg.jpg' layout='fill' objectFit='cover' alt='Background'></Image>
+      </div>
+
+      {/* タイムライン */}
+      <div className='pt-12'>
+        <div className='relative mx-auto max-w-lg'>
+          <SideMenu
+            user={user}
+            className='absolute top-5 hidden lg:block'
+            style={{ left: '-12rem' }}
+          />
+          <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' />
+          {isLoading && <p className='py-3 text-center'>投稿を取得中...</p>}
+          <div ref={targetRef} className='h-px' />
+          {!hasMore && <p className='py-3 text-center'>これ以上投稿はありません</p>}
+        </div>
+      </div>
+
+      {/* 投稿（詠）ボタン */}
       <FloatingActionButton />
+
+      {/* ハンバーガーメニュー */}
+      {isMenuOpen && (
+        <div className='fixed inset-0 z-50 justify-center lg:hidden'>
+          <div className='flex h-fit w-full bg-white py-4'>
+            <SideMenu user={user} className='mx-auto' />
+          </div>
+          <div onClick={() => setIsMenuOpen(false)} className='size-full bg-black/50'></div>
+        </div>
+      )}
     </div>
   );
 };
