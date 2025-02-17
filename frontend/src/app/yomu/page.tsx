@@ -13,6 +13,7 @@ import { postYomu, PostResult } from './postActions';
 import Loading from '@/components/Loading';
 import AfterYomu from './AfterYomu';
 import { calcFileSize } from '@/lib/CalcFileSize';
+import FileUploadButton from '@/components/FileUploadButton';
 
 const MAX_LENGTH = 140; // 最大文字数
 const MIN_LENGTH = 40; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
@@ -85,15 +86,28 @@ const SignedInPage = (): React.ReactNode => {
     setIsDialogOpen(false);
   }, []);
 
+  // 画像がインポートされた時の処理
   const onDrop = (e: React.DragEvent<HTMLTextAreaElement>): void => {
     e.preventDefault();
     if (e.dataTransfer.files.length !== 1) {
       console.log('ファイルは1つだけアップロードしてください');
+      alert('ファイルは1つだけアップロードしてください');
       return;
     }
 
     const file = e.dataTransfer.files[0];
+    uploadFile(file);
+  };
 
+  const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    uploadFile(file);
+  };
+
+  const uploadFile = (file: File) => {
     if (!judgeImage(file)) {
       console.log('画像ファイルをアップロードしてください');
       alert('画像ファイルをアップロードしてください');
@@ -114,10 +128,7 @@ const SignedInPage = (): React.ReactNode => {
     };
   };
 
-  const onDeleteFile = () => {
-    setFile(null);
-  };
-
+  // 投稿ボタンを押した時の処理
   const onClickYomuButton = async () => {
     setPostStatus(PostStatus.POSTING);
     console.log('投稿');
@@ -167,9 +178,9 @@ const SignedInPage = (): React.ReactNode => {
               className='rounded-full'
             />
             <textarea
-              className={`w-full resize-none overflow-hidden rounded-lg border-2 border-dotted p-3 outline-none md:text-lg ${
+              className={`w-full resize-none rounded-lg border-2 border-dotted p-3 outline-none md:text-lg ${
                 isDragActive ? 'border-red-400' : 'border-gray-300/0'
-              } ${file ? '' : 'h-80'}`}
+              } ${file ? 'min-h-40' : 'min-h-80'}`}
               placeholder='いま何してんの？'
               onChange={(e) => {
                 onChangeTextArea(e);
@@ -191,7 +202,9 @@ const SignedInPage = (): React.ReactNode => {
               <div className='absolute right-1 top-1 z-10 rounded-lg bg-white/40 hover:bg-white/70'>
                 <VscClose
                   className='size-8 cursor-pointer hover:opacity-70'
-                  onClick={onDeleteFile}
+                  onClick={() => {
+                    setFile(null);
+                  }}
                 />
               </div>
               <Image src={file.filePath} alt='upload' fill className='rounded object-contain' />
@@ -202,8 +215,8 @@ const SignedInPage = (): React.ReactNode => {
             {text.length}文字
           </p>
           <button
-            className={`mx-auto block size-16 rounded-full border-2 border-transparent bg-orange-400 font-shinryu text-4xl font-bold text-white shadow-lg  ${
-              canPost ? 'hover:bg-orange-500' : 'opacity-50'
+            className={`mx-auto block size-16 rounded-full border-2 border-transparent bg-orange-400 font-shinryu text-4xl font-bold text-white shadow-lg transition-transform duration-300  ${
+              canPost ? 'hover:scale-105 hover:bg-orange-500 active:scale-95' : 'opacity-50'
             }`}
             disabled={!canPost}
             onClick={onClickYomuButton}
@@ -217,6 +230,10 @@ const SignedInPage = (): React.ReactNode => {
             </p>
           )}
 
+          {/* 画像アップロードボタン */}
+          <FileUploadButton onChangeFileCallback={onChangeFile} />
+
+          {/* 下書き削除のダイアログ */}
           <Dialog
             isOpen={isDialogOpen}
             description='ページを離れると下書きは保存されません。よろしいですか？'
@@ -229,6 +246,7 @@ const SignedInPage = (): React.ReactNode => {
         </div>
       </main>
 
+      {/* 投稿中ローディング */}
       {postStatus === PostStatus.POSTING && (
         <div className='fixed z-20 size-full bg-black/30'>
           <Loading className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2' isCenter />
