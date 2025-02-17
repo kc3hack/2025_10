@@ -23,7 +23,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     //console.log(image);
 
     if (!originalValue || typeof originalValue !== 'string') {
-      console.log('if');
+      //console.log('if');
       return c.json(
         {
           message: 'originalはstringである必要があります．',
@@ -38,6 +38,19 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     const tankaArray = await generateTanka(original);
     const tanka = JSON.stringify(tankaArray);
 
+    // tankaが空([])ならエラーを返す
+    if (tanka.length == 0) {
+      return c.json(
+        {
+          message: 'tankaが空です．',
+          statusCode: 500,
+          error: 'Internal Server Error',
+        },
+        500
+      );
+    }
+
+    // imageがnullならimage_pathをnullにする．
     let image_path;
     if (image == null) {
       image_path = null;
