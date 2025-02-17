@@ -12,6 +12,7 @@ import { judgeImage } from '@/lib/JudgeImage';
 import { postYomu, PostResult } from './postActions';
 import Loading from '@/components/Loading';
 import AfterYomu from './AfterYomu';
+import { calcFileSize } from '@/lib/CalcFileSize';
 
 const MAX_LENGTH = 140; // 最大文字数
 const MIN_LENGTH = 40; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
@@ -95,6 +96,13 @@ const SignedInPage = (): React.ReactNode => {
 
     if (!judgeImage(file)) {
       console.log('画像ファイルをアップロードしてください');
+      alert('画像ファイルをアップロードしてください');
+      return;
+    }
+
+    if (calcFileSize(file) > 5) {
+      console.log('ファイルサイズが5MBを超えています');
+      alert('ファイルサイズが5MBを超えています');
       return;
     }
 
@@ -116,7 +124,6 @@ const SignedInPage = (): React.ReactNode => {
     const res = await postYomu({
       originalText: text,
       imageData: file?.file ?? null,
-      imagePath: file?.filePath ?? '',
       userName: session.data?.user?.name ?? '',
       userIconPath: session.data?.user?.image ?? '',
     });
@@ -231,9 +238,9 @@ const SignedInPage = (): React.ReactNode => {
       {postStatus === PostStatus.SUCCESS && (
         <AfterYomu
           tanka={resResult?.tanka ?? []}
-          imagePath={resResult?.imagePath ?? ''}
-          userName={resResult?.userName ?? ''}
-          userIconPath={resResult?.userIconPath ?? ''}
+          imagePath={file?.filePath ?? ''}
+          userName={session.data?.user?.name ?? ''}
+          userIconPath={session.data?.user?.image ?? ''}
         />
       )}
     </>
