@@ -97,6 +97,10 @@ const SignedInPage = (): React.ReactNode => {
     setFile(null);
   };
 
+  const onClickYomuButton = () => {
+    console.log('投稿');
+  };
+
   return (
     <div className='fixed left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2'>
       <div
@@ -153,15 +157,25 @@ const SignedInPage = (): React.ReactNode => {
             <p className='absolute bottom-0 left-0'>{file.file.name}</p>
           </div>
         )}
+        <p className={`${canPost ? 'text-green-500' : 'text-red-500'} text-right`}>
+          {text.length}文字
+        </p>
         <button
-          className={`mx-auto block size-16 rounded-full border-2 border-transparent bg-orange-400 font-shinryu text-4xl font-bold text-white shadow-lg hover:bg-orange-500 ${
-            canPost ? '' : 'opacity-50'
+          className={`mx-auto block size-16 rounded-full border-2 border-transparent bg-orange-400 font-shinryu text-4xl font-bold text-white shadow-lg  ${
+            canPost ? 'hover:bg-orange-500' : 'opacity-50'
           }`}
           disabled={!canPost}
+          onClick={onClickYomuButton}
         >
           詠
         </button>
-        <p className={canPost ? 'text-green-500' : 'text-red-500'}>{text.length}</p>
+
+        {!canPost && (
+          <p className='mt-2 text-center text-sm text-red-500'>
+            ※{MIN_LENGTH}文字以上{MAX_LENGTH}文字以内で投稿できます。
+          </p>
+        )}
+
         <Dialog
           isOpen={isDialogOpen}
           description='ページを離れると下書きは保存されません。よろしいですか？'
