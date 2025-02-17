@@ -22,13 +22,7 @@ const fetchPosts = async ({
   const posts = [
     {
       id: 'example_post',
-      tanka: {
-        line1: 'KANSAI',
-        line2: '捉え難しき',
-        line3: 'お題かな',
-        line4: '古都の熱き歌',
-        line5: 'アプリで詠まん',
-      },
+      tanka: ['KANSAI', '捉え難しき', 'お題かな', '古都の熱き歌', 'アプリで詠まん'],
       original:
         'K.A.N.S.A.Iというお題、どう捉えていいのか難しかった。京都や奈良は昔から短歌がアツいのかな。短歌を使ったアプリ作ろうかな。',
       imageUrl: '',
@@ -43,13 +37,7 @@ const fetchPosts = async ({
     },
     {
       id: 'example_post',
-      tanka: {
-        line1: 'KANSAI',
-        line2: '捉え難しき',
-        line3: 'お題かな',
-        line4: '古都の熱き歌',
-        line5: 'アプリで詠まん',
-      },
+      tanka: ['KANSAI', '捉え難しき', 'お題かな', '古都の熱き歌', 'アプリで詠まん'],
       original:
         'K.A.N.S.A.Iというお題、どう捉えていいのか難しかった。京都や奈良は昔から短歌がアツいのかな。短歌を使ったアプリ作ろうかな。',
       imageUrl: '/imageSample.jpg',
