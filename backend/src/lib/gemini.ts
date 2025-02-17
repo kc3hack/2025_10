@@ -65,13 +65,13 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
       return lines.every((line, index) => {
         // everyは配列のすべての要素が条件を満たしていればtrueを返す
         //console.log(line);
-        // アルファベット、ひらがな、カタカナ、漢字を1文字としてカウント
-        const regex = /[A-Za-z\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/g;
+        // アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント
+        const regex = /[A-Za-z\uFF21-\uFF3A\uFF41-\uFF5A\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/g;
         // console.log(line.match(regex));
         const count = line.match(regex)?.length || 0;
         // console.log('count: ', count);
         // console.log('-----------------------------');
-        // 文字数をカウント（ひらがな、カタカナ、漢字を1文字としてカウント）
+        // 文字数をカウント（アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント）
         return Math.abs(count - expectedCharaCount[index]) <= 3; // 3文字分までの誤差は許容
       });
     };
