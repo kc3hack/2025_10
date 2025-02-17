@@ -85,7 +85,7 @@ const Timeline = () => {
   return (
     <div className='relative min-h-screen'>
       {/* ヘッダ */}
-      <div className='fixed top-0 w-full h-12 flex items-center justify-center text-2xl font-kokuryu bg-white z-40'>
+      <div className='fixed top-0 z-40 flex h-12 w-full items-center justify-center bg-white font-kokuryu text-2xl'>
         <MdOutlineMenu
           onClick={() => {
             setIsMenuOpen(true);
@@ -97,22 +97,22 @@ const Timeline = () => {
       </div>
 
       {/* 背景画像 */}
-      <div className='fixed top-0 left-0 w-full h-screen z-[-1] opacity-20'>
+      <div className='fixed left-0 top-0 z-[-1] h-screen w-full opacity-20'>
         <Image src='/bg.jpg' layout='fill' objectFit='cover' alt='Background'></Image>
       </div>
 
       {/* タイムライン */}
       <div className='pt-12'>
-        <div className='relative max-w-lg mx-auto'>
+        <div className='relative mx-auto max-w-lg'>
           <SideMenu
             user={user}
-            className='hidden lg:block absolute top-5'
+            className='absolute top-5 hidden lg:block'
             style={{ left: '-12rem' }}
           />
           <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' />
-          {isLoading && <p className='text-center py-3'>投稿を取得中...</p>}
+          {isLoading && <p className='py-3 text-center'>投稿を取得中...</p>}
           <div ref={targetRef} className='h-px' />
-          {!hasMore && <p className='text-center py-3'>これ以上投稿はありません</p>}
+          {!hasMore && <p className='py-3 text-center'>これ以上投稿はありません</p>}
         </div>
       </div>
 
@@ -121,14 +121,11 @@ const Timeline = () => {
 
       {/* ハンバーガーメニュー */}
       {isMenuOpen && (
-        <div className='fixed inset-0 justify-center z-50 lg:hidden'>
-          <div className='flex w-full h-fit py-4 bg-white'>
+        <div className='fixed inset-0 z-50 justify-center lg:hidden'>
+          <div className='flex h-fit w-full bg-white py-4'>
             <SideMenu user={user} className='mx-auto' />
           </div>
-          <div
-            onClick={() => setIsMenuOpen(false)}
-            className='w-full h-full bg-black bg-opacity-50'
-          ></div>
+          <div onClick={() => setIsMenuOpen(false)} className='size-full bg-black/50'></div>
         </div>
       )}
     </div>

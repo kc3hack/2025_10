@@ -21,15 +21,15 @@ interface SideMenuProps {
 const SideMenu = ({ user, className, style }: SideMenuProps) => {
   return (
     <div className={`${className} w-40 space-y-3`} style={style}>
-      <div className='flex items-center rounded-lg bg-transparent hover:bg-black/5 hover:cursor-pointer'>
+      <div className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'>
         <CiUser size={28} />
         <a className='pl-1 text-xl'>プロフィール</a>
       </div>
-      <div className='flex items-center rounded-lg bg-transparent hover:bg-black/5 hover:cursor-pointer'>
+      <div className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'>
         <CiSettings size={28} />
         <a className='pl-1 text-xl'>設定</a>
       </div>
-      <div className='flex items-center rounded-lg bg-transparent hover:bg-black/5 hover:cursor-pointer'>
+      <div className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'>
         <CiLogout size={28} />
         <a className='pl-1 text-xl'>ログアウト</a>
       </div>

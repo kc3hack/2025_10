@@ -48,13 +48,13 @@ const DropDownButton = ({ className, items }: DropDownButtonProps) => {
   return (
     <div className={`${className} relative inline-block`} ref={containerRef}>
       <button
-        className='flex mx-auto w-7 h-7 items-center justify-center rounded-full bg-transparent hover:bg-black/5'
+        className='mx-auto flex size-7 items-center justify-center rounded-full bg-transparent hover:bg-black/5'
         onClick={() => toggleDropDown()}
       >
         <BsThreeDots size={20} />
       </button>
       {isOpen && (
-        <ul className='absolute top-3 right-0 w-64 h-fit mt-4 mx-3 p-0 border-2 rounded-xl bg-white border-gray-200 shadow-md z-50'>
+        <ul className='absolute right-0 top-3 z-50 mx-3 mt-4 h-fit w-64 rounded-xl border-2 border-gray-200 bg-white p-0 shadow-md'>
           {items.map((item) => (
             <li
               key={item.label}
@@ -62,7 +62,7 @@ const DropDownButton = ({ className, items }: DropDownButtonProps) => {
                 item.onClick();
                 setIsOpen(false);
               }}
-              className={`flex mx-1 my-1 items-center hover:bg-gray-100 rounded-md hover:cursor-pointer ${
+              className={`m-1 flex items-center rounded-md hover:cursor-pointer hover:bg-gray-100 ${
                 item.className ?? ''
               }`}
             >
