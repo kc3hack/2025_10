@@ -5,7 +5,6 @@ import React from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
 import { PostTypes } from '@/types/postTypes';
-import { TankaTypes } from '@/types/tankaTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
@@ -154,11 +153,11 @@ const Post = ({ post, className }: PostProps) => {
 /**
  * 短歌をパースして，改行と全角空白を追加する．
  * @function parseTanka
- * @param {TankaTypes} tanka - 短歌型オブジェクト
+ * @param {Array<string>} tanka - 短歌の配列
  * @return {string} パースされた短歌の文字列
  */
-const parseTanka = (tanka: TankaTypes): string => {
-  const parsedTanka: string = `${tanka.line1}\n\u3000${tanka.line2}\n\u3000\u3000${tanka.line3}\n${tanka.line4}\n\u3000${tanka.line5}`;
+const parseTanka = (tanka: Array<string>): string => {
+  const parsedTanka: string = `${tanka[0]}\n\u3000${tanka[1]}\n\u3000\u3000${tanka[2]}\n${tanka[3]}\n\u3000${tanka[4]}`;
   return parsedTanka;
 };
 
