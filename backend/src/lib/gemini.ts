@@ -17,7 +17,7 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.0-pro-exp-02-05',
+      model: 'gemini-2.0-flash',
       systemInstruction: `SNSの投稿を短歌にしてください。原文の特徴的な要素はそのままに、比喩表現を使った趣深い短歌にしてください。出力の形式は以下のJSONスキーマに従ってください。各値は日本語で出力してください。
   {
     "type": "object",
