@@ -48,10 +48,29 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
             "line5": {
               "type": "string",
               "description": "短歌の5句目, 7文字程度"
-            }
+            },
+            "yomi1": {
+              "type": "string",
+              "description": "短歌の1句目のふりがな"
+            },
+            "yomi2": {
+              "type": "string",
+              "description": "短歌の2句目のふりがな"
+            },
+            "yomi3": {
+              "type": "string",
+              "description": "短歌の1句目のふりがな"
+            },
+            "yomi4": {
+              "type": "string",
+              "description": "短歌の2句目のふりがな"
+            },
+            "yomi5": {
+              "type": "string",
+              "description": "短歌の1句目のふりがな"
+            },
           },
-          "required": ["line1", "line2", "line3", "line4", "line5"]
-        }
+          "required": ["line1", "line2", "line3", "line4", "line5", "yomi1", "yomi2", "yomi3", "yomi4", "yomi5"]
       },
       "required": ["response"]
     }
@@ -91,9 +110,17 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
         jsonResponse.response[0].line5,
       ];
 
+      const tankaYomi = [
+        jsonResponse.response[0].yomi1,
+        jsonResponse.response[0].yomi2,
+        jsonResponse.response[0].yomi3,
+        jsonResponse.response[0].yomi4,
+        jsonResponse.response[0].yomi5,
+      ];
+
       // console.log(tanka);
 
-      if (isValidTanka(tanka)) {
+      if (isValidTanka(tankaYomi)) {
         console.log('短歌の形式が正しいので結果を返却');
         // ["短歌の1行目", "短歌の2行目", "短歌の3行目", "短歌の4行目", "短歌の5行目"]
         return tanka;
