@@ -9,6 +9,9 @@ import FloatingActionButton from '@/components/FloatingActionButton';
 import { MdOutlineMenu } from 'react-icons/md';
 import SideMenu from '@/components/SideMenu';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import LoginDialog from '@/components/LoginDialog';
+import { useRouter } from 'next/navigation';
 
 const LIMIT = 10;
 
@@ -21,10 +24,15 @@ const Timeline = () => {
   const [isLoading, setIsLoading] = useState(false);
   // これ以上取得できる投稿があるかのフラグ
   const [hasMore, setHasMore] = useState(true);
-  // ログインしているユーザを保持するState
-  const [user] = useState({ name: 'Name', bio: 'bio', iconUrl: '/iconDefault.png' });
   // ハンバーガーメニューの開閉状態
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // セッションの取得
+  const session = useSession();
+  // ログイン状態
+  const isLoggedIn = session.status === 'authenticated';
+  // ログイン促進ダイアログの開閉状態
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+  const router = useRouter();
 
   //IntersectionObserverを保持するためのref
   const observer = useRef<IntersectionObserver | null>(null);
@@ -104,11 +112,7 @@ const Timeline = () => {
       {/* タイムライン */}
       <div className='pt-12'>
         <div className='relative mx-auto max-w-lg'>
-          <SideMenu
-            user={user}
-            className='absolute top-5 hidden lg:block'
-            style={{ left: '-12rem' }}
-          />
+          <SideMenu className='absolute top-5 hidden lg:block' style={{ left: '-12rem' }} />
           <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' />
           {isLoading && <p className='py-3 text-center'>投稿を取得中...</p>}
           <div ref={targetRef} className='h-px' />
@@ -117,17 +121,28 @@ const Timeline = () => {
       </div>
 
       {/* 投稿（詠）ボタン */}
-      <FloatingActionButton />
+      <FloatingActionButton
+        onClick={() => {
+          if (isLoggedIn) {
+            router.push('/yomu');
+          } else {
+            setLoginDialogOpen(true);
+          }
+        }}
+      />
 
       {/* ハンバーガーメニュー */}
       {isMenuOpen && (
         <div className='fixed inset-0 z-50 justify-center lg:hidden'>
           <div className='flex h-fit w-full bg-white py-4'>
-            <SideMenu user={user} className='mx-auto' />
+            <SideMenu className='mx-auto' />
           </div>
           <div onClick={() => setIsMenuOpen(false)} className='size-full bg-black/50'></div>
         </div>
       )}
+
+      {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
+      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
     </div>
   );
 };

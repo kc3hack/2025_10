@@ -11,7 +11,9 @@ import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
 import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
-import Dialog from './Dialog';
+import { useSession } from 'next-auth/react';
+import Dialog from '@/components/Dialog';
+import LoginDialog from './LoginDialog';
 
 // props の型定義
 interface PostProps {
@@ -34,6 +36,28 @@ const Post = ({ post, className }: PostProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   // 削除確認ダイアログの表示状態
   const [dialogOpen, setDialogOpen] = useState(false);
+  // ユーザアイコンURLが一致するなら自分の投稿
+  const isMyPost = useSession().data?.user?.image === post.user.iconUrl;
+  // ドロップダウンメニューの要素
+  const dropDownItems = [];
+  // ドロップダウンメニューの投稿削除ボタン
+  const dropDownDeleteButton = {
+    label: '投稿を削除',
+    onClick: () => setDialogOpen(true),
+    className: '',
+    icon: <MdDeleteForever />,
+    color: 'red',
+  };
+  // 自分の投稿ならドロップダウンに削除ボタン追加
+  if (isMyPost) {
+    dropDownItems.push(dropDownDeleteButton);
+  }
+  // セッションの取得
+  const session = useSession();
+  // ログイン状態
+  const isLoggedIn = session.status === 'authenticated';
+  // ログイン促進ダイアログの開閉状態
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
 
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
@@ -49,18 +73,7 @@ const Post = ({ post, className }: PostProps) => {
         <div className='ml-2 cursor-pointer items-center'>
           <p className='text-lg text-black hover:underline'>{post.user.name}</p>
         </div>
-        <DropDownButton
-          className='ml-auto flex'
-          items={[
-            {
-              label: '投稿を削除',
-              onClick: () => setDialogOpen(true),
-              className: '',
-              icon: <MdDeleteForever />,
-              color: 'red',
-            },
-          ]}
-        ></DropDownButton>
+        <DropDownButton className='ml-auto flex' items={dropDownItems}></DropDownButton>
       </div>
       {/* アイコン以外 */}
       <div
@@ -100,7 +113,16 @@ const Post = ({ post, className }: PostProps) => {
         {formatDateKanji(post.date)}
         <div className='ml-auto flex items-center'>
           <p className='mr-2 text-sm'>{post.miyabi.toLocaleString()}</p>
-          <MiyabiButton size='small' className='mr-0' />
+          <MiyabiButton
+            size='small'
+            onClick={() => {
+              if (isLoggedIn) {
+              } else {
+                setLoginDialogOpen(true);
+              }
+            }}
+            className='mr-0'
+          />
         </div>
       </div>
       {/* 拡大表示が有効の場合，モーダルを表示する */}
@@ -123,6 +145,8 @@ const Post = ({ post, className }: PostProps) => {
           noText='いいえ'
         />
       )}
+      {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
+      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
     </div>
   );
 };
