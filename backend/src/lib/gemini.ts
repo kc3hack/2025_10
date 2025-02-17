@@ -91,7 +91,7 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
         // console.log('count: ', count);
         // console.log('-----------------------------');
         // 文字数をカウント（アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント）
-        return Math.abs(count - expectedCharaCount[index]) <= 3; // 3文字分までの誤差は許容
+        return Math.abs(count - expectedCharaCount[index]) <= 1; // 1文字分までの誤差は許容
       });
     };
 
@@ -126,6 +126,7 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
         return tanka;
       } else if (i < 2) {
         console.log(tanka);
+        console.log(tankaYomi);
         console.log('短歌の形式が不正のため再生成');
       }
     }
