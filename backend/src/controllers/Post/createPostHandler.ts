@@ -38,11 +38,11 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
 
     const image_path = await uploadFile(image);
 
-    console.log(original);
-    console.log(tanka);
-    console.log(image_path);
-    console.log(user_name);
-    console.log(user_icon);
+    //console.log(original);
+    //console.log(tanka);
+    //console.log(image_path);
+    //console.log(user_name);
+    //console.log(user_icon);
 
     // ここからDBのpostテーブルへ情報登録
     const sql = `insert into ${env.POSTS_TABLE_NAME} (original, tanka, image_path, user_name, user_icon) values (:original, :tanka, :image_path, :user_name, :user_icon)`;

@@ -83,7 +83,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       is_miyabi: row.is_miyabi ? true : false,
     }));
 
-    console.log(results);
+    //console.log(results);
 
     // レスポンス
     return c.json(
