@@ -23,6 +23,7 @@ const Timeline = () => {
   const [hasMore, setHasMore] = useState(true);
   // ログインしているユーザを保持するState
   const [user, setUser] = useState({ name: 'Name', bio: 'bio', iconUrl: '/iconDefault.png' });
+  // ハンバーガーメニューの開閉状態
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   //IntersectionObserverを保持するためのref
