@@ -44,7 +44,8 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
 
     // user_iconがnullなら追加条件なし，nullでないならユーザを限定する条件を追加
     let user_query;
-    if (user_icon == null) {
+    if (user_icon == null || user_icon == '') {
+      //console.log('if');
       user_query = '';
     } else {
       user_query = 'AND post.user_icon = :user_icon';
