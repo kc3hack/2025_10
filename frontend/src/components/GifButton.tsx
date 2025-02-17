@@ -60,9 +60,9 @@ const GifButton = ({
   return (
     <button
       onClick={switchButton}
-      className={`${sizeClass} ${className} relative block mx-auto hover:scale-110 transition-all duration-300`}
+      className={`${sizeClass} ${className} relative mx-auto block transition-all duration-300 hover:scale-110`}
     >
-      <Image src={src} alt='gif' className='w-full h-full object-cover' fill sizes='object-cover' />
+      <Image src={src} alt='gif' className='size-full object-cover' fill sizes='object-cover' />
     </button>
   );
 };

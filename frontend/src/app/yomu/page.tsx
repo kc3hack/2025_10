@@ -98,12 +98,12 @@ const SignedInPage = (): React.ReactNode => {
   };
 
   return (
-    <div className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
+    <div className='fixed left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2'>
       <div
-        className={`max-w-[40rem] min-h-[30rem] bg-white rounded-lg shadow-lg p-8 mx-auto w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2`}
+        className={`mx-auto min-h-[30rem] w-11/12 max-w-[40rem] rounded-lg bg-white p-8 shadow-lg md:w-3/4 lg:w-2/3 xl:w-1/2`}
       >
         <div
-          className='block size-8 hover:opacity-70 mb-4 cursor-pointer'
+          className='mb-4 block size-8 cursor-pointer hover:opacity-70'
           onClick={() => {
             if (text.length > 0 || file) {
               // 下書きがあるときは警告を出す
@@ -125,9 +125,9 @@ const SignedInPage = (): React.ReactNode => {
             className='rounded-full'
           />
           <textarea
-            className={`w-full resize-none overflow-hidden p-3 outline-none md:text-lg border-2 border-dotted rounded-lg ${
-              isDragActive ? 'border-red-400' : 'border-opacity-0 border-gray-300'
-            } ${file ? '' : 'h-[20rem]'}`}
+            className={`w-full resize-none overflow-hidden rounded-lg border-2 border-dotted p-3 outline-none md:text-lg ${
+              isDragActive ? 'border-red-400' : 'border-gray-300/0'
+            } ${file ? '' : 'h-80'}`}
             placeholder='いま何してんの？'
             onChange={(e) => {
               onChangeTextArea(e);
@@ -145,16 +145,16 @@ const SignedInPage = (): React.ReactNode => {
           ></textarea>
         </div>
         {file && (
-          <div className='mx-auto relative w-1/2 aspect-square mb-4'>
-            <div className='absolute top-1 right-1 bg-white/40 hover:bg-white/70 rounded-lg z-10'>
-              <VscClose className='size-8 hover:opacity-70 cursor-pointer' onClick={onDeleteFile} />
+          <div className='relative mx-auto mb-4 aspect-square w-1/2'>
+            <div className='absolute right-1 top-1 z-10 rounded-lg bg-white/40 hover:bg-white/70'>
+              <VscClose className='size-8 cursor-pointer hover:opacity-70' onClick={onDeleteFile} />
             </div>
-            <Image src={file.filePath} alt='upload' fill className='object-contain rounded' />
+            <Image src={file.filePath} alt='upload' fill className='rounded object-contain' />
             <p className='absolute bottom-0 left-0'>{file.file.name}</p>
           </div>
         )}
         <button
-          className={`block mx-auto w-16 h-16 border-2 border-transparent shadow-lg bg-orange-400 hover:bg-orange-500 text-4xl font-bold text-white font-shinryu rounded-full ${
+          className={`mx-auto block size-16 rounded-full border-2 border-transparent bg-orange-400 font-shinryu text-4xl font-bold text-white shadow-lg hover:bg-orange-500 ${
             canPost ? '' : 'opacity-50'
           }`}
           disabled={!canPost}
@@ -181,11 +181,11 @@ const SignedInPage = (): React.ReactNode => {
  */
 const NotSignedInPage = (): React.ReactNode => {
   return (
-    <div className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
-      <div className='max-w-[40rem] h-[30rem] bg-white rounded-lg shadow-lg p-8 mx-auto w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2'>
+    <div className='fixed left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2'>
+      <div className='mx-auto h-[30rem] w-11/12 max-w-[40rem] rounded-lg bg-white p-8 shadow-lg md:w-3/4 lg:w-2/3 xl:w-1/2'>
         <Link
           href='/timeline'
-          className='block size-8 hover:opacity-70 mb-4 cursor-pointer'
+          className='mb-4 block size-8 cursor-pointer hover:opacity-70'
           onClick={() => {}}
         >
           <VscClose className='size-full' />
@@ -194,7 +194,7 @@ const NotSignedInPage = (): React.ReactNode => {
           <p className='mb-4'>投稿するにはログインしてください</p>
           <button
             onClick={() => signIn()}
-            className='bg-orange-400 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded'
+            className='rounded bg-orange-400 px-4 py-2 font-bold text-white hover:bg-orange-500'
           >
             ログイン
           </button>
