@@ -36,10 +36,9 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     const original = originalValue;
 
     const tankaArray = await generateTanka(original);
-    const tanka = JSON.stringify(tankaArray);
 
-    // tankaが空([])ならエラーを返す
-    if (tanka.length == 0) {
+    // tankaArrayが空([])ならエラーを返す
+    if (tankaArray.length == 0) {
       return c.json(
         {
           message: 'tankaが空です．',
@@ -50,11 +49,16 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
       );
     }
 
+    const tanka = JSON.stringify(tankaArray);
+
     // imageがnullならimage_pathをnullにする．
     let image_path;
     if (image == null) {
       image_path = null;
     } else {
+      // ここに圧縮処理 (jpegにして解像度さげる．めざせ500KB)
+
+      // アップロード
       image_path = await uploadFile(image);
     }
 

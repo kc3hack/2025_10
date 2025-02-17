@@ -17,7 +17,12 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       `SELECT id FROM ${env.POSTS_TABLE_NAME} ORDER BY created_at DESC LIMIT 1;`
     );
     // 受け取ったjsonを各変数に格納 (post_idが指定なしなら，最新の投稿idになる)
-    let { limit, my_icon, post_id = null, user_icon = null } = await c.req.json<getPostSchema>();
+    let {
+      limit,
+      my_icon = null,
+      post_id = null,
+      user_icon = null,
+    } = await c.req.json<getPostSchema>();
 
     // 入力のpost_idがnullなら最新の投稿から取得，そうでなければその投稿よりも古いものを取得
     // sql文中の比較条件切り替え
