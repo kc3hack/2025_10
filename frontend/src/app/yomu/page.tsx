@@ -93,6 +93,10 @@ const SignedInPage = (): React.ReactNode => {
     };
   };
 
+  const onDeleteFile = () => {
+    setFile(null);
+  };
+
   return (
     <div className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full'>
       <div
@@ -142,6 +146,9 @@ const SignedInPage = (): React.ReactNode => {
         </div>
         {file && (
           <div className='mx-auto relative w-1/2 aspect-square mb-4'>
+            <div className='absolute top-1 right-1 bg-white/40 hover:bg-white/70 rounded-lg z-10'>
+              <VscClose className='size-8 hover:opacity-70 cursor-pointer' onClick={onDeleteFile} />
+            </div>
             <Image src={file.filePath} alt='upload' fill className='object-contain rounded' />
             <p className='absolute bottom-0 left-0'>{file.file.name}</p>
           </div>
