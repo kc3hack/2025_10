@@ -59,25 +59,59 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
       generationConfig: { responseMimeType: 'application/json' },
     });
 
-    const result = await model.generateContent(originalText);
-    const jsonResponse = JSON.parse(result.response.text());
-    // console.log(jsonResponse);
-    // console.log('-----------------------------');
+    // 短歌の各句の文字数をチェックする関数
+    const isValidTanka = (lines: string[]): boolean => {
+      const expectedCharaCount = [5, 7, 5, 7, 7];
+      return lines.every((line, index) => {
+        // everyは配列のすべての要素が条件を満たしていればtrueを返す
+        //console.log(line);
+        // アルファベット、ひらがな、カタカナ、漢字を1文字としてカウント
+        const regex = /[A-Za-z\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/g;
+        // console.log(line.match(regex));
+        const count = line.match(regex)?.length || 0;
+        // console.log('count: ', count);
+        // console.log('-----------------------------');
+        // 文字数をカウント（ひらがな、カタカナ、漢字を1文字としてカウント）
+        return Math.abs(count - expectedCharaCount[index]) <= 3; // 3文字分までの誤差は許容
+      });
+    };
 
-    // ["短歌の1行目", "短歌の2行目", "短歌の3行目", "短歌の4行目", "短歌の5行目"]
-    return [
-      jsonResponse.response[0].line1,
-      jsonResponse.response[0].line2,
-      jsonResponse.response[0].line3,
-      jsonResponse.response[0].line4,
-      jsonResponse.response[0].line5,
-    ];
+    // 生成後、型のチェック（3回まで）
+    for (let i = 0; i < 3; i++) {
+      const result = await model.generateContent(originalText);
+      const jsonResponse = JSON.parse(result.response.text());
+
+      console.log(`短歌生成${i + 1}回目`);
+
+      const tanka = [
+        jsonResponse.response[0].line1,
+        jsonResponse.response[0].line2,
+        jsonResponse.response[0].line3,
+        jsonResponse.response[0].line4,
+        jsonResponse.response[0].line5,
+      ];
+
+      // console.log(tanka);
+
+      if (isValidTanka(tanka)) {
+        console.log('短歌の形式が正しいので結果を返却');
+        // ["短歌の1行目", "短歌の2行目", "短歌の3行目", "短歌の4行目", "短歌の5行目"]
+        return tanka;
+      } else if (i < 2) {
+        console.log(tanka);
+        console.log('短歌の形式が不正のため再生成');
+      }
+    }
+
+    console.log('短歌を生成できませんでした');
+    throw new Error('短歌を生成できませんでした');
   } catch (error) {
     console.error('APIエラー:', error);
     return [];
   }
 };
 
+/*
 const getGeminiText = async (c: Context) => {
   try {
     // POSTメソッド以外は拒否
@@ -161,5 +195,6 @@ const getGeminiText = async (c: Context) => {
     return c.json({ error: 'Internal Server Error' }, 500);
   }
 };
+*/
 
 export default generateTanka;
