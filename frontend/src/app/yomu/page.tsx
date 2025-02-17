@@ -9,6 +9,7 @@ import Dialog from '@/components/Dialog';
 import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { judgeImage } from '@/lib/JudgeImage';
+import { postYomu } from './postActions';
 
 const MAX_LENGTH = 140; // 最大文字数
 const MIN_LENGTH = 40; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
@@ -97,8 +98,16 @@ const SignedInPage = (): React.ReactNode => {
     setFile(null);
   };
 
-  const onClickYomuButton = () => {
+  const onClickYomuButton = async () => {
     console.log('投稿');
+    const res = await postYomu({
+      originalText: text,
+      imageData: file?.file,
+      userName: session.data?.user?.name ?? '',
+      userIconPath: session.data?.user?.image ?? '',
+    });
+
+    console.log(res);
   };
 
   return (
