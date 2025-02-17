@@ -4,6 +4,9 @@ import db from '../db.js';
 import { getPostSchema } from '../../schema/Post/getPostSchema.js';
 import type { getPostRoute } from '../../routes/Post/getPostRoute.js';
 import { env } from '../../config/env.js';
+import { sampleDownloadSchema } from '../../schema/sampleS3Schema.js';
+import type { sampleS3DownloadRoute } from '../../routes/sampleS3Route.js';
+import { getFileByUrl } from '../../lib/s3-connector.js';
 
 type getPostSchema = z.infer<typeof getPostSchema>;
 
@@ -14,33 +17,28 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       `SELECT id FROM ${env.POSTS_TABLE_NAME} ORDER BY created_at DESC LIMIT 1;`
     );
     // 受け取ったjsonを各変数に格納 (post_idが指定なしなら，最新の投稿idになる)
-    const {
-      limit,
-      my_icon,
-      post_id = latest_post_id[0].id,
-      user_icon = null,
-    } = await c.req.json<getPostSchema>();
+    let { limit, my_icon, post_id = null, user_icon = null } = await c.req.json<getPostSchema>();
 
-    // 投稿が存在するかチェック
-    const checkSql = `SELECT * FROM ${env.POSTS_TABLE_NAME} WHERE id = :post_id;`;
-    const existingPosts = await db.query(checkSql, { post_id });
-    if (existingPosts.length == 0) {
-      return c.json(
-        {
-          message: '投稿が見つかりません．',
-          statusCode: 404,
-          error: 'Not Found',
-        },
-        404
-      );
-    }
-
-    // 入力のpost_idがundifinedなら最新の投稿から取得，そうでなければその投稿よりも古いものを取得
+    // 入力のpost_idがnullなら最新の投稿から取得，そうでなければその投稿よりも古いものを取得
     // sql文中の比較条件切り替え
     let symbol;
-    if (post_id == latest_post_id[0].id) {
+    if (post_id == null) {
+      post_id = latest_post_id[0].id;
       symbol = '<=';
     } else {
+      // 投稿が存在するかチェック
+      const checkSql = `SELECT * FROM ${env.POSTS_TABLE_NAME} WHERE id = :post_id;`;
+      const existingPosts = await db.query(checkSql, { post_id });
+      if (existingPosts.length == 0) {
+        return c.json(
+          {
+            message: '投稿が見つかりません．',
+            statusCode: 404,
+            error: 'Not Found',
+          },
+          404
+        );
+      }
       symbol = '<';
     }
 
@@ -84,6 +82,8 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       ...row,
       is_miyabi: row.is_miyabi ? true : false,
     }));
+
+    console.log(results);
 
     // レスポンス
     return c.json(

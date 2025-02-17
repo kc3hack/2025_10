@@ -5,6 +5,9 @@ import { createPostSchema } from '../../schema/Post/createPostSchema.js';
 import type { createPostRoute } from '../../routes/Post/createPostRoute.js';
 import { env } from '../../config/env.js';
 import generateTanka from '../../lib/gemini.js';
+import { sampleUploadSchema } from '../../schema/sampleS3Schema.js';
+import type { sampleS3UploadRoute } from '../../routes/sampleS3Route.js';
+import { uploadFile } from '../../lib/s3-connector.js';
 
 type createPostSchema = z.infer<typeof createPostSchema>;
 
@@ -13,7 +16,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     // 受け取ったデータを各変数に格納
     const formData = await c.req.formData();
     const originalValue = formData.get('original');
-    const image = formData.get('image') || null;
+    const image = (formData.get('image') as File) || null;
     const user_name = formData.get('user_name');
     const user_icon = formData.get('user_icon');
 
@@ -30,16 +33,14 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     }
     const original = originalValue;
 
-    //console.log(image);
-
     const tankaArray = await generateTanka(original);
     const tanka = JSON.stringify(tankaArray);
 
-    const image_path = 'test.png';
+    const image_path = await uploadFile(image);
 
     console.log(original);
     console.log(tanka);
-    console.log(image);
+    console.log(image_path);
     console.log(user_name);
     console.log(user_icon);
 
