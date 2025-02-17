@@ -57,11 +57,7 @@ const SignedInPage = (): React.ReactNode => {
 
   const router = useRouter();
 
-  // テキストエリアの高さを自動で調整する
-  const resizeTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // e.target.style.height = 'auto';
-    // e.target.style.height = `${e.target.scrollHeight}px`;
-
+  const onChangeTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
     setCanPost(e.target.value.length >= MIN_LENGTH && e.target.value.length <= MAX_LENGTH);
   };
@@ -130,7 +126,7 @@ const SignedInPage = (): React.ReactNode => {
             } ${file ? '' : 'h-[20rem]'}`}
             placeholder='いま何してんの？'
             onChange={(e) => {
-              resizeTextArea(e);
+              onChangeTextArea(e);
             }}
             onDrop={(e) => {
               onDrop(e);
@@ -168,7 +164,6 @@ const SignedInPage = (): React.ReactNode => {
           yesText='OK'
           noText='キャンセル'
         />
-        {/* <FileDropZone file={file} setFile={updateFile} /> */}
       </div>
     </div>
   );
