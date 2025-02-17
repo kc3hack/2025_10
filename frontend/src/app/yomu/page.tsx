@@ -9,8 +9,9 @@ import Dialog from '@/components/Dialog';
 import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { judgeImage } from '@/lib/JudgeImage';
-import { postYomu } from './postActions';
+import { postYomu, PostResult } from './postActions';
 import Loading from '@/components/Loading';
+import AfterYomu from './AfterYomu';
 
 const MAX_LENGTH = 140; // 最大文字数
 const MIN_LENGTH = 40; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
@@ -63,6 +64,7 @@ const SignedInPage = (): React.ReactNode => {
   const [file, setFile] = useState<UploadedFile | null>(null);
 
   const [postStatus, setPostStatus] = useState<PostStatus>(PostStatus.INITIAL);
+  const [resResult, setResResult] = useState<PostResult | null>(null);
 
   const [isDragActive, setIsDragActive] = useState(false);
 
@@ -113,7 +115,8 @@ const SignedInPage = (): React.ReactNode => {
     console.log('投稿');
     const res = await postYomu({
       originalText: text,
-      imageData: file?.file,
+      imageData: file?.file ?? null,
+      imagePath: file?.filePath ?? '',
       userName: session.data?.user?.name ?? '',
       userIconPath: session.data?.user?.image ?? '',
     });
@@ -124,6 +127,7 @@ const SignedInPage = (): React.ReactNode => {
     }
 
     console.log(res);
+    setResResult(res);
     setPostStatus(PostStatus.SUCCESS);
   };
 
@@ -222,6 +226,15 @@ const SignedInPage = (): React.ReactNode => {
         <div className='fixed z-20 size-full bg-black/30'>
           <Loading className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2' isCenter />
         </div>
+      )}
+
+      {postStatus === PostStatus.SUCCESS && (
+        <AfterYomu
+          tanka={resResult?.tanka ?? []}
+          imagePath={resResult?.imagePath ?? ''}
+          userName={resResult?.userName ?? ''}
+          userIconPath={resResult?.userIconPath ?? ''}
+        />
       )}
     </>
   );
