@@ -2,7 +2,7 @@ import { z } from '@hono/zod-openapi';
 
 // リクエストの型
 export const createMiyabiSchema = z.object({
-  user_icon: z.string().openapi({
+  my_icon: z.string().openapi({
     example: 'https://avatars.githubusercontent.com/u/131171129?v=4',
     description: 'git hubのアイコンURL',
   }),

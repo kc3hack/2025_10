@@ -16,6 +16,7 @@ const deletePostHandler: RouteHandler<typeof deletePostRoute, {}> = async (c: Co
     const checkSql = `SELECT * FROM ${env.POSTS_TABLE_NAME} WHERE id = :post_id;`;
     const existingPosts = await db.query(checkSql, { post_id });
     if (existingPosts.length == 0) {
+      console.log('投稿が見つかりません．');
       return c.json(
         {
           message: '投稿が見つかりません．',
@@ -30,6 +31,7 @@ const deletePostHandler: RouteHandler<typeof deletePostRoute, {}> = async (c: Co
     const checkSql2 = `SELECT * FROM ${env.POSTS_TABLE_NAME} WHERE id = :post_id;`;
     const postInfo = await db.query(checkSql2, { post_id });
     if (postInfo[0].user_icon != user_icon) {
+      console.log('許可がありません．');
       return c.json(
         {
           message: '許可がありません．',
@@ -46,16 +48,18 @@ const deletePostHandler: RouteHandler<typeof deletePostRoute, {}> = async (c: Co
     await db.query(sql, { user_icon, post_id });
 
     // レスポンス
+    console.log('投稿を削除しました．');
     return c.json(
       {
-        message: '投稿しました．',
+        message: '投稿を削除しました．',
       },
       200
     );
   } catch (err) {
+    console.log('投稿の削除に失敗しました．');
     return c.json(
       {
-        message: '投稿に失敗しました．',
+        message: '投稿の削除に失敗しました．',
         statusCode: 500,
         error: 'Internal Server Error',
       },
