@@ -134,7 +134,7 @@ const SignedInPage = (): React.ReactNode => {
   // 投稿ボタンを押した時の処理
   const onClickYomuButton = async () => {
     setPostStatus(PostStatus.POSTING);
-    console.log('投稿');
+    // console.log('投稿');
     const res = await postYomu({
       originalText: text,
       imageData: file?.file ?? null,
