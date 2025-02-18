@@ -14,7 +14,7 @@ export interface PostResult {
   tanka: string[];
 }
 
-const client = hc<AppType>('http://backend:8080');
+const client = hc<AppType>(process.env.BACKEND_URL ?? 'http://localhost:8080');
 
 /**
  * 短歌を投稿する
