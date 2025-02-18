@@ -13,13 +13,14 @@ import { useSession } from 'next-auth/react';
 import LoginDialog from '@/components/LoginDialog';
 import { useRouter } from 'next/navigation';
 
-const LIMIT = 10;
+const LIMIT = 10; // 一度に取得する投稿数
+const MAX = 100; // タイムラインに表示できる最大投稿数
 
 const Timeline = () => {
   // 投稿データの配列
   const [posts, setPosts] = useState<PostTypes[]>([]);
   // 投稿取得時のオフセットID
-  const [offsetId, setOffsetId] = useState('');
+  const offsetIdRef = useRef('');
   // データ取得中かどうかのフラグ
   const [isLoading, setIsLoading] = useState(false);
   // これ以上取得できる投稿があるかのフラグ
@@ -36,6 +37,8 @@ const Timeline = () => {
 
   //IntersectionObserverを保持するためのref
   const observer = useRef<IntersectionObserver | null>(null);
+  // 投稿取得の重複実行を防ぐためのref
+  const isFetchingRef = useRef(false);
 
   /**
    * 追加の投稿データを取得し，状態を更新する非同期関数のCallback Ref
@@ -44,16 +47,24 @@ const Timeline = () => {
    * @returns {Promise<void>} 投稿データの取得と状態更新が完了するPromise
    */
   const loadMorePosts = useCallback(async () => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
     setIsLoading(true);
     // 投稿データを取得
     const newPosts = await fetchPosts({
       limit: LIMIT,
-      iconUrl: session.data?.user?.id,
-      offsetId: offsetId,
+      iconUrl: session.data?.user?.image ?? '',
+      offsetId: offsetIdRef.current,
     });
     if (newPosts && newPosts.length > 0) {
-      setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-      setOffsetId(() => newPosts[newPosts.length - 1].id);
+      setPosts((prevPosts) => {
+        const updatedPosts = [...prevPosts, ...newPosts];
+        if (updatedPosts.length >= MAX) {
+          setHasMore(false);
+        }
+        return updatedPosts;
+      });
+      offsetIdRef.current = newPosts[newPosts.length - 1].id;
       // 取得した投稿数がLIMIT未満の場合は，これ以上取得できる投稿は無い．
       if (newPosts.length < LIMIT) {
         setHasMore(false);
@@ -63,7 +74,8 @@ const Timeline = () => {
       setHasMore(false);
     }
     setIsLoading(false);
-  }, [offsetId]);
+    isFetchingRef.current = false;
+  }, [session.data?.user?.image]);
 
   // ターゲットの要素を監視するためのcallback ref
   const targetRef = useCallback(
@@ -94,6 +106,11 @@ const Timeline = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 見かけ上の投稿を削除する関数
+  const deletePost = (postId: string) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  };
+
   return (
     <div className='relative min-h-screen'>
       {/* ヘッダ */}
@@ -117,10 +134,10 @@ const Timeline = () => {
       <div className='pt-12'>
         <div className='relative mx-auto max-w-lg'>
           <SideMenu className='fixed top-16 hidden -translate-x-full lg:block' />
-          <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' />
+          <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' onDelete={deletePost} />
           {isLoading && <p className='py-3 text-center'>投稿を取得中...</p>}
           <div ref={targetRef} className='h-px' />
-          {!hasMore && <p className='py-3 text-center'>これ以上投稿はありません</p>}
+          {!hasMore && <p className='py-3 text-center'>これ以上投稿を取得できません。</p>}
         </div>
       </div>
 
@@ -146,7 +163,7 @@ const Timeline = () => {
       )}
 
       {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
+      <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />
     </div>
   );
 };

@@ -35,6 +35,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       const checkSql = `SELECT * FROM ${env.POSTS_TABLE_NAME} WHERE id = :post_id;`;
       const existingPosts = await db.query(checkSql, { post_id });
       if (existingPosts.length == 0) {
+        console.log('投稿が見つかりません．');
         return c.json(
           {
             message: '投稿が見つかりません．',
@@ -92,6 +93,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
     //console.log(results);
 
     // レスポンス
+    console.log('投稿を取得しました．');
     return c.json(
       {
         message: '投稿を取得しました．',
@@ -100,6 +102,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       200
     );
   } catch (err) {
+    console.log('投稿の取得に失敗しました．');
     return c.json(
       {
         message: '投稿の取得に失敗しました．',

@@ -13,11 +13,14 @@ import { MdDeleteForever } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import Dialog from '@/components/Dialog';
 import LoginDialog from './LoginDialog';
+import { addMiyabi, removeMiyabi } from '@/app/timeline/actions/countMiyabi';
+import deletePost from '@/app/timeline/actions/deletePost';
 
 // props の型定義
 interface PostProps {
   post: PostTypes;
   className?: string;
+  onDelete: (postId: string) => void;
 }
 
 /**
@@ -26,7 +29,7 @@ interface PostProps {
  * @param {PostProps} props - 投稿データを含むオブジェクト
  * @return {JSX.Element} 投稿を表示するReactコンポーネント
  */
-const Post = ({ post, className }: PostProps) => {
+const Post = ({ post, className, onDelete }: PostProps) => {
   // 短歌をパースする
   const tanka = parseTanka(post.tanka);
   // 投稿に画像が含まれるか
@@ -37,6 +40,8 @@ const Post = ({ post, className }: PostProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   // 削除確認ダイアログの表示状態
   const [dialogOpen, setDialogOpen] = useState(false);
+  // 削除失敗ダイアログの表示状態
+  const [deleteFailedDialogOpen, setDeleteFailedDialogOpen] = useState(false);
   // ユーザアイコンURLが一致するなら自分の投稿
   const isMyPost = useSession().data?.user?.image === post.user.iconUrl;
   // ドロップダウンメニューの要素
@@ -59,6 +64,10 @@ const Post = ({ post, className }: PostProps) => {
   const isLoggedIn = session.status === 'authenticated';
   // ログイン促進ダイアログの開閉状態
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+  // 親の持つPostsから自身を削除する
+  const handleDelete = () => {
+    onDelete(post.id);
+  };
 
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
@@ -116,47 +125,65 @@ const Post = ({ post, className }: PostProps) => {
           <p className='mr-2 text-sm'>{miyabiCount.toLocaleString()}</p>
           <MiyabiButton
             size='small'
-            onClick={() => {
+            onClick={async () => {
               if (isLoggedIn) {
                 setMiyabiCount((count) => ++count);
+                await addMiyabi({ postId: post.id, iconUrl: session.data?.user?.image ?? '' });
               } else {
                 setLoginDialogOpen(true);
               }
             }}
-            onCancel={() => {
+            onCancel={async () => {
               if (isLoggedIn) {
                 setMiyabiCount((count) => --count);
+                await removeMiyabi({ postId: post.id, iconUrl: session.data?.user?.image ?? '' });
               } else {
                 setLoginDialogOpen(true);
               }
             }}
             initialIsClicked={post.miyabiIsClicked}
+            isAnimationDisabled={!isLoggedIn}
             className='mr-0'
           />
         </div>
       </div>
       {/* 拡大表示が有効の場合，モーダルを表示する */}
       {modalOpen && <ImageModal imageUrl={post.imageUrl} setModalOpen={setModalOpen} />}
-      {/* ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {dialogOpen && (
-        <Dialog
-          isOpen={dialogOpen}
-          title='投稿の削除'
-          description='この投稿を削除しますか？'
-          yesCallback={() => {
-            console.log('はい');
-            setDialogOpen(false);
-          }}
-          noCallback={() => {
-            console.log('いいえ');
-            setDialogOpen(false);
-          }}
-          yesText='はい'
-          noText='いいえ'
-        />
-      )}
+      {/* 削除確認ダイアログ表示が有効の場合，ダイアログを表示する */}
+      <Dialog
+        isOpen={dialogOpen}
+        title='投稿の削除'
+        description='この投稿を削除しますか？'
+        yesCallback={async () => {
+          console.log('はい');
+          setDialogOpen(false);
+          const result = await deletePost({
+            postId: post.id,
+            iconUrl: session.data?.user?.image ?? '',
+          });
+          if (!result) setDeleteFailedDialogOpen(true);
+          else handleDelete();
+        }}
+        noCallback={() => {
+          console.log('いいえ');
+          setDialogOpen(false);
+        }}
+        yesText='はい'
+        noText='いいえ'
+      />
+      {/* 削除失敗ダイアログ表示が有効の場合，ダイアログを表示する */}
+      <Dialog
+        isOpen={deleteFailedDialogOpen}
+        title='エラー'
+        description='投稿の削除に失敗しました。時間をおいてやり直してみてください。'
+        yesCallback={() => {
+          setDeleteFailedDialogOpen(false);
+        }}
+        yesText='はい'
+        isOnlyOK
+      />
       {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
+      <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />
     </div>
   );
 };
