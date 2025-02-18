@@ -61,45 +61,16 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     } else {
       // ここに圧縮処理 (jpegにしてqualityさげる．めざせ500KB)
       // File型からbufferへ
-      //console.log(image);
       const arrayBuffer = await image.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
       const new_file_name = 'file.jpg';
 
-      await sharp(buffer)
-        .resize({ height: 1080 })
-        .jpeg()
-        .toBuffer()
-        .then(async (resultBuffer) => {
-          // BufferからFile型へ変換
-          const file = new File([resultBuffer], new_file_name, { type: 'image/jpeg' });
-          //console.log(file);
-          // アップロード
-          image_path = await uploadFile(file);
-          //console.log(image_path);
-        })
-        .catch((err) => {
-          console.error('画像圧縮エラー:', err);
-          return c.json(
-            {
-              message: '投稿に失敗しました．',
-              statusCode: 500,
-              error: 'Internal Server Error',
-            },
-            500
-          );
-        });
-
-      // jpegへの変換&圧縮 (二分探索で500KB以下にする)
-      /*
       await compressImage(buffer)
         .then(async (resultBuffer) => {
           // BufferからFile型へ変換
           const file = new File([resultBuffer], new_file_name, { type: 'image/jpeg' });
-          console.log(file);
           // アップロード
           image_path = await uploadFile(file);
-          //console.log(image_path);
         })
         .catch((err) => {
           console.error('画像圧縮エラー:', err);
@@ -112,10 +83,8 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
             500
           );
         });
-      */
     }
 
-    //console.log(image_path);
     // ここからDBのpostテーブルへ情報登録
     const sql = `insert into ${env.POSTS_TABLE_NAME} (original, tanka, image_path, user_name, user_icon) values (:original, :tanka, :image_path, :user_name, :user_icon)`;
     await db.query(sql, { original, tanka, image_path, user_name, user_icon });
@@ -144,7 +113,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
 
 export default createPostHandler;
 
-// 二分探索で500MB以下にする
+// 1080pに圧縮．それでも500KB超えていたら二分探索で500KB以下にする
 async function compressImage(inputBuffer: Buffer): Promise<Buffer> {
   let minQuality = 1;
   let maxQuality = 100;
@@ -152,9 +121,24 @@ async function compressImage(inputBuffer: Buffer): Promise<Buffer> {
   let bestBuffer: Buffer | null = null;
   const targetFileSize = 500 * 1024; // 500KB
 
+  // jpegに変換して，それ以外何もしなくても500KB以下か?
+  const compressedJpegBuffer = await sharp(inputBuffer).jpeg().toBuffer();
+  if (compressedJpegBuffer.length <= targetFileSize) {
+    return compressedJpegBuffer;
+  }
+
+  // 1080pにして500KB以下か?
+  const compressed1080pBuffer = await sharp(inputBuffer).resize({ height: 1080 }).jpeg().toBuffer();
+  if (compressed1080pBuffer.length <= targetFileSize) {
+    return compressed1080pBuffer;
+  }
+
+  // 二分探索
   while (minQuality <= maxQuality) {
     const midQuality = Math.floor((minQuality + maxQuality) / 2);
-    const compressedBuffer = await sharp(inputBuffer).jpeg({ quality: midQuality }).toBuffer();
+    const compressedBuffer = await sharp(compressed1080pBuffer)
+      .jpeg({ quality: midQuality })
+      .toBuffer();
 
     // サイズがtargetFileSizeより大きければ，maxQualityを小さく
     if (compressedBuffer.length > targetFileSize) {
