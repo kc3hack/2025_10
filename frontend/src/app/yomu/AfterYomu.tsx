@@ -186,7 +186,7 @@ const AfterYomu = ({ tanka, imagePath, userName, userIconPath }: AfterYomuProps)
                 height={40}
                 className='rounded-full'
               />
-              <span className='ml-2 text-red-700'>{userName}</span>
+              <span className='mx-1 text-red-700'>{userName}</span>
             </motion.div>
           )}
         </div>
