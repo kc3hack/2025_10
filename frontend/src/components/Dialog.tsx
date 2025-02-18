@@ -66,7 +66,7 @@ const Dialog = ({
             <>
               <AlertDialogCancel onClick={clickNo}>{noText}</AlertDialogCancel>
               <AlertDialogAction
-                className='bg-orange-400 hover:bg-orange-200 text-black'
+                className='bg-orange-400 text-black hover:bg-orange-200'
                 onClick={clickYes}
               >
                 {yesText}
