@@ -63,6 +63,7 @@ const SignedInPage = (): React.ReactNode => {
   const [text, setText] = useState('');
   const [canPost, setCanPost] = useState(false); // 投稿可能か: 文字数から計算する
   const [isDialogOpen, setIsDialogOpen] = useState(false); // 下書き削除のダイアログの表示状態
+  const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false); // 投稿失敗のダイアログの表示状態
   const session = useSession();
   const [file, setFile] = useState<UploadedFile | null>(null);
 
@@ -143,7 +144,7 @@ const SignedInPage = (): React.ReactNode => {
     });
 
     if (res.message !== '投稿に成功しました') {
-      setPostStatus(PostStatus.ERROR);
+      setIsErrorDialogOpen(true);
       return;
     }
 
@@ -254,8 +255,19 @@ const SignedInPage = (): React.ReactNode => {
               isOnlyOK={false}
               yesCallback={yesCallback}
               noCallback={noCallback}
-              yesText='OK'
+              yesText='はい'
               noText='キャンセル'
+            />
+
+            <Dialog
+              isOpen={isErrorDialogOpen}
+              description='投稿に失敗しました。もう一度詠んでみてください。'
+              isOnlyOK={true}
+              yesCallback={() => {
+                setIsErrorDialogOpen(false);
+                setPostStatus(PostStatus.INITIAL);
+              }}
+              yesText='はい'
             />
           </div>
         )}
