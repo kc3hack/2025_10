@@ -136,7 +136,7 @@ const AfterYomu = ({ tanka, imagePath, userName, userIconPath }: AfterYomuProps)
   return (
     <AnimatePresence mode='wait'>
       <main
-        className={`fixed left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 bg-cover bg-center bg-no-repeat`}
+        className={`absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 bg-cover bg-center bg-no-repeat`}
       >
         <div
           className={`mx-auto h-auto w-11/12 max-w-[40rem] rounded-lg bg-white/60 bg-cover bg-center bg-no-repeat p-8 shadow-lg md:w-3/4 lg:w-2/3 xl:w-1/2`}
