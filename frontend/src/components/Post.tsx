@@ -5,7 +5,6 @@ import React from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
 import { PostTypes } from '@/types/postTypes';
-import { TankaTypes } from '@/types/tankaTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
@@ -32,6 +31,8 @@ const Post = ({ post, className }: PostProps) => {
   const tanka = parseTanka(post.tanka);
   // 投稿に画像が含まれるか
   const hasImage = Boolean(post.imageUrl);
+  // 雅カウントの状態
+  const [miyabiCount, setMiyabiCount] = useState(post.miyabiCount);
   // 画像の拡大表示状態
   const [modalOpen, setModalOpen] = useState(false);
   // 削除確認ダイアログの表示状態
@@ -112,15 +113,24 @@ const Post = ({ post, className }: PostProps) => {
       <div className='mt-3 flex items-center text-black'>
         {formatDateKanji(post.date)}
         <div className='ml-auto flex items-center'>
-          <p className='mr-2 text-sm'>{post.miyabi.toLocaleString()}</p>
+          <p className='mr-2 text-sm'>{miyabiCount.toLocaleString()}</p>
           <MiyabiButton
             size='small'
             onClick={() => {
               if (isLoggedIn) {
+                setMiyabiCount((count) => ++count);
               } else {
                 setLoginDialogOpen(true);
               }
             }}
+            onCancel={() => {
+              if (isLoggedIn) {
+                setMiyabiCount((count) => --count);
+              } else {
+                setLoginDialogOpen(true);
+              }
+            }}
+            initialIsClicked={post.miyabiIsClicked}
             className='mr-0'
           />
         </div>
@@ -154,11 +164,11 @@ const Post = ({ post, className }: PostProps) => {
 /**
  * 短歌をパースして，改行と全角空白を追加する．
  * @function parseTanka
- * @param {TankaTypes} tanka - 短歌型オブジェクト
+ * @param {Array<string>} tanka - 短歌の配列
  * @return {string} パースされた短歌の文字列
  */
-const parseTanka = (tanka: TankaTypes): string => {
-  const parsedTanka: string = `${tanka.line1}\n\u3000${tanka.line2}\n\u3000\u3000${tanka.line3}\n${tanka.line4}\n\u3000${tanka.line5}`;
+const parseTanka = (tanka: Array<string>): string => {
+  const parsedTanka: string = `${tanka[0]}\n\u3000${tanka[1]}\n\u3000\u3000${tanka[2]}\n${tanka[3]}\n\u3000${tanka[4]}`;
   return parsedTanka;
 };
 

@@ -37,7 +37,6 @@ const GifButton = ({
       setIsAnimationPlaying(false);
       setIsClicked(true);
     }, animationDuration);
-    onClick?.();
   };
 
   const cancelButton = () => {
@@ -46,6 +45,7 @@ const GifButton = ({
   };
 
   const switchButton = () => {
+    if (isAnimationPlaying) return;
     if (isClicked) {
       cancelButton();
       onCancel?.();
