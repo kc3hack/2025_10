@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
       '202502-test-bucket.s3.ap-northeast-1.amazonaws.com',
     ],
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
+  },
 };
 
 export default nextConfig;
