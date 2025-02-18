@@ -13,6 +13,8 @@ services:
       - backend
     env_file:
       - ./frontend/.env
+    environment:
+      - BACKEND_URL=http://backend:8080
   backend:
     build:
       context: ./backend
