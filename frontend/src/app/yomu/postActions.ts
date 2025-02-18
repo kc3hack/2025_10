@@ -24,14 +24,28 @@ const client = hc<AppType>('http://backend:8080');
 export const postYomu = async (data: PostData): Promise<PostResult> => {
   try {
     console.log(data);
-    const res = await client.post.$post({
-      form: {
-        original: data.originalText,
-        user_name: data.userName,
-        user_icon: data.userIconPath,
-        image: data.imageData ? data.imageData : null,
-      },
-    });
+
+    let res;
+
+    if (data.imageData) {
+      res = await client.post.$post({
+        form: {
+          original: data.originalText,
+          user_name: data.userName,
+          user_icon: data.userIconPath,
+        },
+      });
+    } else {
+      res = await client.post.$post({
+        form: {
+          original: data.originalText,
+          user_name: data.userName,
+          user_icon: data.userIconPath,
+        },
+      });
+    }
+
+    console.log(res);
 
     if (!res.ok) {
       return {
