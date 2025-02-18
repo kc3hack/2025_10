@@ -20,7 +20,7 @@ const Timeline = () => {
   // 投稿データの配列
   const [posts, setPosts] = useState<PostTypes[]>([]);
   // 投稿取得時のオフセットID
-  const [offsetId, setOffsetId] = useState('');
+  const offsetIdRef = useRef('');
   // データ取得中かどうかのフラグ
   const [isLoading, setIsLoading] = useState(false);
   // これ以上取得できる投稿があるかのフラグ
@@ -37,6 +37,8 @@ const Timeline = () => {
 
   //IntersectionObserverを保持するためのref
   const observer = useRef<IntersectionObserver | null>(null);
+  // 投稿取得の重複実行を防ぐためのref
+  const isFetchingRef = useRef(false);
 
   /**
    * 追加の投稿データを取得し，状態を更新する非同期関数のCallback Ref
@@ -45,16 +47,24 @@ const Timeline = () => {
    * @returns {Promise<void>} 投稿データの取得と状態更新が完了するPromise
    */
   const loadMorePosts = useCallback(async () => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
     setIsLoading(true);
     // 投稿データを取得
     const newPosts = await fetchPosts({
       limit: LIMIT,
       iconUrl: session.data?.user?.image ?? '',
-      offsetId: offsetId,
+      offsetId: offsetIdRef.current,
     });
-    if (newPosts && newPosts.length > 0 && posts.length < MAX) {
-      setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-      setOffsetId(() => newPosts[newPosts.length - 1].id);
+    if (newPosts && newPosts.length > 0) {
+      setPosts((prevPosts) => {
+        const updatedPosts = [...prevPosts, ...newPosts];
+        if (updatedPosts.length >= MAX) {
+          setHasMore(false);
+        }
+        return updatedPosts;
+      });
+      offsetIdRef.current = newPosts[newPosts.length - 1].id;
       // 取得した投稿数がLIMIT未満の場合は，これ以上取得できる投稿は無い．
       if (newPosts.length < LIMIT) {
         setHasMore(false);
@@ -64,7 +74,8 @@ const Timeline = () => {
       setHasMore(false);
     }
     setIsLoading(false);
-  }, [offsetId, session.data?.user?.image, posts]);
+    isFetchingRef.current = false;
+  }, [session.data?.user?.image]);
 
   // ターゲットの要素を監視するためのcallback ref
   const targetRef = useCallback(
