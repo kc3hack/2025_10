@@ -1,7 +1,7 @@
 import { z } from '@hono/zod-openapi';
 
 // リクエストの型
-export const getPostSchema = z.object({
+export const getMiyabiRankingSchema = z.object({
   limit: z.number().openapi({
     example: 10,
     description: '取得する投稿の数',
@@ -14,14 +14,11 @@ export const getPostSchema = z.object({
     example: 'cb3adc47-eba3-11ef-9ce7-0242ac130002',
     description: '投稿id',
   }),
-  user_icon: z.string().optional().openapi({
-    example: 'https://avatars.githubusercontent.com/u/131171129?v=4',
-    description: 'git hubのアイコンURL',
-  }),
 });
 
 // postのスキーマ
 export const postSchema = z.object({
+  rank: z.number(),
   id: z.string(),
   original: z.string(),
   tanka: z.array(z.string()),
@@ -34,7 +31,7 @@ export const postSchema = z.object({
 });
 
 // レスポンスの型
-export const getPostResponseSchema = z.object({
+export const getMiyabiRankingResponseSchema = z.object({
   message: z.string(),
   posts: z.array(postSchema),
 });

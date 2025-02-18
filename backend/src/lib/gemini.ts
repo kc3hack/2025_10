@@ -103,11 +103,11 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
       console.log(`短歌生成${i + 1}回目`);
 
       const tanka = [
-        jsonResponse.response[0].line1,
-        jsonResponse.response[0].line2,
-        jsonResponse.response[0].line3,
-        jsonResponse.response[0].line4,
-        jsonResponse.response[0].line5,
+        jsonResponse.response[0].line1.replace('ッ', 'ツ'),
+        jsonResponse.response[0].line2.replace('ッ', 'ツ'),
+        jsonResponse.response[0].line3.replace('ッ', 'ツ'),
+        jsonResponse.response[0].line4.replace('ッ', 'ツ'),
+        jsonResponse.response[0].line5.replace('ッ', 'ツ'),
       ];
 
       const tankaYomi = [

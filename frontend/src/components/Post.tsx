@@ -5,13 +5,14 @@ import React from 'react';
 import { useState } from 'react';
 import Image from 'next/image';
 import { PostTypes } from '@/types/postTypes';
-import { TankaTypes } from '@/types/tankaTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
 import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
-import Dialog from './Dialog';
+import { useSession } from 'next-auth/react';
+import Dialog from '@/components/Dialog';
+import LoginDialog from './LoginDialog';
 
 // props の型定義
 interface PostProps {
@@ -30,10 +31,34 @@ const Post = ({ post, className }: PostProps) => {
   const tanka = parseTanka(post.tanka);
   // 投稿に画像が含まれるか
   const hasImage = Boolean(post.imageUrl);
+  // 雅カウントの状態
+  const [miyabiCount, setMiyabiCount] = useState(post.miyabiCount);
   // 画像の拡大表示状態
   const [modalOpen, setModalOpen] = useState(false);
   // 削除確認ダイアログの表示状態
   const [dialogOpen, setDialogOpen] = useState(false);
+  // ユーザアイコンURLが一致するなら自分の投稿
+  const isMyPost = useSession().data?.user?.image === post.user.iconUrl;
+  // ドロップダウンメニューの要素
+  const dropDownItems = [];
+  // ドロップダウンメニューの投稿削除ボタン
+  const dropDownDeleteButton = {
+    label: '投稿を削除',
+    onClick: () => setDialogOpen(true),
+    className: '',
+    icon: <MdDeleteForever />,
+    color: 'red',
+  };
+  // 自分の投稿ならドロップダウンに削除ボタン追加
+  if (isMyPost) {
+    dropDownItems.push(dropDownDeleteButton);
+  }
+  // セッションの取得
+  const session = useSession();
+  // ログイン状態
+  const isLoggedIn = session.status === 'authenticated';
+  // ログイン促進ダイアログの開閉状態
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
 
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
@@ -49,18 +74,7 @@ const Post = ({ post, className }: PostProps) => {
         <div className='ml-2 cursor-pointer items-center'>
           <p className='text-lg text-black hover:underline'>{post.user.name}</p>
         </div>
-        <DropDownButton
-          className='ml-auto flex'
-          items={[
-            {
-              label: '投稿を削除',
-              onClick: () => setDialogOpen(true),
-              className: '',
-              icon: <MdDeleteForever />,
-              color: 'red',
-            },
-          ]}
-        ></DropDownButton>
+        <DropDownButton className='ml-auto flex' items={dropDownItems}></DropDownButton>
       </div>
       {/* アイコン以外 */}
       <div
@@ -99,8 +113,26 @@ const Post = ({ post, className }: PostProps) => {
       <div className='mt-3 flex items-center text-black'>
         {formatDateKanji(post.date)}
         <div className='ml-auto flex items-center'>
-          <p className='mr-2 text-sm'>{post.miyabi.toLocaleString()}</p>
-          <MiyabiButton size='small' className='mr-0' />
+          <p className='mr-2 text-sm'>{miyabiCount.toLocaleString()}</p>
+          <MiyabiButton
+            size='small'
+            onClick={() => {
+              if (isLoggedIn) {
+                setMiyabiCount((count) => ++count);
+              } else {
+                setLoginDialogOpen(true);
+              }
+            }}
+            onCancel={() => {
+              if (isLoggedIn) {
+                setMiyabiCount((count) => --count);
+              } else {
+                setLoginDialogOpen(true);
+              }
+            }}
+            initialIsClicked={post.miyabiIsClicked}
+            className='mr-0'
+          />
         </div>
       </div>
       {/* 拡大表示が有効の場合，モーダルを表示する */}
@@ -123,6 +155,8 @@ const Post = ({ post, className }: PostProps) => {
           noText='いいえ'
         />
       )}
+      {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
+      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
     </div>
   );
 };
@@ -130,11 +164,11 @@ const Post = ({ post, className }: PostProps) => {
 /**
  * 短歌をパースして，改行と全角空白を追加する．
  * @function parseTanka
- * @param {TankaTypes} tanka - 短歌型オブジェクト
+ * @param {Array<string>} tanka - 短歌の配列
  * @return {string} パースされた短歌の文字列
  */
-const parseTanka = (tanka: TankaTypes): string => {
-  const parsedTanka: string = `${tanka.line1}\n\u3000${tanka.line2}\n\u3000\u3000${tanka.line3}\n${tanka.line4}\n\u3000${tanka.line5}`;
+const parseTanka = (tanka: Array<string>): string => {
+  const parsedTanka: string = `${tanka[0]}\n\u3000${tanka[1]}\n\u3000\u3000${tanka[2]}\n${tanka[3]}\n\u3000${tanka[4]}`;
   return parsedTanka;
 };
 

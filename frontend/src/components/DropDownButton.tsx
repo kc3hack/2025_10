@@ -28,6 +28,7 @@ interface DropDownButtonProps {
 const DropDownButton = ({ className, items }: DropDownButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const hasItem = items.length > 0;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -46,7 +47,10 @@ const DropDownButton = ({ className, items }: DropDownButtonProps) => {
   };
 
   return (
-    <div className={`${className} relative inline-block`} ref={containerRef}>
+    <div
+      className={`${className} relative inline-block ${hasItem ? '' : 'hidden'}`}
+      ref={containerRef}
+    >
       <button
         className='mx-auto flex size-7 items-center justify-center rounded-full bg-transparent hover:bg-black/5'
         onClick={() => toggleDropDown()}
