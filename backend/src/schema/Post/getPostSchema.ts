@@ -6,9 +6,8 @@ export const getPostSchema = z.object({
     example: 10,
     description: '取得する投稿の数',
   }),
-  my_icon: z.string().openapi({
-    example:
-      'https://avatars.githubusercontent.com/u/131171129?s=400&u=07f7dfa8e99b79f55836a04baf5ae537fc527599&v=4',
+  my_icon: z.string().optional().openapi({
+    example: 'https://avatars.githubusercontent.com/u/131171129?v=4',
     description: 'git hubのアイコンURL',
   }),
   post_id: z.string().optional().openapi({
@@ -16,8 +15,7 @@ export const getPostSchema = z.object({
     description: '投稿id',
   }),
   user_icon: z.string().optional().openapi({
-    example:
-      'https://avatars.githubusercontent.com/u/131171129?s=400&u=07f7dfa8e99b79f55836a04baf5ae537fc527599&v=4',
+    example: 'https://avatars.githubusercontent.com/u/131171129?v=4',
     description: 'git hubのアイコンURL',
   }),
 });

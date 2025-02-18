@@ -20,8 +20,10 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     const user_name = formData.get('user_name');
     const user_icon = formData.get('user_icon');
 
+    //console.log(image);
+
     if (!originalValue || typeof originalValue !== 'string') {
-      console.log('if');
+      //console.log('if');
       return c.json(
         {
           message: 'originalはstringである必要があります．',
@@ -34,9 +36,31 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     const original = originalValue;
 
     const tankaArray = await generateTanka(original);
+
+    // tankaArrayが空([])ならエラーを返す
+    if (tankaArray.length == 0) {
+      return c.json(
+        {
+          message: 'tankaが空です．',
+          statusCode: 500,
+          error: 'Internal Server Error',
+        },
+        500
+      );
+    }
+
     const tanka = JSON.stringify(tankaArray);
 
-    const image_path = await uploadFile(image);
+    // imageがnullならimage_pathをnullにする．
+    let image_path;
+    if (image == null) {
+      image_path = null;
+    } else {
+      // ここに圧縮処理 (jpegにして解像度さげる．めざせ500KB)
+
+      // アップロード
+      image_path = await uploadFile(image);
+    }
 
     //console.log(original);
     //console.log(tanka);
