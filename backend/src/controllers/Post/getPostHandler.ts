@@ -27,7 +27,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
     // 入力のpost_idがnullなら最新の投稿から取得，そうでなければその投稿よりも古いものを取得
     // sql文中の比較条件切り替え
     let symbol;
-    if (post_id == null) {
+    if (post_id == null || post_id == '') {
       post_id = latest_post_id[0].id;
       symbol = '<=';
     } else {
