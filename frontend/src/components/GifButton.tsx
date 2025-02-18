@@ -9,6 +9,7 @@ export interface GifButtonProps {
   afterSrc: string;
   animationDuration?: number;
   initialIsClicked?: boolean;
+  isAnimationDisabled?: boolean;
   onClick?: () => void;
   onCancel?: () => void;
   className?: string;
@@ -21,6 +22,7 @@ const GifButton = ({
   afterSrc,
   animationDuration,
   initialIsClicked,
+  isAnimationDisabled = false,
   onClick,
   onCancel,
   className,
@@ -32,6 +34,7 @@ const GifButton = ({
   const [isAnimationPlaying, setIsAnimationPlaying] = useState(false);
 
   const clickButton = () => {
+    if (isAnimationDisabled) return;
     setIsAnimationPlaying(true);
     setTimeout(() => {
       setIsAnimationPlaying(false);
@@ -40,6 +43,7 @@ const GifButton = ({
   };
 
   const cancelButton = () => {
+    if (isAnimationDisabled) return;
     setIsAnimationPlaying(false);
     setIsClicked(false);
   };

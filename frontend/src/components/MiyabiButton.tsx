@@ -6,6 +6,7 @@ interface MiyabiButtonProps {
   size?: 'small' | 'medium' | 'large';
   className?: string;
   initialIsClicked?: boolean;
+  isAnimationDisabled?: boolean;
   onClick?: () => void;
   onCancel?: () => void;
 }
@@ -16,6 +17,7 @@ const MiyabiButton = ({
   onCancel,
   className,
   initialIsClicked = false,
+  isAnimationDisabled = false,
 }: MiyabiButtonProps) => {
   return (
     <GifButton
@@ -27,6 +29,7 @@ const MiyabiButton = ({
       initialIsClicked={initialIsClicked}
       onClick={onClick}
       onCancel={onCancel}
+      isAnimationDisabled={isAnimationDisabled}
       className={`${className} scale-150 hover:scale-[1.6]`}
     />
   );
