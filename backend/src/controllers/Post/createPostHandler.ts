@@ -136,7 +136,8 @@ async function compressImage(inputBuffer: Buffer): Promise<Buffer> {
   // 二分探索
   while (minQuality <= maxQuality) {
     const midQuality = Math.floor((minQuality + maxQuality) / 2);
-    const compressedBuffer = await sharp(compressed1080pBuffer)
+    const compressedBuffer = await sharp(inputBuffer)
+      .resize({ height: 1080 })
       .jpeg({ quality: midQuality })
       .toBuffer();
 
