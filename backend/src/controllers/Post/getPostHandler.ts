@@ -17,12 +17,17 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       `SELECT id FROM ${env.POSTS_TABLE_NAME} ORDER BY created_at DESC LIMIT 1;`
     );
     // 受け取ったjsonを各変数に格納 (post_idが指定なしなら，最新の投稿idになる)
-    let { limit, my_icon, post_id = null, user_icon = null } = await c.req.json<getPostSchema>();
+    let {
+      limit,
+      my_icon = null,
+      post_id = null,
+      user_icon = null,
+    } = await c.req.json<getPostSchema>();
 
     // 入力のpost_idがnullなら最新の投稿から取得，そうでなければその投稿よりも古いものを取得
     // sql文中の比較条件切り替え
     let symbol;
-    if (post_id == null) {
+    if (post_id == null || post_id == '') {
       post_id = latest_post_id[0].id;
       symbol = '<=';
     } else {
@@ -44,7 +49,8 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
 
     // user_iconがnullなら追加条件なし，nullでないならユーザを限定する条件を追加
     let user_query;
-    if (user_icon == null) {
+    if (user_icon == null || user_icon == '') {
+      //console.log('if');
       user_query = '';
     } else {
       user_query = 'AND post.user_icon = :user_icon';
