@@ -1,7 +1,11 @@
 // サーバアクション
 'use server';
 
+import { hc } from 'hono/client';
+import { AppType } from '../../../../../backend/src/index';
 import { PostTypes } from '@/types/postTypes';
+
+const client = hc<AppType>('http://localhost:8080');
 
 /**
  * 投稿データを取得する非同期関数
@@ -9,52 +13,50 @@ import { PostTypes } from '@/types/postTypes';
  * @function fetchPosts
  * @param {Object} params - 投稿データ取得のためのパラメータオブジェクト
  * @param {number} params.limit - 取得する投稿の最大件数
+ * @param {string} params.iconUrl - ユーザのアイコン画像URL
  * @param {string} params.offsetId - 取得を開始する投稿のID（オフセット）
  * @returns {Promise<PostTypes[]>} 投稿データの配列を返すPromise．投稿が存在しない場合は空配列を返す．
  */
 const fetchPosts = async ({
   limit,
+  iconUrl,
   offsetId,
 }: {
   limit: number;
-  offsetId: string;
+  iconUrl?: string;
+  offsetId?: string;
 }): Promise<PostTypes[] | []> => {
-  const posts = [
-    {
-      id: 'example_post',
-      tanka: ['KANSAI', '捉え難しき', 'お題かな', '古都の熱き歌', 'アプリで詠まん'],
-      original:
-        'K.A.N.S.A.Iというお題、どう捉えていいのか難しかった。京都や奈良は昔から短歌がアツいのかな。短歌を使ったアプリ作ろうかな。',
-      imageUrl: '',
-      date: new Date(),
-      user: {
-        id: 'example_user',
-        name: 'Name',
-        bio: 'bio',
-        iconUrl: '',
-      },
-      miyabi: 2222,
-    },
-    {
-      id: 'example_post',
-      tanka: ['KANSAI', '捉え難しき', 'お題かな', '古都の熱き歌', 'アプリで詠まん'],
-      original:
-        'K.A.N.S.A.Iというお題、どう捉えていいのか難しかった。京都や奈良は昔から短歌がアツいのかな。短歌を使ったアプリ作ろうかな。',
-      imageUrl: '/imageSample.jpg',
-      date: new Date(),
-      user: {
-        id: 'example_user',
-        name: 'Name',
-        bio: 'bio',
-        iconUrl: '',
-      },
-      miyabi: 22,
-    },
-  ];
-  console.log(`Loading more Posts... limit: ${limit}, offsetId: ${offsetId}`);
-
   try {
-    return [...posts, ...posts, ...posts, ...posts, ...posts];
+    const res = await client.timeline.$post({
+      json: {
+        limit: limit,
+        my_icon: iconUrl,
+        post_id: offsetId,
+      },
+    });
+    console.log(`Loading more Posts... limit: ${limit}, offsetId: ${offsetId}`);
+
+    // エラーがある場合は空の配列を返す
+    if (!res.ok) {
+      console.log(res.statusText);
+      return [];
+    }
+
+    const json = await res.json();
+    return json.posts.map((post) => ({
+      ...post,
+      id: post.id,
+      tanka: post.tanka,
+      original: post.original,
+      imageUrl: post.image_path ?? '',
+      date: new Date(post.created_at),
+      user: {
+        name: post.user_name,
+        iconUrl: post.user_icon,
+      },
+      miyabiCount: post.miyabi_count,
+      miyabiIsClicked: post.is_miyabi,
+    }));
   } catch (error) {
     console.error(error);
     return [];

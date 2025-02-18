@@ -31,6 +31,8 @@ const Post = ({ post, className }: PostProps) => {
   const tanka = parseTanka(post.tanka);
   // 投稿に画像が含まれるか
   const hasImage = Boolean(post.imageUrl);
+  // 雅カウントの状態
+  const [miyabiCount, setMiyabiCount] = useState(post.miyabiCount);
   // 画像の拡大表示状態
   const [modalOpen, setModalOpen] = useState(false);
   // 削除確認ダイアログの表示状態
@@ -111,15 +113,24 @@ const Post = ({ post, className }: PostProps) => {
       <div className='mt-3 flex items-center text-black'>
         {formatDateKanji(post.date)}
         <div className='ml-auto flex items-center'>
-          <p className='mr-2 text-sm'>{post.miyabi.toLocaleString()}</p>
+          <p className='mr-2 text-sm'>{miyabiCount.toLocaleString()}</p>
           <MiyabiButton
             size='small'
             onClick={() => {
               if (isLoggedIn) {
+                setMiyabiCount((count) => ++count);
               } else {
                 setLoginDialogOpen(true);
               }
             }}
+            onCancel={() => {
+              if (isLoggedIn) {
+                setMiyabiCount((count) => --count);
+              } else {
+                setLoginDialogOpen(true);
+              }
+            }}
+            initialIsClicked={post.miyabiIsClicked}
             className='mr-0'
           />
         </div>

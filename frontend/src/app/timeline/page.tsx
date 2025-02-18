@@ -46,10 +46,14 @@ const Timeline = () => {
   const loadMorePosts = useCallback(async () => {
     setIsLoading(true);
     // 投稿データを取得
-    const newPosts = await fetchPosts({ limit: LIMIT, offsetId });
+    const newPosts = await fetchPosts({
+      limit: LIMIT,
+      iconUrl: session.data?.user?.id,
+      offsetId: offsetId,
+    });
     if (newPosts && newPosts.length > 0) {
       setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-      setOffsetId(() => newPosts[1].id);
+      setOffsetId(() => newPosts[newPosts.length - 1].id);
       // 取得した投稿数がLIMIT未満の場合は，これ以上取得できる投稿は無い．
       if (newPosts.length < LIMIT) {
         setHasMore(false);
@@ -112,7 +116,7 @@ const Timeline = () => {
       {/* タイムライン */}
       <div className='pt-12'>
         <div className='relative mx-auto max-w-lg'>
-          <SideMenu className='absolute top-5 hidden lg:block' style={{ left: '-12rem' }} />
+          <SideMenu className='fixed top-16 hidden -translate-x-full lg:block' />
           <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' />
           {isLoading && <p className='py-3 text-center'>投稿を取得中...</p>}
           <div ref={targetRef} className='h-px' />

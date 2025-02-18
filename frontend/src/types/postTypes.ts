@@ -7,5 +7,6 @@ export type PostTypes = {
   imageUrl: string;
   date: Date;
   user: UserTypes;
-  miyabi: number;
+  miyabiCount: number;
+  miyabiIsClicked: boolean;
 };
