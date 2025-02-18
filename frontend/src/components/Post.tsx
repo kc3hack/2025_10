@@ -13,6 +13,8 @@ import { MdDeleteForever } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import Dialog from '@/components/Dialog';
 import LoginDialog from './LoginDialog';
+import { addMiyabi, removeMiyabi } from '@/app/timeline/actions/countMiyabi';
+import deletePost from '@/app/timeline/actions/deletePost';
 
 // props の型定義
 interface PostProps {
@@ -116,16 +118,18 @@ const Post = ({ post, className }: PostProps) => {
           <p className='mr-2 text-sm'>{miyabiCount.toLocaleString()}</p>
           <MiyabiButton
             size='small'
-            onClick={() => {
+            onClick={async () => {
               if (isLoggedIn) {
                 setMiyabiCount((count) => ++count);
+                await addMiyabi({ postId: post.id, iconUrl: session.data?.user?.image ?? '' });
               } else {
                 setLoginDialogOpen(true);
               }
             }}
-            onCancel={() => {
+            onCancel={async () => {
               if (isLoggedIn) {
                 setMiyabiCount((count) => --count);
+                await removeMiyabi({ postId: post.id, iconUrl: session.data?.user?.image ?? '' });
               } else {
                 setLoginDialogOpen(true);
               }
@@ -143,9 +147,10 @@ const Post = ({ post, className }: PostProps) => {
           isOpen={dialogOpen}
           title='投稿の削除'
           description='この投稿を削除しますか？'
-          yesCallback={() => {
+          yesCallback={async () => {
             console.log('はい');
             setDialogOpen(false);
+            await deletePost({ postId: post.id, iconUrl: session.data?.user?.image ?? '' });
           }}
           noCallback={() => {
             console.log('いいえ');

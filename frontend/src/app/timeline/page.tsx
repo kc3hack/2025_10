@@ -48,7 +48,7 @@ const Timeline = () => {
     // 投稿データを取得
     const newPosts = await fetchPosts({
       limit: LIMIT,
-      iconUrl: session.data?.user?.id,
+      iconUrl: session.data?.user?.image ?? '',
       offsetId: offsetId,
     });
     if (newPosts && newPosts.length > 0) {
@@ -63,7 +63,7 @@ const Timeline = () => {
       setHasMore(false);
     }
     setIsLoading(false);
-  }, [offsetId]);
+  }, [offsetId, session.data?.user?.image]);
 
   // ターゲットの要素を監視するためのcallback ref
   const targetRef = useCallback(
