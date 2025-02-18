@@ -11,7 +11,9 @@ import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
 import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
-import ConfirmationDialog from './ConfirmationDialog';
+import { useSession } from 'next-auth/react';
+import Dialog from '@/components/Dialog';
+import LoginDialog from './LoginDialog';
 
 // props の型定義
 interface PostProps {
@@ -34,37 +36,48 @@ const Post = ({ post, className }: PostProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   // 削除確認ダイアログの表示状態
   const [dialogOpen, setDialogOpen] = useState(false);
+  // ユーザアイコンURLが一致するなら自分の投稿
+  const isMyPost = useSession().data?.user?.image === post.user.iconUrl;
+  // ドロップダウンメニューの要素
+  const dropDownItems = [];
+  // ドロップダウンメニューの投稿削除ボタン
+  const dropDownDeleteButton = {
+    label: '投稿を削除',
+    onClick: () => setDialogOpen(true),
+    className: '',
+    icon: <MdDeleteForever />,
+    color: 'red',
+  };
+  // 自分の投稿ならドロップダウンに削除ボタン追加
+  if (isMyPost) {
+    dropDownItems.push(dropDownDeleteButton);
+  }
+  // セッションの取得
+  const session = useSession();
+  // ログイン状態
+  const isLoggedIn = session.status === 'authenticated';
+  // ログイン促進ダイアログの開閉状態
+  const [loginDialogOpen, setLoginDialogOpen] = useState(false);
 
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
       {/* プロフィールアイコン */}
-      <div className='flex mb-3 items-center'>
+      <div className='mb-3 flex items-center'>
         <Image
           src={post.user.iconUrl !== '' ? post.user.iconUrl : '/iconDefault.png'}
           height={40}
           width={40}
           alt='Icon'
-          className='rounded-full cursor-pointer hover:brightness-75'
+          className='cursor-pointer rounded-full hover:brightness-75'
         />
-        <div className='ml-2 items-center cursor-pointer'>
-          <p className='text-lg hover:underline text-black'>{post.user.name}</p>
+        <div className='ml-2 cursor-pointer items-center'>
+          <p className='text-lg text-black hover:underline'>{post.user.name}</p>
         </div>
-        <DropDownButton
-          className='flex ml-auto'
-          items={[
-            {
-              label: '投稿を削除',
-              onClick: () => setDialogOpen(true),
-              className: '',
-              icon: <MdDeleteForever />,
-              color: 'red',
-            },
-          ]}
-        ></DropDownButton>
+        <DropDownButton className='ml-auto flex' items={dropDownItems}></DropDownButton>
       </div>
       {/* アイコン以外 */}
       <div
-        className={`flex justify-center items-start relative w-full aspect-[4/3] overflow-hidden mx-auto ${
+        className={`relative mx-auto flex aspect-[4/3] w-full items-start justify-center overflow-hidden ${
           hasImage ? 'cursor-pointer' : ''
         }`}
         // 画像をクリックすると拡大表示を有効化
@@ -76,44 +89,64 @@ const Post = ({ post, className }: PostProps) => {
           src={post.imageUrl !== '' ? post.imageUrl : '/imageDefault.png'}
           fill
           alt='Image'
-          className={`object-cover rounded-xl ${hasImage ? 'filter brightness-50' : ''}`}
+          className={`rounded-xl object-cover ${hasImage ? 'brightness-50' : ''}`}
         />
-        <div className='absolute top-1/2 transform -translate-y-1/2 flex justify-center items-start'>
+        <div className='absolute top-1/2 flex -translate-y-1/2 items-start justify-center'>
           <p
             className={`self-end font-shinryu ${
               hasImage ? 'text-white' : 'text-black'
-            } text-base lg:text-lg mr-3 [writing-mode:vertical-rl] [text-orientation:upright]`}
+            } mr-3 text-base [text-orientation:upright] [writing-mode:vertical-rl] lg:text-lg`}
           >
             {post.user.name}
           </p>
           <p
             className={`inline-block align-top font-shinryu ${
               hasImage ? 'text-white' : 'text-black'
-            } text-2xl lg:text-3xl whitespace-pre-line [writing-mode:vertical-rl] [text-orientation:upright]`}
+            } whitespace-pre-line text-2xl [text-orientation:upright] [writing-mode:vertical-rl] lg:text-3xl`}
           >
             {tanka}
           </p>
         </div>
       </div>
-      <p className='w-full mt-3 whitespace-pre-line break-words text-black'>{post.original}</p>
-      <div className='flex mt-3 items-center text-black'>
+      <p className='mt-3 w-full whitespace-pre-line break-words text-black'>{post.original}</p>
+      <div className='mt-3 flex items-center text-black'>
         {formatDateKanji(post.date)}
         <div className='ml-auto flex items-center'>
-          <p className='text-sm mr-2'>{post.miyabi.toLocaleString()}</p>
-          <MiyabiButton size='small' className='mr-0' />
+          <p className='mr-2 text-sm'>{post.miyabi.toLocaleString()}</p>
+          <MiyabiButton
+            size='small'
+            onClick={() => {
+              if (isLoggedIn) {
+              } else {
+                setLoginDialogOpen(true);
+              }
+            }}
+            className='mr-0'
+          />
         </div>
       </div>
       {/* 拡大表示が有効の場合，モーダルを表示する */}
       {modalOpen && <ImageModal imageUrl={post.imageUrl} setModalOpen={setModalOpen} />}
       {/* ダイアログ表示が有効の場合，ダイアログを表示する */}
       {dialogOpen && (
-        <ConfirmationDialog
-          message='この投稿を削除しますか？'
-          option1={{ label: 'いいえ', onClick: () => console.log('いいえ') }}
-          option2={{ label: 'はい', color: 'red', onClick: () => console.log('はい') }}
-          setDialogOpen={setDialogOpen}
+        <Dialog
+          isOpen={dialogOpen}
+          title='投稿の削除'
+          description='この投稿を削除しますか？'
+          yesCallback={() => {
+            console.log('はい');
+            setDialogOpen(false);
+          }}
+          noCallback={() => {
+            console.log('いいえ');
+            setDialogOpen(false);
+          }}
+          yesText='はい'
+          noText='いいえ'
         />
       )}
+      {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
+      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
     </div>
   );
 };

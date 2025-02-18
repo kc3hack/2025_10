@@ -16,6 +16,7 @@ const errorResponseSchema = z.object({
 export const deleteMiyabiRoute = createRoute({
   method: 'delete',
   path: '/miyabi',
+  tags: ['Miyabi'],
   request: {
     body: {
       required: true,

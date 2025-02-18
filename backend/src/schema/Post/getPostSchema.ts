@@ -26,7 +26,7 @@ export const getPostSchema = z.object({
 export const postSchema = z.object({
   id: z.string(),
   original: z.string(),
-  tanka: z.string(),
+  tanka: z.array(z.string()),
   image_path: z.string(),
   created_at: z.string(),
   user_name: z.string(),
