@@ -41,6 +41,7 @@ export const postYomu = async (data: PostData): Promise<PostResult> => {
           original: data.originalText,
           user_name: data.userName,
           user_icon: data.userIconPath,
+          image: data.imageData,
         },
       });
     }
