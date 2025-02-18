@@ -6,5 +6,5 @@
   },
   "editor.tabSize": 2,
   "eslint.workingDirectories": ["./src"],
-  "cSpell.words": ["Tankalizer"]
+  "cSpell.words": ["Tankalizer", "Yomu"]
 }

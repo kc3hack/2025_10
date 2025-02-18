@@ -36,17 +36,16 @@ const FileDropZone = ({ file, setFile }: FileDropZoneProps) => {
       {...getRootProps()}
       className={
         isDragActive
-          ? 'border-2 border-dotted rounded-lg border-red-400 h-3/6'
-          : 'border-2 border-dotted rounded-lg border-gray-300 h-3/6'
+          ? 'h-3/6 rounded-lg border-2 border-dotted border-red-400'
+          : 'h-3/6 rounded-lg border-2 border-dotted border-gray-300'
       }
     >
-      {/* <input {...getInputProps()} /> */}
       {!file && (
         <p
           className={
             isDragActive
-              ? 'text-gray-600 flex justify-center items-center h-full text-center'
-              : 'text-gray-400 flex justify-center items-center h-full text-center'
+              ? 'flex h-full items-center justify-center text-center text-gray-600'
+              : 'flex h-full items-center justify-center text-center text-gray-400'
           }
         >
           ここにアップロードしたい画像をドラッグ&ドロップしてください。

@@ -38,7 +38,7 @@ const ReactionButton = ({
         clickButtonAnimation();
         onClick?.();
       }}
-      className={`${sizeClass} ${className} block mx-auto hover:scale-110 transition-all duration-300`}
+      className={`${sizeClass} ${className} mx-auto block transition-all duration-300 hover:scale-110`}
     >
       <DotLottieReact
         src={lottieSrc}
