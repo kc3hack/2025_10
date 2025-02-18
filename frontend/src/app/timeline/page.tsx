@@ -13,7 +13,8 @@ import { useSession } from 'next-auth/react';
 import LoginDialog from '@/components/LoginDialog';
 import { useRouter } from 'next/navigation';
 
-const LIMIT = 10;
+const LIMIT = 10; // 一度に取得する投稿数
+const MAX = 100; // タイムラインに表示できる最大投稿数
 
 const Timeline = () => {
   // 投稿データの配列
@@ -51,7 +52,7 @@ const Timeline = () => {
       iconUrl: session.data?.user?.image ?? '',
       offsetId: offsetId,
     });
-    if (newPosts && newPosts.length > 0) {
+    if (newPosts && newPosts.length > 0 && posts.length < MAX) {
       setPosts((prevPosts) => [...prevPosts, ...newPosts]);
       setOffsetId(() => newPosts[newPosts.length - 1].id);
       // 取得した投稿数がLIMIT未満の場合は，これ以上取得できる投稿は無い．
@@ -63,7 +64,7 @@ const Timeline = () => {
       setHasMore(false);
     }
     setIsLoading(false);
-  }, [offsetId, session.data?.user?.image]);
+  }, [offsetId, session.data?.user?.image, posts]);
 
   // ターゲットの要素を監視するためのcallback ref
   const targetRef = useCallback(
@@ -120,7 +121,7 @@ const Timeline = () => {
           <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' />
           {isLoading && <p className='py-3 text-center'>投稿を取得中...</p>}
           <div ref={targetRef} className='h-px' />
-          {!hasMore && <p className='py-3 text-center'>これ以上投稿はありません</p>}
+          {!hasMore && <p className='py-3 text-center'>これ以上投稿を取得できません。</p>}
         </div>
       </div>
 
