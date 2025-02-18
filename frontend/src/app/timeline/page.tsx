@@ -95,6 +95,11 @@ const Timeline = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 見かけ上の投稿を削除する関数
+  const deletePost = (postId: string) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  };
+
   return (
     <div className='relative min-h-screen'>
       {/* ヘッダ */}
@@ -118,7 +123,7 @@ const Timeline = () => {
       <div className='pt-12'>
         <div className='relative mx-auto max-w-lg'>
           <SideMenu className='fixed top-16 hidden -translate-x-full lg:block' />
-          <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' />
+          <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' onDelete={deletePost} />
           {isLoading && <p className='py-3 text-center'>投稿を取得中...</p>}
           <div ref={targetRef} className='h-px' />
           {!hasMore && <p className='py-3 text-center'>これ以上投稿を取得できません。</p>}

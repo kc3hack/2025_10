@@ -20,6 +20,7 @@ import deletePost from '@/app/timeline/actions/deletePost';
 interface PostProps {
   post: PostTypes;
   className?: string;
+  onDelete: (postId: string) => void;
 }
 
 /**
@@ -28,7 +29,7 @@ interface PostProps {
  * @param {PostProps} props - 投稿データを含むオブジェクト
  * @return {JSX.Element} 投稿を表示するReactコンポーネント
  */
-const Post = ({ post, className }: PostProps) => {
+const Post = ({ post, className, onDelete }: PostProps) => {
   // 短歌をパースする
   const tanka = parseTanka(post.tanka);
   // 投稿に画像が含まれるか
@@ -63,6 +64,10 @@ const Post = ({ post, className }: PostProps) => {
   const isLoggedIn = session.status === 'authenticated';
   // ログイン促進ダイアログの開閉状態
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+  // 親の持つPostsから自身を削除する
+  const handleDelete = () => {
+    onDelete(post.id);
+  };
 
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
@@ -156,6 +161,7 @@ const Post = ({ post, className }: PostProps) => {
             iconUrl: session.data?.user?.image ?? '',
           });
           if (!result) setDeleteFailedDialogOpen(true);
+          else handleDelete();
         }}
         noCallback={() => {
           console.log('いいえ');
