@@ -39,6 +39,8 @@ const Post = ({ post, className }: PostProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   // 削除確認ダイアログの表示状態
   const [dialogOpen, setDialogOpen] = useState(false);
+  // 削除失敗ダイアログの表示状態
+  const [deleteFailedDialogOpen, setDeleteFailedDialogOpen] = useState(false);
   // ユーザアイコンURLが一致するなら自分の投稿
   const isMyPost = useSession().data?.user?.image === post.user.iconUrl;
   // ドロップダウンメニューの要素
@@ -141,27 +143,40 @@ const Post = ({ post, className }: PostProps) => {
       </div>
       {/* 拡大表示が有効の場合，モーダルを表示する */}
       {modalOpen && <ImageModal imageUrl={post.imageUrl} setModalOpen={setModalOpen} />}
-      {/* ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {dialogOpen && (
-        <Dialog
-          isOpen={dialogOpen}
-          title='投稿の削除'
-          description='この投稿を削除しますか？'
-          yesCallback={async () => {
-            console.log('はい');
-            setDialogOpen(false);
-            await deletePost({ postId: post.id, iconUrl: session.data?.user?.image ?? '' });
-          }}
-          noCallback={() => {
-            console.log('いいえ');
-            setDialogOpen(false);
-          }}
-          yesText='はい'
-          noText='いいえ'
-        />
-      )}
+      {/* 削除確認ダイアログ表示が有効の場合，ダイアログを表示する */}
+      <Dialog
+        isOpen={dialogOpen}
+        title='投稿の削除'
+        description='この投稿を削除しますか？'
+        yesCallback={async () => {
+          console.log('はい');
+          setDialogOpen(false);
+          const result = await deletePost({
+            postId: post.id,
+            iconUrl: session.data?.user?.image ?? '',
+          });
+          if (!result) setDeleteFailedDialogOpen(true);
+        }}
+        noCallback={() => {
+          console.log('いいえ');
+          setDialogOpen(false);
+        }}
+        yesText='はい'
+        noText='いいえ'
+      />
+      {/* 削除失敗ダイアログ表示が有効の場合，ダイアログを表示する */}
+      <Dialog
+        isOpen={deleteFailedDialogOpen}
+        title='エラー'
+        description='投稿の削除に失敗しました。時間をおいてやり直してみてください。'
+        yesCallback={() => {
+          setDeleteFailedDialogOpen(false);
+        }}
+        yesText='はい'
+        isOnlyOK
+      />
       {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
+      <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />
     </div>
   );
 };

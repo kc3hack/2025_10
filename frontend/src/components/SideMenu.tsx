@@ -87,24 +87,22 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
         </div>
       )}
       {/* ログアウト確認ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {logoutDialogOpen && (
-        <Dialog
-          isOpen={logoutDialogOpen}
-          title='ログアウト'
-          description='ログアウトしますか？'
-          yesCallback={() => {
-            setLogoutDialogOpen(false);
-            signOut();
-          }}
-          noCallback={() => {
-            setLogoutDialogOpen(false);
-          }}
-          yesText='はい'
-          noText='いいえ'
-        />
-      )}
+      <Dialog
+        isOpen={logoutDialogOpen}
+        title='ログアウト'
+        description='ログアウトしますか？'
+        yesCallback={() => {
+          setLogoutDialogOpen(false);
+          signOut();
+        }}
+        noCallback={() => {
+          setLogoutDialogOpen(false);
+        }}
+        yesText='はい'
+        noText='いいえ'
+      />
       {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
+      <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />
     </div>
   );
 };

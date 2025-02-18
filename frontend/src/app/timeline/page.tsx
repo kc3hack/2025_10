@@ -146,7 +146,7 @@ const Timeline = () => {
       )}
 
       {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
+      <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />
     </div>
   );
 };
