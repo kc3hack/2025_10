@@ -142,6 +142,7 @@ const Post = ({ post, className, onDelete }: PostProps) => {
               }
             }}
             initialIsClicked={post.miyabiIsClicked}
+            isAnimationDisabled={!isLoggedIn}
             className='mr-0'
           />
         </div>
