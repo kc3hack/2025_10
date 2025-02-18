@@ -5,7 +5,7 @@ import { hc } from 'hono/client';
 import { AppType } from '../../../../../backend/src/index';
 import { PostTypes } from '@/types/postTypes';
 
-const client = hc<AppType>('http://localhost:8080');
+const client = hc<AppType>('http://backend:8080');
 
 /**
  * 投稿データを取得する非同期関数
