@@ -14,7 +14,7 @@ export interface PostResult {
   tanka: string[];
 }
 
-const client = hc<AppType>('http://backend:8080');
+const client = hc<AppType>(process.env.BACKEND_URL ?? 'http://localhost:8080');
 
 /**
  * 短歌を投稿する
@@ -24,14 +24,28 @@ const client = hc<AppType>('http://backend:8080');
 export const postYomu = async (data: PostData): Promise<PostResult> => {
   try {
     console.log(data);
-    const res = await client.post.$post({
-      form: {
-        original: data.originalText,
-        user_name: data.userName,
-        user_icon: data.userIconPath,
-        image: data.imageData ? data.imageData : null,
-      },
-    });
+
+    let res;
+
+    if (data.imageData) {
+      res = await client.post.$post({
+        form: {
+          original: data.originalText,
+          user_name: data.userName,
+          user_icon: data.userIconPath,
+        },
+      });
+    } else {
+      res = await client.post.$post({
+        form: {
+          original: data.originalText,
+          user_name: data.userName,
+          user_icon: data.userIconPath,
+        },
+      });
+    }
+
+    console.log(res);
 
     if (!res.ok) {
       return {
