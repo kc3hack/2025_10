@@ -48,32 +48,27 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
         },
         yomi0: {
           type: SchemaType.STRING,
-          description:
-            '短歌の1句目のふりがな（基本的に日本語のひらがなだが、短歌にアルファベット部分があった場合はその部分のみアルファベットで出力）',
+          description: '短歌の1句目のふりがな',
           nullable: false,
         },
         yomi1: {
           type: SchemaType.STRING,
-          description:
-            '短歌の2句目のふりがな（基本的に日本語のひらがなだが、短歌にアルファベット部分があった場合はその部分のみアルファベットで出力）',
+          description: '短歌の2句目のふりがな',
           nullable: false,
         },
         yomi2: {
           type: SchemaType.STRING,
-          description:
-            '短歌の3句目のふりがな（基本的に日本語のひらがなだが、短歌にアルファベット部分があった場合はその部分のみアルファベットで出力）',
+          description: '短歌の3句目のふりがな',
           nullable: false,
         },
         yomi3: {
           type: SchemaType.STRING,
-          description:
-            '短歌の4句目のふりがな（基本的に日本語のひらがなだが、短歌にアルファベット部分があった場合はその部分のみアルファベットで出力）',
+          description: '短歌の4句目のふりがな',
           nullable: false,
         },
         yomi4: {
           type: SchemaType.STRING,
-          description:
-            '短歌の5句目のふりがな（基本的に日本語のひらがなだが、短歌にアルファベット部分があった場合はその部分のみアルファベットで出力）',
+          description: '短歌の5句目のふりがな',
           nullable: false,
         },
       },
@@ -110,12 +105,12 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
         // アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント
         const regex = /[A-Za-z\uFF21-\uFF3A\uFF41-\uFF5A\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/g;
         const matchedChars = line.match(regex) || [];
-        console.log(matchedChars);
+        // console.log(matchedChars);
         // 「ゃ」「ャ」「ゅ」「ュ」「ょ」「ョ」はカウントしない
         const excludeChars = ['ゃ', 'ャ', 'ゅ', 'ュ', 'ょ', 'ョ'];
         const validChars = matchedChars.filter((char) => !excludeChars.includes(char));
         const count = validChars.length;
-        console.log('count: ', count);
+        // console.log('count: ', count);
 
         // 文字数をカウント（アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント）
         return Math.abs(count - expectedCharaCount[index]) <= 1; // 1文字分までの誤差は許容
@@ -133,7 +128,7 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
 
       const result = await model.generateContent(originalText);
 
-      console.log(result.response.text());
+      // console.log(result.response.text());
 
       const jsonResponse = JSON.parse(result.response.text());
 
