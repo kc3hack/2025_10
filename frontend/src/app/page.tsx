@@ -41,8 +41,8 @@ const Page = () => {
       </div>
 
       {/* 背景画像 */}
-      <div className='fixed left-0 top-0 z-[-1] h-screen w-full opacity-20'>
-        <Image src='/bg.jpg' layout='fill' objectFit='cover' alt='Background'></Image>
+      <div className='fixed left-0 top-0 z-[-1] h-lvh w-full opacity-20'>
+        <Image src='/bg.jpg' fill alt='Background' className='object-cover'></Image>
       </div>
 
       {/* タイムライン */}
