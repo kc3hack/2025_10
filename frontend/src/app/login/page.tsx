@@ -2,9 +2,13 @@ import { redirect } from 'next/navigation';
 import { signIn, providerMap } from '@/auth/config';
 import { AuthError } from 'next-auth';
 
-export default async function SignInPage(props: {
-  searchParams: Promise<{ callbackUrl: string | undefined }>;
-}) {
+interface Props {
+  searchParams: Promise<{ callbackUrl?: string }>;
+}
+
+export default async function SignInPage({ searchParams }: Props) {
+  const { callbackUrl } = await searchParams;
+
   return (
     <div className='flex flex-col gap-2'>
       {Object.values(providerMap).map((provider) => (
@@ -14,7 +18,7 @@ export default async function SignInPage(props: {
             'use server';
             try {
               await signIn(provider.id, {
-                redirectTo: (await props.searchParams)?.callbackUrl ?? '',
+                redirectTo: callbackUrl ?? '',
               });
             } catch (error) {
               if (error instanceof AuthError) {
