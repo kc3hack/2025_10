@@ -1,11 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState, useRef, useCallback } from 'react';
 import { PostTypes } from '@/types/postTypes';
 import PostList from '@/components/PostList';
 import fetchPosts from '@/app/timeline/actions/fetchPosts';
 import { useSession } from 'next-auth/react';
+import { FaArrowUp } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 // props の型定義
 interface TimelineProps {
@@ -30,11 +32,12 @@ const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
   const [hasMore, setHasMore] = useState(true);
   // セッションの取得
   const session = useSession();
-
   //IntersectionObserverを保持するためのref
   const observer = useRef<IntersectionObserver | null>(null);
   // 投稿取得の重複実行を防ぐためのref
   const isFetchingRef = useRef(false);
+  // 一番上まで戻るボタンの表示状態
+  const [showTopButton, setShowTopButton] = useState(false);
 
   /**
    * 追加の投稿データを取得し，状態を更新する非同期関数のCallback Ref
@@ -103,12 +106,41 @@ const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
   };
 
+  // スクロールを監視するためのイベントリスナーの追加
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > window.innerHeight) {
+        setShowTopButton(true);
+      } else {
+        setShowTopButton(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className={`${className}`}>
       <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' onDelete={deletePost} />
       {hasMore && <p className='py-3 text-center'>投稿を取得中...</p>}
       <div ref={targetRef} className='h-px' />
       {!hasMore && <p className='py-3 text-center'>これ以上投稿を取得できません。</p>}
+      {showTopButton && (
+        <motion.div
+          initial={{ opacity: 0, x: '-50%', y: -10 }}
+          animate={{ opacity: 1, x: '-50%', y: 0 }}
+          transition={{ duration: 0.2 }}
+          whileHover={{ scale: 1.1 }}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className='fixed left-1/2 top-12 my-5 flex items-center justify-center rounded-xl bg-orange-400 px-3'
+        >
+          <FaArrowUp color='white' />
+          <a className='py-1 pl-1 text-white shadow-md hover:cursor-pointer'>最新の短歌に戻る</a>
+        </motion.div>
+      )}
     </div>
   );
 };
