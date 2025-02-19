@@ -131,11 +131,10 @@ const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
           initial={{ opacity: 0, x: '-50%', y: -10 }}
           animate={{ opacity: 1, x: '-50%', y: 0 }}
           transition={{ duration: 0.2 }}
-          whileHover={{ scale: 1.1 }}
           onClick={() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className='fixed left-1/2 top-12 my-5 flex items-center justify-center rounded-xl bg-orange-400 px-3'
+          className='fixed left-1/2 top-12 my-5 flex items-center justify-center rounded-xl bg-orange-400 px-3 hover:bg-orange-500'
         >
           <FaArrowUp color='white' />
           <a className='py-1 pl-1 text-white shadow-md hover:cursor-pointer'>最新の短歌に戻る</a>

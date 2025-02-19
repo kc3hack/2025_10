@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import LoginDialog from '@/components/LoginDialog';
 import { useRouter } from 'next/navigation';
 import Timeline from '@/components/Timeline';
+import { motion } from 'framer-motion';
 
 const LIMIT = 10; // 一度に取得する投稿数
 const MAX = 100; // タイムラインに表示できる最大投稿数
@@ -67,10 +68,21 @@ const Page = () => {
       {/* ハンバーガーメニュー */}
       {isMenuOpen && (
         <div className='fixed inset-0 z-50 justify-center lg:hidden'>
-          <div className='flex h-fit w-full bg-white py-4'>
+          <motion.div
+            initial={{ opacity: 0, x: '-30%' }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+            className='flex h-fit w-full bg-white py-4'
+          >
             <SideMenu className='mx-auto' />
-          </div>
-          <div onClick={() => setIsMenuOpen(false)} className='size-full bg-black/50'></div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setIsMenuOpen(false)}
+            className='size-full bg-black/50'
+          />
         </div>
       )}
 
