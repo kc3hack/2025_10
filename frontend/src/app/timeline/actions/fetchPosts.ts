@@ -21,10 +21,12 @@ const fetchPosts = async ({
   limit,
   iconUrl,
   offsetId,
+  targetUserUrl,
 }: {
   limit: number;
   iconUrl?: string;
   offsetId?: string;
+  targetUserUrl?: string;
 }): Promise<PostTypes[] | []> => {
   try {
     const res = await client.timeline.$post({
@@ -32,6 +34,7 @@ const fetchPosts = async ({
         limit: limit,
         my_icon: iconUrl,
         post_id: offsetId,
+        user_icon: targetUserUrl,
       },
     });
     console.log(
