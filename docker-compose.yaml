@@ -14,6 +14,7 @@ services:
     env_file:
       - ./frontend/.env
     environment:
+      - TZ=Asia/Tokyo
       - BACKEND_URL=http://backend:8080
   backend:
     build:
@@ -27,3 +28,5 @@ services:
       - /app/node_modules
     env_file:
       - ./backend/.env
+    environment:
+      - TZ=Asia/Tokyo

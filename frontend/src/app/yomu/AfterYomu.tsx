@@ -193,7 +193,7 @@ const AfterYomu = ({ tanka, imagePath, userName, userIconPath }: AfterYomuProps)
         <button
           key='okButton'
           onClick={() => {
-            router.push('/timeline');
+            router.push('/');
           }}
           disabled={!showHanko}
           className={`fixed inset-x-0 bottom-0 mx-auto w-fit translate-y-full rounded-md border-2 border-red-700 bg-orange-400 p-1 px-6 text-[1.5rem] leading-normal transition-transform ${
