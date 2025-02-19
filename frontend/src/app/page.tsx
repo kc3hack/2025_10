@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { PostTypes } from '@/types/postTypes';
 import PostList from '@/components/PostList';
 import fetchPosts from '@/app/timeline/actions/fetchPosts';
@@ -21,8 +21,6 @@ const Timeline = () => {
   const [posts, setPosts] = useState<PostTypes[]>([]);
   // 投稿取得時のオフセットID
   const offsetIdRef = useRef('');
-  // データ取得中かどうかのフラグ
-  const [isLoading, setIsLoading] = useState(false);
   // これ以上取得できる投稿があるかのフラグ
   const [hasMore, setHasMore] = useState(true);
   // ハンバーガーメニューの開閉状態
@@ -47,9 +45,11 @@ const Timeline = () => {
    * @returns {Promise<void>} 投稿データの取得と状態更新が完了するPromise
    */
   const loadMorePosts = useCallback(async () => {
+    // セッションロード中なら投稿取得をしない
+    if (session.status === 'loading') return;
+    // 投稿取得中なら重複実行しない
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
-    setIsLoading(true);
     // 投稿データを取得
     const newPosts = await fetchPosts({
       limit: LIMIT,
@@ -73,15 +73,14 @@ const Timeline = () => {
       // 投稿が取得できなかった場合は，これ以上取得できる投稿は無いとする．
       setHasMore(false);
     }
-    setIsLoading(false);
     isFetchingRef.current = false;
-  }, [session.data?.user?.image]);
+  }, [session.status, session.data?.user?.image]);
 
   // ターゲットの要素を監視するためのcallback ref
   const targetRef = useCallback(
     (node: HTMLDivElement | null) => {
       // すでに読み込み中の場合は無視
-      if (isLoading) return;
+      if (isFetchingRef.current) return;
 
       // 前回の監視を解除
       if (observer.current) observer.current.disconnect();
@@ -97,14 +96,8 @@ const Timeline = () => {
       //nodeが存在する場合，監視を開始
       if (node) observer.current.observe(node);
     },
-    [isLoading, hasMore, loadMorePosts]
+    [hasMore, loadMorePosts]
   );
-
-  // 初回レンダリング時に最初の投稿を取得
-  useEffect(() => {
-    loadMorePosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // 見かけ上の投稿を削除する関数
   const deletePost = (postId: string) => {
@@ -135,7 +128,7 @@ const Timeline = () => {
         <div className='relative mx-auto max-w-lg'>
           <SideMenu className='fixed top-16 hidden -translate-x-full lg:block' />
           <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' onDelete={deletePost} />
-          {isLoading && <p className='py-3 text-center'>投稿を取得中...</p>}
+          {hasMore && <p className='py-3 text-center'>投稿を取得中...</p>}
           <div ref={targetRef} className='h-px' />
           {!hasMore && <p className='py-3 text-center'>これ以上投稿を取得できません。</p>}
         </div>
