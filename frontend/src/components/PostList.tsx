@@ -8,6 +8,7 @@ import Post from '@/components/Post';
 interface PostListProps {
   posts: PostTypes[];
   className?: string;
+  onDelete: (postId: string) => void;
 }
 
 /**
@@ -16,11 +17,11 @@ interface PostListProps {
  * @param {PostListProps} props - 投稿データの配列を含むオブジェクト
  * @return {JSX.Elements} 投稿リスト表示するReactコンポーネント
  */
-const PostList = ({ posts, className }: PostListProps) => {
+const PostList = ({ posts, className, onDelete }: PostListProps) => {
   return (
     <div className='flex-1 overflow-auto'>
       {posts.map((post, i) => (
-        <Post key={i} post={post} className={className} />
+        <Post key={i} post={post} className={className} onDelete={onDelete} />
       ))}
     </div>
   );

@@ -2,6 +2,7 @@
 'use client';
 
 import { CiUser, CiSettings, CiLogout, CiLogin } from 'react-icons/ci';
+import { PiRankingLight } from 'react-icons/pi';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -48,6 +49,17 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
         onClick={() => {
           if (isLoggedIn) {
           } else {
+          }
+        }}
+        className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+      >
+        <PiRankingLight size={28} />
+        <a className='pl-1 text-xl'>雅ランキング</a>
+      </div>
+      <div
+        onClick={() => {
+          if (isLoggedIn) {
+          } else {
             setLoginDialogOpen(true);
           }
         }}
@@ -87,24 +99,22 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
         </div>
       )}
       {/* ログアウト確認ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {logoutDialogOpen && (
-        <Dialog
-          isOpen={logoutDialogOpen}
-          title='ログアウト'
-          description='ログアウトしますか？'
-          yesCallback={() => {
-            setLogoutDialogOpen(false);
-            signOut();
-          }}
-          noCallback={() => {
-            setLogoutDialogOpen(false);
-          }}
-          yesText='はい'
-          noText='いいえ'
-        />
-      )}
+      <Dialog
+        isOpen={logoutDialogOpen}
+        title='ログアウト'
+        description='ログアウトしますか？'
+        yesCallback={() => {
+          setLogoutDialogOpen(false);
+          signOut();
+        }}
+        noCallback={() => {
+          setLogoutDialogOpen(false);
+        }}
+        yesText='はい'
+        noText='いいえ'
+      />
       {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
-      {loginDialogOpen && <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />}
+      <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />
     </div>
   );
 };
