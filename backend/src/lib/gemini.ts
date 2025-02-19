@@ -2,6 +2,10 @@ import type { Context } from 'hono';
 import { env } from '../config/env.js';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 
+const printLine = (): void => {
+  console.log('--------------------------------');
+};
+
 const generateTanka = async (originalText: string): Promise<string[]> => {
   // Geminiで短歌生成
 
@@ -117,10 +121,6 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
       });
     };
 
-    const printLine = (): void => {
-      console.log('--------------------------------');
-    };
-
     // 生成後、型のチェック（3回まで）
     for (let i = 0; i < 3; i++) {
       printLine();
@@ -171,6 +171,18 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
   } catch (error) {
     console.error('APIエラー:', error);
     return [];
+  }
+};
+
+const getNews = async (originalText: string): Promise<JSON> => {
+  try {
+    const apiKey = env.GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error('APIが設定されていません。');
+    }
+  } catch (error) {
+    console.error('APIエラー:', error);
+    return {};
   }
 };
 
