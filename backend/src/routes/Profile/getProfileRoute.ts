@@ -42,7 +42,7 @@ export const getProfileRoute = createRoute({
           schema: errorResponseSchema,
         },
       },
-      description: 'Not Found',
+      description: 'Not Found Error response',
     },
     500: {
       content: {
