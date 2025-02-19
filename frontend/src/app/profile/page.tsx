@@ -15,7 +15,8 @@ const ProfileSettings = () => {
       <div className='fixed top-0 z-40 flex h-12 w-full items-center justify-center bg-white font-kokuryu text-2xl'>
         <div className=''>Tankalizer</div>
       </div>
-      <div className='fixed left-0 top-0 z-[-1] h-screen w-full opacity-20'>
+
+      <div className='fixed left-0 top-0 z-[-1] h-lvh w-full opacity-20'>
         <Image src='/bg.jpg' layout='fill' objectFit='cover' alt='Background'></Image>
       </div>
 
@@ -48,7 +49,7 @@ const ProfileSettings = () => {
               </div>
             </div>
           </div>
-          <Timeline limit={10} max={100} />
+          <Timeline limit={10} max={100} targetUserUrl={session.data.user?.image ?? ''} />
         </div>
       ) : (
         <div className='text-center text-gray-700'>ログインしてください。</div>
