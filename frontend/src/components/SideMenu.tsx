@@ -2,6 +2,7 @@
 'use client';
 
 import { CiUser, CiSettings, CiLogout, CiLogin } from 'react-icons/ci';
+import { PiRankingLight } from 'react-icons/pi';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -43,6 +44,17 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       >
         <CiUser size={28} />
         <a className='pl-1 text-xl'>プロフィール</a>
+      </div>
+      <div
+        onClick={() => {
+          if (isLoggedIn) {
+          } else {
+          }
+        }}
+        className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+      >
+        <PiRankingLight size={28} />
+        <a className='pl-1 text-xl'>雅ランキング</a>
       </div>
       <div
         onClick={() => {

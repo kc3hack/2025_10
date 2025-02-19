@@ -81,7 +81,7 @@ const SignedInPage = (): React.ReactNode => {
 
   const yesCallback = useCallback(() => {
     setIsDialogOpen(false);
-    router.push('/timeline'); // 「はい」を押したらタイムラインに戻る
+    router.push('/'); // 「はい」を押したらタイムラインに戻る
   }, [router]);
 
   const noCallback = useCallback(() => {
@@ -301,7 +301,7 @@ const NotSignedInPage = (): React.ReactNode => {
     <main className='fixed left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2'>
       <div className='mx-auto h-[30rem] w-11/12 max-w-[40rem] rounded-lg bg-white p-8 shadow-lg md:w-3/4 lg:w-2/3 xl:w-1/2'>
         <Link
-          href='/timeline'
+          href='/'
           className='mb-4 block size-8 cursor-pointer hover:opacity-70'
           onClick={() => {}}
         >
