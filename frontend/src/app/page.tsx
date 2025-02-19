@@ -54,6 +54,7 @@ const Page = () => {
 
       {/* 投稿（詠）ボタン */}
       <FloatingActionButton
+        char='詠'
         onClick={() => {
           if (isLoggedIn) {
             router.push('/yomu');
