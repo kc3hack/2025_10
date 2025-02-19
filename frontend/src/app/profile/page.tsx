@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import React from 'react';
 import Timeline from '@/components/Timeline';
 
@@ -22,11 +22,11 @@ const ProfileSettings = () => {
 
       {session.status === 'authenticated' ? (
         <div className='pt-12'>
-          <div className='w-full max-w-xl border-[2px]  border-gray-300 bg-gradient-to-r from-amber-100 to-amber-50 rounded-2xl shadow-lg'>
-            <div className='text-center text-xl font-semibold text-gray-700 py-4 border-b border-gray-300'>
+          <div className='w-full max-w-xl rounded-2xl  border-2 border-gray-300 bg-gradient-to-r from-amber-100 to-amber-50 shadow-lg'>
+            <div className='border-b border-gray-300 py-4 text-center text-xl font-semibold text-gray-700'>
               プロフィール
             </div>
-            <div className='p-6 space-y-6'>
+            <div className='space-y-6 p-6'>
               <div className='flex flex-col items-center space-y-4'>
                 {session.data.user?.image && (
                   <Image
@@ -37,8 +37,8 @@ const ProfileSettings = () => {
                     className='rounded-full border-2 border-gray-300'
                   />
                 )}
-                <div className='space-y-2 w-full text-center'>
-                  <label htmlFor='name' className='block text-gray-700 font-medium'>
+                <div className='w-full space-y-2 text-center'>
+                  <label htmlFor='name' className='block font-medium text-gray-700'>
                     名前 {session.data.user?.name}
                   </label>
                   <div className='mt-4 text-gray-600'>

@@ -29,7 +29,7 @@ const FileDropZone = ({ file, setFile }: FileDropZoneProps) => {
     };
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <div
