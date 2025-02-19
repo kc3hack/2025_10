@@ -1,10 +1,7 @@
 // サーバアクション
 'use server';
 
-import { hc } from 'hono/client';
-import { AppType } from '../../../../../backend/src/index';
-
-const client = hc<AppType>(process.env.BACKEND_URL ?? 'http://localhost:8080');
+const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:8080';
 
 /**
  * 投稿データを削除する非同期関数
@@ -23,11 +20,15 @@ const deletePost = async ({
   postId: string;
 }): Promise<boolean> => {
   try {
-    const res = await client.post.$delete({
-      json: {
+    const res = await fetch(`${backendUrl}/post`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         user_icon: iconUrl,
         post_id: postId,
-      },
+      }),
     });
 
     // エラーがある場合はログを出力
