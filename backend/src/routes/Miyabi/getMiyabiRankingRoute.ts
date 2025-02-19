@@ -36,6 +36,14 @@ export const getMiyabiRankingRoute = createRoute({
       },
       description: 'Successful response',
     },
+    404: {
+      content: {
+        'application/json': {
+          schema: errorResponseSchema,
+        },
+      },
+      description: 'Not Found',
+    },
     500: {
       content: {
         'application/json': {
@@ -49,6 +57,10 @@ export const getMiyabiRankingRoute = createRoute({
 
 export type getMiyabiRankingRouteResponse200 = z.infer<
   (typeof getMiyabiRankingRoute.responses)['200']['content']['application/json']['schema']
+>;
+
+export type getMiyabiRankingRouteResponse404 = z.infer<
+  (typeof getMiyabiRankingRoute.responses)['404']['content']['application/json']['schema']
 >;
 
 export type getMiyabiRankingRouteResponse500 = z.infer<

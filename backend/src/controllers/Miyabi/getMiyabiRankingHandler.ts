@@ -44,6 +44,7 @@ const getMiyabiRankingHandler: RouteHandler<typeof getMiyabiRankingRoute, {}> = 
 
     let results;
     // ここからDBのpostテーブルから情報取得
+    // 先にMiyabiテーブルでpostごとに雅数を算出，それにpostsテーブルをJOINする？
     const sql = `
       SELECT 
         post.id, 
@@ -53,18 +54,13 @@ const getMiyabiRankingHandler: RouteHandler<typeof getMiyabiRankingRoute, {}> = 
         post.created_at,
         post.user_name,
         post.user_icon, 
-        (SELECT COUNT(*) FROM ${env.MIYABI_TABLE_NAME} WHERE post_id = post.id) as miyabi_count,
-        CASE WHEN miyabi.id IS NULL THEN false ELSE true END as is_miyabi
-      FROM ${env.POSTS_TABLE_NAME} post
-      LEFT JOIN ${env.MIYABI_TABLE_NAME} miyabi
-        ON post.id = miyabi.post_id AND miyabi.user_icon = :my_icon
-      WHERE post.created_at ${symbol} (
-          SELECT created_at 
-          FROM ${env.POSTS_TABLE_NAME} 
-          WHERE id = :post_id
-        )
-      ORDER BY post.created_at DESC 
-      LIMIT :limit
+        COUNT(*) as miyabi_count
+      FROM ${env.MIYABI_TABLE_NAME} miyabi
+      LEFT JOIN ${env.POSTS_TABLE_NAME} post
+        ON miyabi.post_id = post.id
+      GROUP BY miyabi.post_id
+      ORDER BY miyabi_count DESC;
+      ;
     `;
 
     results = await db.query(sql, { limit, my_icon, post_id });
