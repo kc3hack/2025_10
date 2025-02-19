@@ -5,6 +5,19 @@ import { PostTypes } from '@/types/postTypes';
 
 const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:8080';
 
+// response の型定義
+interface PostResponse {
+  id: string;
+  original: string;
+  tanka: [];
+  image_path: string;
+  created_at: string;
+  user_name: string;
+  user_icon: string;
+  miyabi_count: number;
+  is_miyabi: boolean;
+}
+
 /**
  * 投稿データを取得する非同期関数
  * @async
@@ -50,7 +63,7 @@ const fetchPosts = async ({
     }
 
     const json = await res.json();
-    return json.posts.map((post) => ({
+    return json.posts.map((post: PostResponse) => ({
       id: post.id,
       tanka: post.tanka,
       original: post.original,
