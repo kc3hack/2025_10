@@ -170,7 +170,7 @@ const SignedInPage = (): React.ReactNode => {
                   setIsDialogOpen(true);
                 } else {
                   // 無いときはそのままタイムラインに戻る
-                  router.push('/timeline');
+                  router.push('/');
                 }
               }}
             >
