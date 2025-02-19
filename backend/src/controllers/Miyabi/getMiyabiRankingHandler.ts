@@ -11,36 +11,8 @@ const getMiyabiRankingHandler: RouteHandler<typeof getMiyabiRankingRoute, {}> = 
   c: Context
 ) => {
   try {
-    // 直近一週間で最も雅の多い投稿idを取得
-    const hot_post_id = await db.query(
-      `SELECT id FROM ${env.POSTS_TABLE_NAME} ORDER BY created_at DESC LIMIT 1;`
-    );
-    // 受け取ったjsonを各変数に格納 (post_idが指定なしなら，hot_post_idになる)
-    let { limit, my_icon = null, post_id = null } = await c.req.json<getMiyabiRankingSchema>();
-
-    // 入力のpost_idがnullならhot_post_idの投稿から取得，そうでなければその投稿よりも雅がすくないものを取得
-    // sql文中の比較条件切り替え
-    let symbol;
-    if (post_id == null || post_id == '') {
-      post_id = hot_post_id[0].id;
-      symbol = '<=';
-    } else {
-      // 投稿が存在するかチェック
-      const checkSql = `SELECT * FROM ${env.POSTS_TABLE_NAME} WHERE id = :post_id;`;
-      const existingPosts = await db.query(checkSql, { post_id });
-      if (existingPosts.length == 0) {
-        console.log('投稿が見つかりません．');
-        return c.json(
-          {
-            message: '投稿が見つかりません．',
-            statusCode: 404,
-            error: 'Not Found',
-          },
-          404
-        );
-      }
-      symbol = '<';
-    }
+    // 受け取ったjsonを各変数に格納
+    let { limit, my_icon = null } = await c.req.json<getMiyabiRankingSchema>();
 
     let results;
     // ここからDBのpostテーブルから情報取得
@@ -59,11 +31,12 @@ const getMiyabiRankingHandler: RouteHandler<typeof getMiyabiRankingRoute, {}> = 
       LEFT JOIN ${env.POSTS_TABLE_NAME} post
         ON miyabi.post_id = post.id
       GROUP BY miyabi.post_id
-      ORDER BY miyabi_count DESC;
+      ORDER BY miyabi_count DESC
+      LIMIT :limit
       ;
     `;
 
-    results = await db.query(sql, { limit, my_icon, post_id });
+    results = await db.query(sql, { limit, my_icon });
     // is_miyabiをtrue or falseで返すための処理
     results = results.map((row: any) => ({
       ...row,
