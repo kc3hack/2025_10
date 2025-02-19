@@ -109,8 +109,12 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
         console.log(line);
         // アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント
         const regex = /[A-Za-z\uFF21-\uFF3A\uFF41-\uFF5A\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]/g;
-        console.log(line.match(regex));
-        const count = line.match(regex)?.length || 0;
+        const matchedChars = line.match(regex) || [];
+        console.log(matchedChars);
+        // 「ゃ」「ャ」「ゅ」「ュ」「ょ」「ョ」はカウントしない
+        const excludeChars = ['ゃ', 'ャ', 'ゅ', 'ュ', 'ょ', 'ョ'];
+        const validChars = matchedChars.filter((char) => !excludeChars.includes(char));
+        const count = validChars.length;
         console.log('count: ', count);
 
         // 文字数をカウント（アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント）
