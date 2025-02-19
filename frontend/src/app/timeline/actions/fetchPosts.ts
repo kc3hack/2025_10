@@ -1,11 +1,9 @@
 // サーバアクション
 'use server';
 
-import { hc } from 'hono/client';
-import { AppType } from '../../../../../backend/src/index';
 import { PostTypes } from '@/types/postTypes';
 
-const client = hc<AppType>(process.env.BACKEND_URL ?? 'http://localhost:8080');
+const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:8080';
 
 /**
  * 投稿データを取得する非同期関数
@@ -29,13 +27,17 @@ const fetchPosts = async ({
   targetUserUrl?: string;
 }): Promise<PostTypes[] | []> => {
   try {
-    const res = await client.timeline.$post({
-      json: {
+    const res = await fetch(`${backendUrl}/timeline`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         limit: limit,
         my_icon: iconUrl,
         post_id: offsetId,
         user_icon: targetUserUrl,
-      },
+      }),
     });
     console.log(
       `Loading more Posts...\nlimit: ${limit}\niconUrl: ${iconUrl}\noffsetId: ${offsetId}`

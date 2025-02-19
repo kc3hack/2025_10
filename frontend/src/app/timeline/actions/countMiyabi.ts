@@ -1,10 +1,7 @@
 // サーバアクション
 'use server';
 
-import { hc } from 'hono/client';
-import { AppType } from '../../../../../backend/src/index';
-
-const client = hc<AppType>(process.env.BACKEND_URL ?? 'http://localhost:8080');
+const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:8080';
 
 /**
  * 雅を増やす非同期関数
@@ -16,11 +13,15 @@ const client = hc<AppType>(process.env.BACKEND_URL ?? 'http://localhost:8080');
  */
 export const addMiyabi = async ({ iconUrl, postId }: { iconUrl: string; postId: string }) => {
   try {
-    const res = await client.miyabi.$post({
-      json: {
+    const res = await fetch(`${backendUrl}/miyabi`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         post_id: postId,
         my_icon: iconUrl,
-      },
+      }),
     });
 
     // エラーがある場合はログを出力
@@ -42,11 +43,15 @@ export const addMiyabi = async ({ iconUrl, postId }: { iconUrl: string; postId: 
  */
 export const removeMiyabi = async ({ iconUrl, postId }: { iconUrl: string; postId: string }) => {
   try {
-    const res = await client.miyabi.$delete({
-      json: {
+    const res = await fetch(`${backendUrl}/miyabi`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         post_id: postId,
         my_icon: iconUrl,
-      },
+      }),
     });
 
     // エラーがある場合はログを出力

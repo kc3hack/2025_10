@@ -174,16 +174,4 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
   }
 };
 
-const getNews = async (originalText: string): Promise<JSON> => {
-  try {
-    const apiKey = env.GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error('APIが設定されていません。');
-    }
-  } catch (error) {
-    console.error('APIエラー:', error);
-    return {};
-  }
-};
-
 export default generateTanka;

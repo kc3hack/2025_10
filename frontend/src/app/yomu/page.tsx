@@ -261,7 +261,7 @@ const SignedInPage = (): React.ReactNode => {
 
             <Dialog
               isOpen={isErrorDialogOpen}
-              description='投稿に失敗しました。もう一度詠んでみてください。'
+              description='投稿に失敗しました。文章を少し変えてもう一度詠んでみてください。'
               isOnlyOK={true}
               yesCallback={() => {
                 setIsErrorDialogOpen(false);
