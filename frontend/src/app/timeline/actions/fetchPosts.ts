@@ -21,10 +21,12 @@ const fetchPosts = async ({
   limit,
   iconUrl,
   offsetId,
+  targetUserUrl,
 }: {
   limit: number;
   iconUrl?: string;
   offsetId?: string;
+  targetUserUrl?: string;
 }): Promise<PostTypes[] | []> => {
   try {
     const res = await client.timeline.$post({
@@ -32,9 +34,12 @@ const fetchPosts = async ({
         limit: limit,
         my_icon: iconUrl,
         post_id: offsetId,
+        user_icon: targetUserUrl,
       },
     });
-    console.log(`Loading more Posts... limit: ${limit}, offsetId: ${offsetId}`);
+    console.log(
+      `Loading more Posts...\nlimit: ${limit}\niconUrl: ${iconUrl}\noffsetId: ${offsetId}`
+    );
 
     // エラーがある場合は空の配列を返す
     if (!res.ok) {
@@ -44,7 +49,6 @@ const fetchPosts = async ({
 
     const json = await res.json();
     return json.posts.map((post) => ({
-      ...post,
       id: post.id,
       tanka: post.tanka,
       original: post.original,

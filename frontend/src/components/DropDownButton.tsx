@@ -3,6 +3,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
+import { motion } from 'framer-motion';
 
 // 各項目の型定義
 export interface DropDownItem {
@@ -58,7 +59,12 @@ const DropDownButton = ({ className, items }: DropDownButtonProps) => {
         <BsThreeDots size={20} />
       </button>
       {isOpen && (
-        <ul className='absolute right-0 top-3 z-50 mx-3 mt-4 h-fit w-64 rounded-xl border-2 border-gray-200 bg-white p-0 shadow-md'>
+        <motion.ul
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.1 }}
+          className='absolute right-0 top-3 z-50 mx-3 mt-4 h-fit w-64 rounded-xl border-2 border-gray-200 bg-white p-0 shadow-md'
+        >
           {items.map((item) => (
             <li
               key={item.label}
@@ -76,7 +82,7 @@ const DropDownButton = ({ className, items }: DropDownButtonProps) => {
               </span>
             </li>
           ))}
-        </ul>
+        </motion.ul>
       )}
     </div>
   );

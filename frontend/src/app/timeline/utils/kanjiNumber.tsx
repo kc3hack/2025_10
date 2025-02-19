@@ -83,15 +83,26 @@ export const formatDateKanji = (date: Date): ReactNode => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
 
   return (
-    <p className='text-sm'>
-      {`${toKanjiNumberSimply(year)}`}
-      <span className='text-xs'>年</span>
-      {`${toKanjiNumber(month)}`}
-      <span className='text-xs'>月</span>
-      {`${toKanjiNumber(day)}`}
-      <span className='text-xs'>日</span>
-    </p>
+    <div>
+      <p className='text-sm'>
+        <span className='text-sm'>令和</span>
+        {`${toKanjiNumberSimply(year - 2018)}`}
+        <span className='text-xs'>年</span>
+        {`${toKanjiNumber(month)}`}
+        <span className='text-xs'>月</span>
+        {`${toKanjiNumber(day)}`}
+        <span className='text-xs'>日</span>
+      </p>
+      <p className='text-sm'>
+        {`${toKanjiNumber(hour)}`}
+        <span className='text-xs'>時</span>
+        {`${toKanjiNumber(minute)}`}
+        <span className='text-xs'>分</span>
+      </p>
+    </div>
   );
 };
