@@ -35,13 +35,21 @@ const createUserHandler: RouteHandler<typeof createUserRoute, {}> = async (c: Co
       // ここからDBのusersテーブルへ追加処理
       const sql = `insert into ${env.USERS_TABLE_NAME} (id, name, icon) values (:id, :name, :icon)`;
       await db.query(sql, { id, name, icon });
+      // レスポンス
+      console.log('ユーザを追加しました．');
+      return c.json(
+        {
+          message: 'ユーザを追加しました．',
+        },
+        200
+      );
     }
 
     // レスポンス
-    console.log('ユーザを追加しました．');
+    console.log('既に存在するため，ユーザを追加しませんでした．');
     return c.json(
       {
-        message: 'ユーザを追加しました．',
+        message: '既に存在するため，ユーザを追加しませんでした．',
       },
       200
     );
