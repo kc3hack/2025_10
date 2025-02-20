@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Timeline from '@/components/Timeline';
 import fetchProfile from './actions/fetchProfile';
@@ -13,11 +13,11 @@ import { ProfileTypes } from '@/types/profileTypes';
  * @returns {JSX.Element} プロフィールを表示するReactコンポーネント
  */
 const Profile = () => {
-  const { userId } = useParams();
-  const [profile, setProfile] = React.useState<ProfileTypes | null>(null);
+  const { userId } = useParams() as { userId: string };
+  const [profile, setProfile] = useState<ProfileTypes | null>(null);
 
   // ユーザIDからプロフィールをFetchする
-  React.useEffect(() => {
+  useEffect(() => {
     const getProfile = async () => {
       const data = await fetchProfile({ userId: userId as string });
       setProfile(data);
@@ -69,7 +69,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        {profile?.iconUrl && <Timeline limit={10} max={100} targetUserUrl={profile?.iconUrl} />}
+        {profile?.iconUrl && <Timeline limit={10} max={100} targetUserId={userId ?? ''} />}
       </div>
     </div>
   );

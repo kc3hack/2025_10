@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface TimelineProps {
   limit: number;
   max: number;
-  targetUserUrl?: string;
+  targetUserId?: string;
   className?: string;
 }
 
@@ -23,7 +23,7 @@ interface TimelineProps {
  * @param {TimelineProps} props - タイムラインのデータを含むオブジェクト
  * @return {JSX.Elements} タイムラインを表示するReactコンポーネント
  */
-const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
+const Timeline = ({ limit, max, targetUserId, className }: TimelineProps) => {
   // 投稿データの配列
   const [posts, setPosts] = useState<PostTypes[]>([]);
   // 投稿取得時のオフセットID
@@ -56,7 +56,7 @@ const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
       limit: limit,
       iconUrl: session.data?.user?.image ?? '',
       offsetId: offsetIdRef.current,
-      targetUserUrl: targetUserUrl,
+      targetUserId: targetUserId,
     });
     if (newPosts && newPosts.length > 0) {
       setPosts((prevPosts) => {
@@ -76,7 +76,7 @@ const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
       setHasMore(false);
     }
     isFetchingRef.current = false;
-  }, [limit, max, targetUserUrl, session.status, session.data?.user?.image]);
+  }, [limit, max, targetUserId, session.status, session.data?.user?.image]);
 
   // ターゲットの要素を監視するためのcallback ref
   const targetRef = useCallback(
