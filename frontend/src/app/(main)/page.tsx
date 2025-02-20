@@ -3,12 +3,10 @@
 import React from 'react';
 import { useState } from 'react';
 import FloatingActionButton from '@/components/FloatingActionButton';
-import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import LoginDialog from '@/components/LoginDialog';
 import { useRouter } from 'next/navigation';
 import Timeline from '@/components/Timeline';
-import HeaderAndMenu from '@/components/HeaderAndMenu';
 
 const LIMIT = 10; // 一度に取得する投稿数
 const MAX = 100; // タイムラインに表示できる最大投稿数
@@ -24,12 +22,6 @@ const Page = () => {
 
   return (
     <div className='relative min-h-screen'>
-      <HeaderAndMenu />
-      {/* 背景画像 */}
-      <div className='fixed left-0 top-0 z-[-1] h-lvh w-full opacity-20'>
-        <Image src='/bg.jpg' fill alt='Background' className='object-cover'></Image>
-      </div>
-
       {/* タイムライン */}
       <div className='mx-auto max-w-lg'>
         <Timeline limit={LIMIT} max={MAX} />

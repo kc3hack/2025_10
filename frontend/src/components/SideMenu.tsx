@@ -5,15 +5,24 @@ import { CiUser, CiSettings, CiLogout, CiLogin, CiClock2 } from 'react-icons/ci'
 import { PiRankingLight } from 'react-icons/pi';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Dialog from './Dialog';
 import LoginDialog from './LoginDialog';
 import { useRouter } from 'next/navigation';
+import fetchUserId from '@/app/(main)/timeline/actions/fetchUserId';
 
 // props の型定義
 interface SideMenuProps {
   className?: string;
   style?: React.CSSProperties;
+}
+
+enum PATHNAME {
+  HOME = '/',
+  PROFILE = '/profile',
+  RANKING = '/ranking',
+  SETTINGS = '/settings',
 }
 
 /**
@@ -32,53 +41,83 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
   // ログイン促進ダイアログの開閉状態
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+  const [userId, setUserId] = useState<string>('');
+
+  // アイコン画像URLからユーザIDをFetchする
+  useEffect(() => {
+    if (session.status !== 'authenticated') return;
+    const getUserId = async () => {
+      const data = await fetchUserId({ iconUrl: session.data?.user?.image ?? '' });
+      setUserId(data);
+    };
+    getUserId();
+  }, [session.status, session.data?.user?.image]);
 
   return (
-    <div className={`${className} w-40 space-y-3 `} style={style}>
+    <div className={`${className} z-10 w-40 space-y-3`} style={style}>
       <div
         onClick={() => {
-          router.push('/');
+          router.push(PATHNAME.HOME);
         }}
-        className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+        className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
+          pathname === PATHNAME.HOME ? 'bg-orange-200' : 'bg-transparent'
+        }`}
       >
         <CiClock2 size={28} />
-        <a className='pl-1 text-xl'>タイムライン</a>
+        <a className={`pl-1 text-xl ${pathname === PATHNAME.HOME ? 'font-bold' : ''}`}>
+          タイムライン
+        </a>
       </div>
       {isLoggedIn && (
         <div
           onClick={() => {
-            router.push('/profile');
+            router.push(`${PATHNAME.PROFILE}/${userId}`);
           }}
-          className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+          className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
+            pathname === `${PATHNAME.PROFILE}/${userId}` ? 'bg-orange-200' : 'bg-transparent'
+          }`}
         >
           <CiUser size={28} />
-          <a className='pl-1 text-xl'>プロフィール</a>
+          <a
+            className={`pl-1 text-xl ${
+              pathname === `${PATHNAME.PROFILE}/${userId}` ? 'font-bold' : ''
+            }`}
+          >
+            プロフィール
+          </a>
         </div>
       )}
       <div
         onClick={() => {
           if (isLoggedIn) {
-            router.push('/ranking');
+            router.push(PATHNAME.RANKING);
           } else {
           }
         }}
-        className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+        className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
+          pathname === PATHNAME.RANKING ? 'bg-orange-200' : 'bg-transparent'
+        }`}
       >
         <PiRankingLight size={28} />
-        <a className='pl-1 text-xl'>雅ランキング</a>
+        <a className={`pl-1 text-xl ${pathname === PATHNAME.RANKING ? 'font-bold' : ''}`}>
+          雅ランキング
+        </a>
       </div>
       <div
         onClick={() => {
           if (isLoggedIn) {
-            router.push('/settings');
+            router.push(PATHNAME.SETTINGS);
           } else {
             setLoginDialogOpen(true);
           }
         }}
-        className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+        className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
+          pathname === PATHNAME.SETTINGS ? 'bg-orange-200' : 'bg-transparent'
+        }`}
       >
         <CiSettings size={28} />
-        <a className='pl-1 text-xl'>設定</a>
+        <a className={`pl-1 text-xl ${pathname === PATHNAME.SETTINGS ? 'font-bold' : ''}`}>設定</a>
       </div>
       {!isLoggedIn && (
         <div

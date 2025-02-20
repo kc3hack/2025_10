@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Noto_Serif_JP } from 'next/font/google';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
+import Image from 'next/image';
 
 import TypekitLoader from '@/loader/TypekitLoader';
 
@@ -37,6 +38,10 @@ export default function RootLayout({
         <body
           className={`${notoSerifJP.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          {/* 背景画像 */}
+          <div className='fixed left-0 top-0 z-[-1] h-lvh w-full opacity-20'>
+            <Image src='/bg.jpg' fill alt='Background' className='object-cover'></Image>
+          </div>
           {children}
         </body>
       </SessionProvider>

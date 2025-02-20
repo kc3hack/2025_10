@@ -64,7 +64,7 @@ const DropDownButton = ({ className, items }: DropDownButtonProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.1 }}
+            transition={{ duration: 0.2 }}
             className='absolute right-0 top-3 z-50 mx-3 mt-4 h-fit w-64 rounded-xl border-2 border-gray-200 bg-white p-0 shadow-md'
           >
             {items.map((item) => (

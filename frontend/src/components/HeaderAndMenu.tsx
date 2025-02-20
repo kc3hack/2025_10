@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { MdOutlineMenu } from 'react-icons/md';
 import SideMenu from '@/components/SideMenu';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * サイドメニューを表示するコンポーネント
@@ -36,25 +36,29 @@ const HeaderAndMenu = () => {
         </div>
       </div>
       {/* ハンバーガーメニュー */}
-      {isMenuOpen && (
-        <div className='fixed inset-0 z-50 justify-center lg:hidden'>
-          <motion.div
-            initial={{ opacity: 0, x: '-30%' }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2 }}
-            className='flex h-fit w-full bg-white py-4'
-          >
-            <SideMenu className='mx-auto' />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.2 }}
-            onClick={() => setIsMenuOpen(false)}
-            className='size-full bg-black/50'
-          />
-        </div>
-      )}
+      <AnimatePresence mode='wait'>
+        {isMenuOpen && (
+          <div className='fixed inset-0 z-50 justify-center lg:hidden'>
+            <motion.div
+              initial={{ opacity: 0, x: '-30%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '-30%' }}
+              transition={{ duration: 0.2 }}
+              className='flex h-fit w-full bg-white py-4'
+            >
+              <SideMenu className='mx-auto' />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsMenuOpen(false)}
+              className='size-full bg-black/50'
+            />
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
