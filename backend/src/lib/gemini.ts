@@ -116,6 +116,16 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
         const count = validChars.length;
         // console.log('count: ', count);
 
+        // 短歌に「（）()」があればふりがなも一緒に出力したと判定してfalseを返す
+        if (
+          line.includes('（') ||
+          line.includes('）') ||
+          line.includes('(') ||
+          line.includes(')')
+        ) {
+          return false;
+        }
+
         // 文字数をカウント（アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント）
         return Math.abs(count - expectedCharaCount[index]) <= 1; // 1文字分までの誤差は許容
       });
