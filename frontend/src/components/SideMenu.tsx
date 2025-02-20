@@ -34,20 +34,18 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
   const router = useRouter();
 
   return (
-    <div className={`${className} w-40 space-y-3`} style={style}>
-      <div
-        onClick={() => {
-          if (isLoggedIn) {
+    <div className={`${className} w-40 space-y-3 `} style={style}>
+      {isLoggedIn && (
+        <div
+          onClick={() => {
             router.push('/profile');
-          } else {
-            setLoginDialogOpen(true);
-          }
-        }}
-        className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
-      >
-        <CiUser size={28} />
-        <a className='pl-1 text-xl'>プロフィール</a>
-      </div>
+          }}
+          className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+        >
+          <CiUser size={28} />
+          <a className='pl-1 text-xl'>プロフィール</a>
+        </div>
+      )}
       <div
         onClick={() => {
           if (isLoggedIn) {
