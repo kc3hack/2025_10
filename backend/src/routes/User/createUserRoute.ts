@@ -52,4 +52,4 @@ export type createUserRouteResponse500 = z.infer<
   (typeof createUserRoute.responses)['500']['content']['application/json']['schema']
 >;
 
-export type createMiyabiRouteResponseError = z.infer<typeof errorResponseSchema>;
+export type createUserRouteResponseError = z.infer<typeof errorResponseSchema>;
