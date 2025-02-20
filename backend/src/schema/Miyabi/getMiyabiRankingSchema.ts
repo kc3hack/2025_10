@@ -10,10 +10,6 @@ export const getMiyabiRankingSchema = z.object({
     example: 'https://avatars.githubusercontent.com/u/131171129?v=4',
     description: 'git hubのアイコンURL',
   }),
-  post_id: z.string().optional().openapi({
-    example: 'cb3adc47-eba3-11ef-9ce7-0242ac130002',
-    description: '投稿id',
-  }),
 });
 
 // postのスキーマ

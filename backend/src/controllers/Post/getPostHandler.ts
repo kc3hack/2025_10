@@ -84,9 +84,11 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
     `;
 
     results = await db.query(sql, { limit, my_icon, post_id, user_icon });
+
     // is_miyabiをtrue or falseで返すための処理
     results = results.map((row: any) => ({
       ...row,
+      user_id: row.user_icon.match(/\/u\/(\d+)/)[1],
       is_miyabi: row.is_miyabi ? true : false,
     }));
 
