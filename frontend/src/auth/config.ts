@@ -25,4 +25,27 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
     signIn: '/login',
   },
+  events: {
+    signIn: async ({ user }) => {
+      // console.log('signin: ' + JSON.stringify(user));
+
+      try {
+        // 認証成功時、DBにユーザデータを登録
+        const res = await fetch(`${process.env.BACKEND_URL}/user`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: user.name,
+            icon: user.image,
+          }),
+        });
+
+        console.log(res);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
 });
