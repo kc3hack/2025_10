@@ -55,13 +55,13 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
   }, [session.status, session.data?.user?.image]);
 
   return (
-    <div className={`${className} z-10 w-40 space-y-3 `} style={style}>
+    <div className={`${className} z-10 w-40 space-y-3`} style={style}>
       <div
         onClick={() => {
           router.push(PATHNAME.HOME);
         }}
-        className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
-          pathname === PATHNAME.HOME ? 'bg-orange-200' : ''
+        className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
+          pathname === PATHNAME.HOME ? 'bg-orange-200' : 'bg-transparent'
         }`}
       >
         <CiClock2 size={28} />
@@ -74,8 +74,8 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
           onClick={() => {
             router.push(`${PATHNAME.PROFILE}/${userId}`);
           }}
-          className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
-            pathname === PATHNAME.PROFILE ? 'bg-orange-200' : ''
+          className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
+            pathname === `${PATHNAME.PROFILE}/${userId}` ? 'bg-orange-200' : 'bg-transparent'
           }`}
         >
           <CiUser size={28} />
@@ -95,8 +95,8 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
           } else {
           }
         }}
-        className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
-          pathname === PATHNAME.RANKING ? 'bg-orange-200' : ''
+        className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
+          pathname === PATHNAME.RANKING ? 'bg-orange-200' : 'bg-transparent'
         }`}
       >
         <PiRankingLight size={28} />
@@ -112,8 +112,8 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
             setLoginDialogOpen(true);
           }
         }}
-        className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
-          pathname === PATHNAME.SETTINGS ? 'bg-orange-200' : ''
+        className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
+          pathname === PATHNAME.SETTINGS ? 'bg-orange-200' : 'bg-transparent'
         }`}
       >
         <CiSettings size={28} />
