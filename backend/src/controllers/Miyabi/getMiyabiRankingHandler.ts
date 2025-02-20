@@ -26,20 +26,25 @@ const getMiyabiRankingHandler: RouteHandler<typeof getMiyabiRankingRoute, {}> = 
         post.created_at,
         post.user_name,
         post.user_icon, 
-        COUNT(*) as miyabi_count
+        COUNT(*) as miyabi_count,
+        CASE WHEN miyabi2.id IS NULL THEN false ELSE true END as is_miyabi
       FROM ${env.MIYABI_TABLE_NAME} miyabi
       LEFT JOIN ${env.POSTS_TABLE_NAME} post
         ON miyabi.post_id = post.id
+      LEFT JOIN ${env.MIYABI_TABLE_NAME} miyabi2
+        ON post.id = miyabi2.post_id AND miyabi2.user_icon = :my_icon
+      WHERE post.created_at >= (NOW() - INTERVAL 7 DAY)
       GROUP BY miyabi.post_id
-      ORDER BY miyabi_count DESC
+      ORDER BY miyabi_count DESC, post.created_at DESC
       LIMIT :limit
       ;
     `;
 
     results = await db.query(sql, { limit, my_icon });
     // is_miyabiをtrue or falseで返すための処理
-    results = results.map((row: any) => ({
+    results = results.map((row: any, index: number) => ({
       ...row,
+      rank: index + 1,
       is_miyabi: row.is_miyabi ? true : false,
     }));
 
