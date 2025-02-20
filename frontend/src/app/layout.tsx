@@ -23,7 +23,7 @@ const notoSerifJP = Noto_Serif_JP({
 
 export const metadata: Metadata = {
   title: 'Tankalizer',
-  description: 'Tankalizer',
+  description: '投稿したつぶやきが短歌に!?新感覚SNS Tankalizer(タンカライザー)',
 };
 
 export default function RootLayout({
