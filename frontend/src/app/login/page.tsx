@@ -45,7 +45,7 @@ export default async function SignInPage({ searchParams }: Props) {
               type='submit'
               className='w-full rounded-lg bg-amber-500 py-3 font-medium text-white shadow-md transition duration-300 hover:bg-amber-600'
             >
-              <span>{provider.name} でログイン</span>
+              <span>ぎっとはぶ でログイン</span>
             </button>
           </form>
         ))}
