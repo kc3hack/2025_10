@@ -6,10 +6,11 @@ import { PiRankingLight } from 'react-icons/pi';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Dialog from './Dialog';
 import LoginDialog from './LoginDialog';
 import { useRouter } from 'next/navigation';
+import fetchUserId from '@/app/timeline/actions/fetchUserId';
 
 // props の型定義
 interface SideMenuProps {
@@ -41,6 +42,18 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const [userId, setUserId] = useState<string>('');
+
+  // アイコン画像URLからユーザIDをFetchする
+  useEffect(() => {
+    if (session.status !== 'authenticated') return;
+    const getUserId = async () => {
+      const data = await fetchUserId({ iconUrl: session.data?.user?.image ?? '' });
+      setUserId(data);
+    };
+    getUserId();
+  }, [session.status, session.data?.user?.image]);
+
   return (
     <div className={`${className} z-10 w-40 space-y-3 `} style={style}>
       <div
@@ -59,7 +72,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       {isLoggedIn && (
         <div
           onClick={() => {
-            router.push('/profile');
+            router.push(`/profile/${userId}`);
           }}
           className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
             pathname === PATHNAME.PROFILE ? 'bg-orange-200' : ''
