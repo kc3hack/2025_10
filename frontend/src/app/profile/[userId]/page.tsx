@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation';
 import Timeline from '@/components/Timeline';
 import fetchProfile from './actions/fetchProfile';
 import { ProfileTypes } from '@/types/profileTypes';
-import HeaderAndMenu from '@/components/HeaderAndMenu';
 
 /**
  * 指定されたIDのユーザのプロフィールを表示する．
@@ -28,11 +27,6 @@ const Profile = () => {
 
   return (
     <div>
-      <HeaderAndMenu />
-      {/* 背景画像 */}
-      <div className='fixed left-0 top-0 z-[-1] h-lvh w-full opacity-20'>
-        <Image src='/bg.jpg' fill alt='Background' className='object-cover'></Image>
-      </div>
       <div className='mx-auto max-w-sm pt-5 lg:max-w-lg'>
         <div className='mx-4 rounded-2xl border-2 border-gray-300 bg-gradient-to-r from-amber-100 to-amber-50 shadow-lg'>
           <div className='border-b border-gray-300 py-2 text-center text-xl font-semibold text-gray-700'>
