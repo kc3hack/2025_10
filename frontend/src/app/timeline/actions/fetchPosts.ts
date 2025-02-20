@@ -1,11 +1,22 @@
 // サーバアクション
 'use server';
 
-import { hc } from 'hono/client';
-import { AppType } from '../../../../../backend/src/index';
 import { PostTypes } from '@/types/postTypes';
 
-const client = hc<AppType>(process.env.BACKEND_URL ?? 'http://localhost:8080');
+const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:8080';
+
+// response の型定義
+interface PostResponse {
+  id: string;
+  original: string;
+  tanka: [];
+  image_path: string;
+  created_at: string;
+  user_name: string;
+  user_icon: string;
+  miyabi_count: number;
+  is_miyabi: boolean;
+}
 
 /**
  * 投稿データを取得する非同期関数
@@ -29,13 +40,17 @@ const fetchPosts = async ({
   targetUserUrl?: string;
 }): Promise<PostTypes[] | []> => {
   try {
-    const res = await client.timeline.$post({
-      json: {
+    const res = await fetch(`${backendUrl}/timeline`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         limit: limit,
         my_icon: iconUrl,
         post_id: offsetId,
         user_icon: targetUserUrl,
-      },
+      }),
     });
     console.log(
       `Loading more Posts...\nlimit: ${limit}\niconUrl: ${iconUrl}\noffsetId: ${offsetId}`
@@ -48,7 +63,7 @@ const fetchPosts = async ({
     }
 
     const json = await res.json();
-    return json.posts.map((post) => ({
+    return json.posts.map((post: PostResponse) => ({
       id: post.id,
       tanka: post.tanka,
       original: post.original,

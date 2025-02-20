@@ -1,6 +1,4 @@
 'use server';
-import { hc } from 'hono/client';
-import { AppType } from '../../../../backend/src/index';
 
 interface PostData {
   originalText: string;
@@ -14,7 +12,7 @@ export interface PostResult {
   tanka: string[];
 }
 
-const client = hc<AppType>(process.env.BACKEND_URL ?? 'http://localhost:8080');
+const backendUrl = process.env.BACKEND_URL ?? 'http://localhost:8080';
 
 /**
  * 短歌を投稿する
@@ -27,22 +25,21 @@ export const postYomu = async (data: PostData): Promise<PostResult> => {
 
     let res;
 
+    const formData = new FormData();
+    formData.append('original', data.originalText);
+    formData.append('user_name', data.userName);
+    formData.append('user_icon', data.userIconPath);
+
     if (data.imageData) {
-      res = await client.post.$post({
-        form: {
-          original: data.originalText,
-          user_name: data.userName,
-          user_icon: data.userIconPath,
-          image: data.imageData,
-        },
+      formData.append('image', data.imageData);
+      res = await fetch(`${backendUrl}/post`, {
+        method: 'POST',
+        body: formData,
       });
     } else {
-      res = await client.post.$post({
-        form: {
-          original: data.originalText,
-          user_name: data.userName,
-          user_icon: data.userIconPath,
-        },
+      res = await fetch(`${backendUrl}/post`, {
+        method: 'POST',
+        body: formData,
       });
     }
 

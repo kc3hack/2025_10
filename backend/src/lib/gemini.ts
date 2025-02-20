@@ -2,6 +2,10 @@ import type { Context } from 'hono';
 import { env } from '../config/env.js';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 
+const printLine = (): void => {
+  console.log('--------------------------------');
+};
+
 const generateTanka = async (originalText: string): Promise<string[]> => {
   // Geminiで短歌生成
 
@@ -115,10 +119,6 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
         // 文字数をカウント（アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント）
         return Math.abs(count - expectedCharaCount[index]) <= 1; // 1文字分までの誤差は許容
       });
-    };
-
-    const printLine = (): void => {
-      console.log('--------------------------------');
     };
 
     // 生成後、型のチェック（3回まで）

@@ -8,6 +8,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
 import Dialog from './Dialog';
 import LoginDialog from './LoginDialog';
+import { useRouter } from 'next/navigation';
 
 // props の型定義
 interface SideMenuProps {
@@ -30,12 +31,14 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
   // ログイン促進ダイアログの開閉状態
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <div className={`${className} w-40 space-y-3`} style={style}>
       <div
         onClick={() => {
           if (isLoggedIn) {
+            router.push('/profile');
           } else {
             setLoginDialogOpen(true);
           }
@@ -48,6 +51,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       <div
         onClick={() => {
           if (isLoggedIn) {
+            router.push('/ranking');
           } else {
           }
         }}
@@ -59,6 +63,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       <div
         onClick={() => {
           if (isLoggedIn) {
+            router.push('/settings');
           } else {
             setLoginDialogOpen(true);
           }
