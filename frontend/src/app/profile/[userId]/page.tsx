@@ -62,8 +62,8 @@ const Profile = () => {
                   {profile?.name ?? '取得中'}
                 </label>
                 <div className='mt-4 text-gray-600'>
-                  <p>総獲得雅数: {profile?.totalMiyabi ?? '取得中'}</p>
-                  <p>総投稿数: {profile?.totalPost ?? '取得中'}</p>
+                  <p>雅獲得数: {profile?.totalMiyabi ?? '取得中'}</p>
+                  <p>総詠歌数: {profile?.totalPost ? `${profile.totalPost}首` : '取得中'}</p>
                 </div>
               </div>
             </div>
