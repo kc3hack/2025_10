@@ -5,6 +5,7 @@ import { CiUser, CiSettings, CiLogout, CiLogin, CiClock2 } from 'react-icons/ci'
 import { PiRankingLight } from 'react-icons/pi';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import Dialog from './Dialog';
 import LoginDialog from './LoginDialog';
@@ -14,6 +15,13 @@ import { useRouter } from 'next/navigation';
 interface SideMenuProps {
   className?: string;
   style?: React.CSSProperties;
+}
+
+enum PATHNAME {
+  HOME = '/',
+  PROFILE = '/profile',
+  RANKING = '/ranking',
+  SETTINGS = '/settings',
 }
 
 /**
@@ -32,27 +40,35 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
   // ログイン促進ダイアログの開閉状態
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   const router = useRouter();
-
+  const pathname = usePathname();
   return (
     <div className={`${className} w-40 space-y-3 `} style={style}>
       <div
         onClick={() => {
           router.push('/');
         }}
-        className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+        className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
+          pathname === PATHNAME.HOME ? 'bg-orange-200' : ''
+        }`}
       >
         <CiClock2 size={28} />
-        <a className='pl-1 text-xl'>タイムライン</a>
+        <a className={`pl-1 text-xl ${pathname === PATHNAME.HOME ? 'font-bold' : ''}`}>
+          タイムライン
+        </a>
       </div>
       {isLoggedIn && (
         <div
           onClick={() => {
             router.push('/profile');
           }}
-          className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+          className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
+            pathname === PATHNAME.PROFILE ? 'bg-orange-200' : ''
+          }`}
         >
           <CiUser size={28} />
-          <a className='pl-1 text-xl'>プロフィール</a>
+          <a className={`pl-1 text-xl ${pathname === PATHNAME.PROFILE ? 'font-bold' : ''}`}>
+            プロフィール
+          </a>
         </div>
       )}
       <div
@@ -62,10 +78,14 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
           } else {
           }
         }}
-        className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+        className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
+          pathname === PATHNAME.RANKING ? 'bg-orange-200' : ''
+        }`}
       >
         <PiRankingLight size={28} />
-        <a className='pl-1 text-xl'>雅ランキング</a>
+        <a className={`pl-1 text-xl ${pathname === PATHNAME.RANKING ? 'font-bold' : ''}`}>
+          雅ランキング
+        </a>
       </div>
       <div
         onClick={() => {
@@ -75,10 +95,12 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
             setLoginDialogOpen(true);
           }
         }}
-        className='flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5'
+        className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
+          pathname === PATHNAME.SETTINGS ? 'bg-orange-200' : ''
+        }`}
       >
         <CiSettings size={28} />
-        <a className='pl-1 text-xl'>設定</a>
+        <a className={`pl-1 text-xl ${pathname === PATHNAME.SETTINGS ? 'font-bold' : ''}`}>設定</a>
       </div>
       {!isLoggedIn && (
         <div
