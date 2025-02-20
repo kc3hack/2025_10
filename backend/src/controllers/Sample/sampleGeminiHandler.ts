@@ -12,16 +12,11 @@ const sampleGeminiHandler: RouteHandler<typeof sampleGeminiRoute, {}> = async (c
 
   /* --- 色々処理 --- */
 
-  const tanka = await generateTanka(originalText);
-  console.log(tanka);
+  const response = await generateTanka(originalText);
+  console.log(response);
 
   // レスポンス
-  return c.json(
-    {
-      result: tanka,
-    },
-    200
-  );
+  return c.json(response, 200);
 };
 
 export default sampleGeminiHandler;
