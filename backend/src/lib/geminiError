@@ -1,0 +1,15 @@
+GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-pro-exp-02-05:generateContent: [429 Too Many Requests] Resource has been exhausted (e.g. check quota).
+at handleResponseNotOk (file:///C:/Users/shoyo/IdeaProjects/KC3Hack/Tankalizer/backend/node_modules/@google/generative-ai/dist/index.mjs:412:11)
+at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+at async makeRequest (file:///C:/Users/shoyo/IdeaProjects/KC3Hack/Tankalizer/backend/node_modules/@google/generative-ai/dist/index.mjs:385:9)
+at async generateContent (file:///C:/Users/shoyo/IdeaProjects/KC3Hack/Tankalizer/backend/node_modules/@google/generative-ai/dist/index.mjs:830:22)
+at async generateTanka (C:\Users\shoyo\IdeaProjects\KC3Hack\Tankalizer\backend\src\lib\gemini.ts:139:22)
+at async sampleGeminiHandler (C:\Users\shoyo\IdeaProjects\KC3Hack\Tankalizer\backend\src\controllers\Sample\sampleGeminiHandler.ts:15:17)
+at async dispatch (file:///C:/Users/shoyo/IdeaProjects/KC3Hack/Tankalizer/backend/node_modules/hono/dist/compose.js:30:17)
+at async file:///C:/Users/shoyo/IdeaProjects/KC3Hack/Tankalizer/backend/node_modules/hono/dist/validator/validator.js:81:5
+at async dispatch (file:///C:/Users/shoyo/IdeaProjects/KC3Hack/Tankalizer/backend/node_modules/hono/dist/compose.js:30:17)
+at async file:///C:/Users/shoyo/IdeaProjects/KC3Hack/Tankalizer/backend/node_modules/hono/dist/hono-base.js:195:25 {
+status: 429,
+statusText: 'Too Many Requests',
+errorDetails: undefined
+}

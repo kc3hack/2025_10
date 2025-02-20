@@ -1,6 +1,5 @@
 {
-  "status_code": 200,
-  "status_message": "ok",
+  "status": "ok",
   "tanka": {
     "line0": "短歌の1句目",
     "line1": "短歌の2句目",
