@@ -34,7 +34,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
   const router = useRouter();
 
   return (
-    <div className={`${className} w-40 space-y-3 `} style={style}>
+    <div className={`${className} z-10 w-40 space-y-3 `} style={style}>
       <div
         onClick={() => {
           router.push('/');
