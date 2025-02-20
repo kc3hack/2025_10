@@ -17,8 +17,8 @@ interface FloatingActionButtonProps {
 const FloatingActionButton = ({ char, onClick, className }: FloatingActionButtonProps) => {
   return (
     <button
-      className={`${className} fixed bottom-10 right-10 z-30 flex size-16 items-center justify-center rounded-full
-  border-2 border-transparent bg-orange-400 font-shinryu text-4xl font-bold text-white shadow-lg hover:bg-orange-500`}
+      className={`${className} fixed bottom-5 right-5 z-30 flex size-16 items-center justify-center rounded-full border-2 border-transparent
+  bg-orange-400 font-shinryu text-4xl font-bold text-white shadow-lg hover:bg-orange-500 lg:bottom-10 lg:right-10`}
       onClick={onClick}
     >
       {char}
