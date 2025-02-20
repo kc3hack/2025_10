@@ -1,11 +1,12 @@
 import React from 'react';
 import HeaderAndMenu from '@/components/HeaderAndMenu';
+import MotionWrapper from '@/components/MotionWrapper';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <HeaderAndMenu />
-      {children}
+      <MotionWrapper>{children}</MotionWrapper>
     </>
   );
 };
