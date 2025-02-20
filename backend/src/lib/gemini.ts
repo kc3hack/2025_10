@@ -101,9 +101,19 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
     });
 
     // 短歌の各句の文字数をチェックする関数
-    const isValidTanka = (lines: string[]): boolean => {
+    const isValidTanka = (tanka: string[], tankaYomi: string[]): boolean => {
+      // tankaに「（）()」があれば短歌とふりがなを一緒に出力したと判定して失敗判定
+      if (
+        tanka.includes('（') ||
+        tanka.includes('）') ||
+        tanka.includes('(') ||
+        tanka.includes(')')
+      ) {
+        return false;
+      }
+
       const expectedCharaCount = [5, 7, 5, 7, 7];
-      return lines.every((line, index) => {
+      return tankaYomi.every((line, index) => {
         // everyは配列のすべての要素が条件を満たしていればtrueを返す
         console.log(line);
         // アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント
@@ -115,16 +125,6 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
         const validChars = matchedChars.filter((char) => !excludeChars.includes(char));
         const count = validChars.length;
         // console.log('count: ', count);
-
-        // 短歌に「（）()」があればふりがなも一緒に出力したと判定してfalseを返す
-        if (
-          line.includes('（') ||
-          line.includes('）') ||
-          line.includes('(') ||
-          line.includes(')')
-        ) {
-          return false;
-        }
 
         // 文字数をカウント（アルファベット（全角、半角）、ひらがな、カタカナ、漢字を1文字としてカウント）
         return Math.abs(count - expectedCharaCount[index]) <= 1; // 1文字分までの誤差は許容
@@ -162,7 +162,7 @@ const generateTanka = async (originalText: string): Promise<string[]> => {
 
       // console.log(tanka);
 
-      if (isValidTanka(tankaYomi)) {
+      if (isValidTanka(tanka, tankaYomi)) {
         printLine();
         console.log('短歌の形式が正しいので結果を返却');
         // ["短歌の1行目", "短歌の2行目", "短歌の3行目", "短歌の4行目", "短歌の5行目"]
