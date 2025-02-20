@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useState, useRef, useCallback } from 'react';
 import { PostTypes } from '@/types/postTypes';
 import PostList from '@/components/PostList';
-import fetchPosts from '@/app/timeline/actions/fetchPosts';
+import fetchPosts from '@/app/(main)/timeline/actions/fetchPosts';
 import { useSession } from 'next-auth/react';
 import { FaArrowUp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
