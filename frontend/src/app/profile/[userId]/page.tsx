@@ -25,10 +25,26 @@ const Profile = () => {
     getProfile();
   }, [userId]);
 
+  // totalPost に応じた背景色のクラスを決定
+  const getBackgroundClass = () => {
+    const totalPost = profile?.totalPost || 0;
+
+    if (totalPost >= 200) return 'from-purple-700'; // 紫色
+    if (totalPost >= 150) return 'from-purple-300'; // 淡い紫色
+    if (totalPost >= 100) return 'from-blue-500'; // 青色
+    if (totalPost >= 75) return 'from-cyan-300'; // 水色
+    if (totalPost >= 50) return 'from-red-700'; // 濃い赤色
+    if (totalPost >= 30) return 'from-red-300'; // 淡い赤色
+    if (totalPost >= 10) return 'from-yellow-500'; // 濃い黄色
+    return 'from-amber-100'; // デフォルト
+  };
+
   return (
     <div>
       <div className='mx-auto max-w-sm pt-5 lg:max-w-lg'>
-        <div className='mx-4 rounded-2xl border-2 border-gray-300 bg-gradient-to-r from-amber-100 to-amber-50 shadow-lg'>
+        <div
+          className={`mx-4 rounded-2xl border-2 border-gray-300 bg-gradient-to-r ${getBackgroundClass()} to-amber-50 shadow-lg`}
+        >
           <div className='border-b border-gray-300 py-2 text-center text-xl font-semibold text-gray-700'>
             プロフィール
           </div>
@@ -46,7 +62,7 @@ const Profile = () => {
                   {profile?.name ?? '取得中'}
                 </label>
                 <div className='mt-4 text-gray-600'>
-                  <p>総雅数: {profile?.totalMiyabi ?? '取得中'}</p>
+                  <p>総獲得雅数: {profile?.totalMiyabi ?? '取得中'}</p>
                   <p>総投稿数: {profile?.totalPost ?? '取得中'}</p>
                 </div>
               </div>
