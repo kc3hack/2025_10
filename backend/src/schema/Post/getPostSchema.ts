@@ -14,8 +14,8 @@ export const getPostSchema = z.object({
     example: 'cb3adc47-eba3-11ef-9ce7-0242ac130002',
     description: '投稿id',
   }),
-  user_icon: z.string().optional().openapi({
-    example: 'https://avatars.githubusercontent.com/u/131171129?v=4',
+  user_id: z.string().optional().openapi({
+    example: '131171129',
     description: 'git hubのアイコンURL',
   }),
 });
@@ -27,6 +27,7 @@ export const postSchema = z.object({
   tanka: z.array(z.string()),
   image_path: z.string(),
   created_at: z.string(),
+  user_id: z.string(),
   user_name: z.string(),
   user_icon: z.string(),
   miyabi_count: z.number(),

@@ -8,13 +8,14 @@ import { PostTypes } from '@/types/postTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
-import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
+import { formatDateKanji } from '@/app/(main)/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import Dialog from '@/components/Dialog';
 import LoginDialog from './LoginDialog';
-import { addMiyabi, removeMiyabi } from '@/app/timeline/actions/countMiyabi';
-import deletePost from '@/app/timeline/actions/deletePost';
+import { addMiyabi, removeMiyabi } from '@/app/(main)/timeline/actions/countMiyabi';
+import deletePost from '@/app/(main)/timeline/actions/deletePost';
+import { useRouter } from 'next/navigation';
 
 // props の型定義
 interface PostProps {
@@ -69,6 +70,8 @@ const Post = ({ post, className, onDelete }: PostProps) => {
     onDelete(post.id);
   };
 
+  const router = useRouter();
+
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
       {/* プロフィールアイコン */}
@@ -78,10 +81,16 @@ const Post = ({ post, className, onDelete }: PostProps) => {
           height={40}
           width={40}
           alt='Icon'
+          onClick={() => router.push(`/profile/${post.user.userId}`)}
           className='cursor-pointer rounded-full hover:brightness-75'
         />
         <div className='ml-2 cursor-pointer items-center'>
-          <p className='text-lg text-black hover:underline'>{post.user.name}</p>
+          <p
+            onClick={() => router.push(`/profile/${post.user.userId}`)}
+            className='text-lg text-black hover:underline'
+          >
+            {post.user.name}
+          </p>
         </div>
         <DropDownButton className='ml-auto flex' items={dropDownItems}></DropDownButton>
       </div>

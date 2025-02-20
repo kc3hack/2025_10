@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useState, useRef, useCallback } from 'react';
 import { PostTypes } from '@/types/postTypes';
 import PostList from '@/components/PostList';
-import fetchPosts from '@/app/timeline/actions/fetchPosts';
+import fetchPosts from '@/app/(main)/timeline/actions/fetchPosts';
 import { useSession } from 'next-auth/react';
 import { FaArrowUp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface TimelineProps {
   limit: number;
   max: number;
-  targetUserUrl?: string;
+  targetUserId?: string;
   className?: string;
 }
 
@@ -23,7 +23,7 @@ interface TimelineProps {
  * @param {TimelineProps} props - タイムラインのデータを含むオブジェクト
  * @return {JSX.Elements} タイムラインを表示するReactコンポーネント
  */
-const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
+const Timeline = ({ limit, max, targetUserId, className }: TimelineProps) => {
   // 投稿データの配列
   const [posts, setPosts] = useState<PostTypes[]>([]);
   // 投稿取得時のオフセットID
@@ -56,7 +56,7 @@ const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
       limit: limit,
       iconUrl: session.data?.user?.image ?? '',
       offsetId: offsetIdRef.current,
-      targetUserUrl: targetUserUrl,
+      targetUserId: targetUserId,
     });
     if (newPosts && newPosts.length > 0) {
       setPosts((prevPosts) => {
@@ -76,7 +76,7 @@ const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
       setHasMore(false);
     }
     isFetchingRef.current = false;
-  }, [limit, max, targetUserUrl, session.status, session.data?.user?.image]);
+  }, [limit, max, targetUserId, session.status, session.data?.user?.image]);
 
   // ターゲットの要素を監視するためのcallback ref
   const targetRef = useCallback(
@@ -123,9 +123,9 @@ const Timeline = ({ limit, max, targetUserUrl, className }: TimelineProps) => {
   return (
     <div className={`${className}`}>
       <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' onDelete={deletePost} />
-      {hasMore && <p className='py-3 text-center'>投稿を取得中...</p>}
+      {hasMore && <p className='py-3 text-center'>短歌を取得中...</p>}
       <div ref={targetRef} className='h-px' />
-      {!hasMore && <p className='py-3 text-center'>これ以上投稿を取得できません。</p>}
+      {!hasMore && <p className='py-3 text-center'>これ以上短歌を取得できません。</p>}
       <AnimatePresence mode='wait'>
         {showTopButton && (
           <motion.div

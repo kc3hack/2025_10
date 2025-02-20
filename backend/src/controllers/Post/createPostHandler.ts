@@ -59,6 +59,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     if (image == null) {
       image_path = null;
     } else {
+      //console.log(image);
       // ここに圧縮処理 (jpegにしてqualityさげる．めざせ500KB)
       // File型からbufferへ
       const arrayBuffer = await image.arrayBuffer();
@@ -69,6 +70,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
         .then(async (resultBuffer) => {
           // BufferからFile型へ変換
           const file = new File([resultBuffer], new_file_name, { type: 'image/jpeg' });
+          //console.log(file);
           // アップロード
           image_path = await uploadFile(file);
         })
@@ -128,7 +130,13 @@ async function compressImage(inputBuffer: Buffer): Promise<Buffer> {
   }
 
   // 1080pにして500KB以下か?
-  const compressed1080pBuffer = await sharp(inputBuffer).resize({ height: 1080 }).jpeg().toBuffer();
+  const compressed1080pBuffer = await sharp(inputBuffer)
+    .rotate()
+    .resize(1080, 1080, {
+      fit: 'inside',
+    })
+    .jpeg()
+    .toBuffer();
   if (compressed1080pBuffer.length <= targetFileSize) {
     return compressed1080pBuffer;
   }
@@ -137,7 +145,10 @@ async function compressImage(inputBuffer: Buffer): Promise<Buffer> {
   while (minQuality <= maxQuality) {
     const midQuality = Math.floor((minQuality + maxQuality) / 2);
     const compressedBuffer = await sharp(inputBuffer)
-      .resize({ height: 1080 })
+      .rotate()
+      .resize(1080, 1080, {
+        fit: 'inside',
+      })
       .jpeg({ quality: midQuality })
       .toBuffer();
 

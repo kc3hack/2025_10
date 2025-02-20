@@ -11,6 +11,14 @@ import { createMiyabiRoute } from './Miyabi/createMiyabiRoute.js';
 import createMiyabiHandler from '../controllers/Miyabi/createMiyabiHandler.js';
 import { deleteMiyabiRoute } from './Miyabi/deleteMiyabiRoute.js';
 import deleteMiyabiHandler from '../controllers/Miyabi/deleteMiyabiHandler.js';
+import { getMiyabiRankingRoute } from './Miyabi/getMiyabiRankingRoute.js';
+import getMiyabiRankingHandler from '../controllers/Miyabi/getMiyabiRankingHandler.js';
+import { createUserRoute } from './User/createUserRoute.js';
+import createUserHandler from '../controllers/User/createUserHandler.js';
+import { getProfileRoute } from './Profile/getProfileRoute.js';
+import getProfileHandler from '../controllers/Profile/getProfileHandler.js';
+import { idiconConverterRoute } from './idiconConverterRoute.js';
+import idiconConverterHandler from '../controllers/idiconConverterHandler.js';
 import { sampleS3UploadRoute } from './sampleS3Route.js';
 import sampleS3UploadHandler from '../controllers/sampleS3UploadHandler.js';
 import { sampleS3DownloadRoute } from './sampleS3Route.js';
@@ -27,6 +35,10 @@ export default router
   .openapi(getPostRoute, getPostHandler)
   .openapi(createMiyabiRoute, createMiyabiHandler)
   .openapi(deleteMiyabiRoute, deleteMiyabiHandler)
+  .openapi(getMiyabiRankingRoute, getMiyabiRankingHandler)
+  .openapi(createUserRoute, createUserHandler)
+  .openapi(getProfileRoute, getProfileHandler)
+  .openapi(idiconConverterRoute, idiconConverterHandler)
   .openapi(sampleS3UploadRoute, sampleS3UploadHandler)
   .openapi(sampleS3DownloadRoute, sampleS3DownloadHandler)
   .openapi(sampleGeminiRoute, sampleGeminiHandler);
