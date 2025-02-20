@@ -17,6 +17,8 @@ import { createUserRoute } from './User/createUserRoute.js';
 import createUserHandler from '../controllers/User/createUserHandler.js';
 import { getProfileRoute } from './Profile/getProfileRoute.js';
 import getProfileHandler from '../controllers/Profile/getProfileHandler.js';
+import { idiconConverterRoute } from './idiconConverterRoute.js';
+import idiconConverterHandler from '../controllers/idiconConverterHandler.js';
 import { sampleS3UploadRoute } from './sampleS3Route.js';
 import sampleS3UploadHandler from '../controllers/sampleS3UploadHandler.js';
 import { sampleS3DownloadRoute } from './sampleS3Route.js';
@@ -36,6 +38,7 @@ export default router
   .openapi(getMiyabiRankingRoute, getMiyabiRankingHandler)
   .openapi(createUserRoute, createUserHandler)
   .openapi(getProfileRoute, getProfileHandler)
+  .openapi(idiconConverterRoute, idiconConverterHandler)
   .openapi(sampleS3UploadRoute, sampleS3UploadHandler)
   .openapi(sampleS3DownloadRoute, sampleS3DownloadHandler)
   .openapi(sampleGeminiRoute, sampleGeminiHandler);
