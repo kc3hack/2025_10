@@ -58,7 +58,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
     <div className={`${className} z-10 w-40 space-y-3 `} style={style}>
       <div
         onClick={() => {
-          router.push('/');
+          router.push(PATHNAME.HOME);
         }}
         className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
           pathname === PATHNAME.HOME ? 'bg-orange-200' : ''
@@ -72,14 +72,18 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       {isLoggedIn && (
         <div
           onClick={() => {
-            router.push(`/profile/${userId}`);
+            router.push(`${PATHNAME.PROFILE}/${userId}`);
           }}
           className={`flex items-center rounded-lg bg-transparent hover:cursor-pointer hover:bg-black/5 ${
             pathname === PATHNAME.PROFILE ? 'bg-orange-200' : ''
           }`}
         >
           <CiUser size={28} />
-          <a className={`pl-1 text-xl ${pathname === PATHNAME.PROFILE ? 'font-bold' : ''}`}>
+          <a
+            className={`pl-1 text-xl ${
+              pathname === `${PATHNAME.PROFILE}/${userId}` ? 'font-bold' : ''
+            }`}
+          >
             プロフィール
           </a>
         </div>
@@ -87,7 +91,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       <div
         onClick={() => {
           if (isLoggedIn) {
-            router.push('/ranking');
+            router.push(PATHNAME.RANKING);
           } else {
           }
         }}
@@ -103,7 +107,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       <div
         onClick={() => {
           if (isLoggedIn) {
-            router.push('/settings');
+            router.push(PATHNAME.SETTINGS);
           } else {
             setLoginDialogOpen(true);
           }
