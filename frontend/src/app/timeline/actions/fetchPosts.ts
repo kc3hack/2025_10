@@ -14,6 +14,7 @@ interface PostResponse {
   created_at: string;
   user_name: string;
   user_icon: string;
+  user_id: string;
   miyabi_count: number;
   is_miyabi: boolean;
 }
@@ -72,6 +73,7 @@ const fetchPosts = async ({
       user: {
         name: post.user_name,
         iconUrl: post.user_icon,
+        userId: post.user_id,
       },
       miyabiCount: post.miyabi_count,
       miyabiIsClicked: post.is_miyabi,

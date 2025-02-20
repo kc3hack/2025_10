@@ -27,6 +27,7 @@ export const postSchema = z.object({
   tanka: z.array(z.string()),
   image_path: z.string(),
   created_at: z.string(),
+  user_id: z.string(),
   user_name: z.string(),
   user_icon: z.string(),
   miyabi_count: z.number(),
