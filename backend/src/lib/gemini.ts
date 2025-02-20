@@ -196,10 +196,4 @@ const generateTanka = async (originalText: string): Promise<any> => {
   }
 };
 
-  } catch (error) {
-    console.error('APIエラー:', error);
-    return [];
-  }
-};
-
 export default generateTanka;
