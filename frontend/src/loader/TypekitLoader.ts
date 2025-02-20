@@ -1,6 +1,22 @@
 'use client';
 import { useEffect } from 'react';
 
+interface TypekitConfig {
+  kitId: string;
+  scriptTimeout: number;
+  async: boolean;
+}
+
+interface Typekit {
+  load: (config: TypekitConfig) => void;
+}
+
+declare global {
+  interface Window {
+    Typekit: Typekit;
+  }
+}
+
 const TypekitLoader: React.FC = () => {
   useEffect(() => {
     (function (d: Document) {
@@ -21,7 +37,7 @@ const TypekitLoader: React.FC = () => {
       tk.onload = function () {
         clearTimeout(t);
         try {
-          (window as any).Typekit.load(config);
+          window.Typekit.load(config);
         } catch (e) {
           console.error(e);
         }

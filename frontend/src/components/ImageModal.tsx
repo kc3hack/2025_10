@@ -23,7 +23,7 @@ const ImageModal = ({ imageUrl, setModalOpen }: ImageModalProps) => {
       onClick={() => setModalOpen(false)}
       className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'
     >
-      <div className='relative h-[90vh] w-[90vw]'>
+      <div className='relative h-[90vh] w-screen lg:w-[90vw]'>
         <Image src={imageUrl} alt='Image' fill className='object-contain' />
       </div>
     </div>
