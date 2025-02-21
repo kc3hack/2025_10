@@ -16,6 +16,7 @@ import fetchUserId from '@/app/(main)/timeline/actions/fetchUserId';
 interface SideMenuProps {
   className?: string;
   style?: React.CSSProperties;
+  setIsOpen?: (isOpen: boolean) => void;
 }
 
 enum PATHNAME {
@@ -31,7 +32,7 @@ enum PATHNAME {
  * @param {SideMenuProps} props - ユーザデータを含むオブジェクト
  * @return {JSX.Element} サイドメニューを表示するReactコンポーネント
  */
-const SideMenu = ({ className, style }: SideMenuProps) => {
+const SideMenu = ({ className, style, setIsOpen }: SideMenuProps) => {
   // セッションの取得
   const session = useSession();
   // ログイン状態
@@ -58,6 +59,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
     <div className={`${className} z-10 w-40 space-y-3`} style={style}>
       <div
         onClick={() => {
+          if (setIsOpen) setIsOpen(false);
           router.push(PATHNAME.HOME);
         }}
         className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
@@ -72,6 +74,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       {isLoggedIn && (
         <div
           onClick={() => {
+            if (setIsOpen) setIsOpen(false);
             router.push(`${PATHNAME.PROFILE}/${userId}`);
           }}
           className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
@@ -91,6 +94,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       <div
         onClick={() => {
           if (isLoggedIn) {
+            if (setIsOpen) setIsOpen(false);
             router.push(PATHNAME.RANKING);
           } else {
           }
@@ -107,6 +111,7 @@ const SideMenu = ({ className, style }: SideMenuProps) => {
       <div
         onClick={() => {
           if (isLoggedIn) {
+            if (setIsOpen) setIsOpen(false);
             router.push(PATHNAME.SETTINGS);
           } else {
             setLoginDialogOpen(true);
