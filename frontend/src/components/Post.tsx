@@ -8,7 +8,7 @@ import { PostTypes } from '@/types/postTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
-import { formatDateKanji } from '@/app/(main)/timeline/utils/kanjiNumber';
+import { formatDateKanji, toKanjiNumber } from '@/app/(main)/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import Dialog from '@/components/Dialog';
@@ -74,6 +74,10 @@ const Post = ({ post, className, onDelete }: PostProps) => {
 
   return (
     <div className={`${className} border-b border-gray-500 p-4`}>
+      {/* 雅ランキングでの順位表記 */}
+      {post.rank && (
+        <p className='text-center text-2xl font-bold text-black'>第{toKanjiNumber(post.rank)}位</p>
+      )}
       {/* プロフィールアイコン */}
       <div className='mb-3 flex items-center'>
         <Image
