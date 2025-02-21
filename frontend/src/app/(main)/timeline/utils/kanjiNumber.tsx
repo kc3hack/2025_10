@@ -90,7 +90,7 @@ export const formatDateKanji = (date: Date, isOnlyDate: boolean = false): ReactN
     <div>
       <p className='text-sm'>
         <span className='text-sm'>令和</span>
-        {`${toKanjiNumberSimply(year - 2018)}`}
+        {`${toKanjiNumber(year - 2018)}`}
         <span className='text-xs'>年</span>
         {`${toKanjiNumber(month)}`}
         <span className='text-xs'>月</span>
