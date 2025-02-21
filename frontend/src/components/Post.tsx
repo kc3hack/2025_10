@@ -72,8 +72,21 @@ const Post = ({ post, className, onDelete }: PostProps) => {
 
   const router = useRouter();
 
+  const getRankBackground = (rank: number | undefined): string => {
+    switch (rank) {
+      case 1:
+        return 'bg-[#E6B422]/75 my-2 mx-2 rounded-xl shadow-lg';
+      case 2:
+        return 'bg-[#C9CACA]/75 my-2 mx-2 rounded-xl shadow-lg';
+      case 3:
+        return 'bg-[#B87333]/75 my-2 mx-2 rounded-xl shadow-lg';
+      default:
+        return 'border-b border-gray-500';
+    }
+  };
+
   return (
-    <div className={`${className} border-b border-gray-500 p-4`}>
+    <div className={`${className} p-4 ${getRankBackground(post.rank)}`}>
       {/* 雅ランキングでの順位表記 */}
       {post.rank && (
         <p className='text-center text-2xl font-bold text-black'>第{toKanjiNumber(post.rank)}位</p>
