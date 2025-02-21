@@ -46,7 +46,7 @@ const HeaderAndMenu = () => {
               transition={{ duration: 0.2 }}
               className='flex h-fit w-full bg-white py-4'
             >
-              <SideMenu className='mx-auto' />
+              <SideMenu className='mx-auto' setIsOpen={setIsMenuOpen} />
             </motion.div>
             <motion.div
               initial={{ opacity: 0 }}

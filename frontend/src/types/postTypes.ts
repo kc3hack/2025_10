@@ -9,4 +9,5 @@ export type PostTypes = {
   user: UserTypes;
   miyabiCount: number;
   miyabiIsClicked: boolean;
+  rank?: number;
 };

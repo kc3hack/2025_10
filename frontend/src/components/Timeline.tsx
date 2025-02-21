@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useState, useRef, useCallback } from 'react';
 import { PostTypes } from '@/types/postTypes';
 import PostList from '@/components/PostList';
-import fetchPosts from '@/app/(main)/timeline/actions/fetchPosts';
+import { fetchPosts, fetchRanking } from '@/app/(main)/timeline/actions/fetchPosts';
 import { useSession } from 'next-auth/react';
 import { FaArrowUp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,6 +14,7 @@ interface TimelineProps {
   limit: number;
   max: number;
   targetUserId?: string;
+  mode?: 'ranking' | 'timeline';
   className?: string;
 }
 
@@ -23,7 +24,7 @@ interface TimelineProps {
  * @param {TimelineProps} props - タイムラインのデータを含むオブジェクト
  * @return {JSX.Elements} タイムラインを表示するReactコンポーネント
  */
-const Timeline = ({ limit, max, targetUserId, className }: TimelineProps) => {
+const Timeline = ({ limit, max, targetUserId, mode = 'timeline', className }: TimelineProps) => {
   // 投稿データの配列
   const [posts, setPosts] = useState<PostTypes[]>([]);
   // 投稿取得時のオフセットID
@@ -52,12 +53,20 @@ const Timeline = ({ limit, max, targetUserId, className }: TimelineProps) => {
     if (isFetchingRef.current) return;
     isFetchingRef.current = true;
     // 投稿データを取得
-    const newPosts = await fetchPosts({
-      limit: limit,
-      iconUrl: session.data?.user?.image ?? '',
-      offsetId: offsetIdRef.current,
-      targetUserId: targetUserId,
-    });
+    let newPosts;
+    if (mode === 'timeline') {
+      newPosts = await fetchPosts({
+        limit: limit,
+        iconUrl: session.data?.user?.image ?? '',
+        offsetId: offsetIdRef.current,
+        targetUserId: targetUserId,
+      });
+    } else {
+      newPosts = await fetchRanking({
+        limit: max,
+        iconUrl: session.data?.user?.image ?? '',
+      });
+    }
     if (newPosts && newPosts.length > 0) {
       setPosts((prevPosts) => {
         const updatedPosts = [...prevPosts, ...newPosts];
@@ -76,7 +85,7 @@ const Timeline = ({ limit, max, targetUserId, className }: TimelineProps) => {
       setHasMore(false);
     }
     isFetchingRef.current = false;
-  }, [limit, max, targetUserId, session.status, session.data?.user?.image]);
+  }, [limit, max, targetUserId, mode, session.status, session.data?.user?.image]);
 
   // ターゲットの要素を監視するためのcallback ref
   const targetRef = useCallback(
