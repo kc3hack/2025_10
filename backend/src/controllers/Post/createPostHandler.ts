@@ -78,7 +78,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
           console.error('画像圧縮エラー:', err);
           return c.json(
             {
-              message: '投稿に失敗しました．',
+              message: '画像の圧縮に失敗しました．',
               statusCode: 500,
               error: 'Internal Server Error',
             },
