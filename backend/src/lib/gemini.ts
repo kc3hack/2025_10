@@ -170,13 +170,13 @@ const generateTanka = async (originalText: string): Promise<any> => {
         console.log('短歌の形式が正しいので結果を返す');
         return {
           isSuccess: true,
-          tanka: {
-            line0: tankaObject.line0.replace('ッ', 'ツ'),
-            line1: tankaObject.line1.replace('ッ', 'ツ'),
-            line2: tankaObject.line2.replace('ッ', 'ツ'),
-            line3: tankaObject.line3.replace('ッ', 'ツ'),
-            line4: tankaObject.line4.replace('ッ', 'ツ'),
-          },
+          tanka: [
+            tankaObject.line0.replace('ッ', 'ツ'),
+            tankaObject.line1.replace('ッ', 'ツ'),
+            tankaObject.line2.replace('ッ', 'ツ'),
+            tankaObject.line3.replace('ッ', 'ツ'),
+            tankaObject.line4.replace('ッ', 'ツ'),
+          ],
         };
       } else if (i < 2) {
         printLine();
