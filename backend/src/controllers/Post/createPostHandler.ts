@@ -37,14 +37,15 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     }
     const original = originalValue;
 
-    const tankaArray = await generateTanka(original);
+    const response = await generateTanka(original);
+    console.log(response);
 
-    // tankaArrayが空([])ならエラーを返す
-    if (tankaArray.length == 0) {
-      console.log('tankaが空です．');
+    // gemini APIのエラー確認
+    if (response.isSuccess == false) {
+      console.log(response.message);
       return c.json(
         {
-          message: 'tankaが空です．',
+          message: response.message,
           statusCode: 500,
           error: 'Internal Server Error',
         },
@@ -52,7 +53,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
       );
     }
 
-    const tanka = JSON.stringify(tankaArray);
+    const tanka = JSON.stringify(response.tanka);
 
     // imageがnullならimage_pathをnullにする．
     let image_path;
