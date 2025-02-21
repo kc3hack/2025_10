@@ -159,7 +159,7 @@ const SignedInPage = (): React.ReactNode => {
         {/* 投稿フォーム */}
         {postStatus !== PostStatus.SUCCESS && (
           <div
-            className={`mx-auto min-h-[30rem] w-11/12 max-w-[40rem] rounded-lg bg-white p-8 shadow-lg md:w-3/4 lg:w-2/3 xl:w-1/2`}
+            className={`mx-auto min-h-[30rem] w-full max-w-[40rem] rounded-lg bg-white p-8 shadow-lg md:w-3/4 lg:w-2/3 xl:w-1/2`}
           >
             {/* 閉じるボタン */}
             <div
@@ -189,7 +189,7 @@ const SignedInPage = (): React.ReactNode => {
               <textarea
                 className={`w-full resize-none rounded-lg border-2 border-dotted p-3 outline-none md:text-lg ${
                   isDragActive ? 'border-red-400' : 'border-gray-300/0'
-                } ${file ? 'min-h-40' : 'min-h-80'}`}
+                } ${file ? 'min-h-40' : 'min-h-40 md:min-h-80'}`}
                 placeholder='いま何してんの？'
                 onChange={(e) => {
                   onChangeTextArea(e);

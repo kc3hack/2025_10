@@ -79,7 +79,7 @@ export const toKanjiNumberSimply = (num: number): string => {
  * @param {Date} date - 変換対象のDate
  * @returns {ReactNode} 変換後のDate
  */
-export const formatDateKanji = (date: Date): ReactNode => {
+export const formatDateKanji = (date: Date, isOnlyDate: boolean = false): ReactNode => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -97,12 +97,14 @@ export const formatDateKanji = (date: Date): ReactNode => {
         {`${toKanjiNumber(day)}`}
         <span className='text-xs'>日</span>
       </p>
-      <p className='text-sm'>
-        {`${toKanjiNumber(hour)}`}
-        <span className='text-xs'>時</span>
-        {`${toKanjiNumber(minute)}`}
-        <span className='text-xs'>分</span>
-      </p>
+      {!isOnlyDate && (
+        <p className='text-sm'>
+          {`${toKanjiNumber(hour)}`}
+          <span className='text-xs'>時</span>
+          {`${toKanjiNumber(minute)}`}
+          <span className='text-xs'>分</span>
+        </p>
+      )}
     </div>
   );
 };

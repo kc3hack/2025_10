@@ -4,9 +4,6 @@ import db from '../db.js';
 import { getPostSchema } from '../../schema/Post/getPostSchema.js';
 import type { getPostRoute } from '../../routes/Post/getPostRoute.js';
 import { env } from '../../config/env.js';
-import { sampleDownloadSchema } from '../../schema/sampleS3Schema.js';
-import type { sampleS3DownloadRoute } from '../../routes/sampleS3Route.js';
-import { getFileByUrl } from '../../lib/s3-connector.js';
 
 type getPostSchema = z.infer<typeof getPostSchema>;
 
@@ -21,7 +18,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       limit,
       my_icon = null,
       post_id = null,
-      user_icon = null,
+      user_id = null,
     } = await c.req.json<getPostSchema>();
 
     // 入力のpost_idがnullなら最新の投稿から取得，そうでなければその投稿よりも古いものを取得
@@ -48,13 +45,15 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       symbol = '<';
     }
 
-    // user_iconがnullなら追加条件なし，nullでないならユーザを限定する条件を追加
+    // user_idがnullなら追加条件なし，nullでないならユーザを限定する条件を追加
     let user_query;
-    if (user_icon == null || user_icon == '') {
+    let user_icon;
+    if (user_id == null || user_id == '') {
       //console.log('if');
       user_query = '';
     } else {
       user_query = 'AND post.user_icon = :user_icon';
+      user_icon = `https://avatars.githubusercontent.com/u/${user_id}?v=4`;
     }
 
     let results;

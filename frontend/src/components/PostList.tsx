@@ -19,7 +19,7 @@ interface PostListProps {
  */
 const PostList = ({ posts, className, onDelete }: PostListProps) => {
   return (
-    <div className='flex-1 overflow-auto'>
+    <div>
       {posts.map((post, i) => (
         <Post key={i} post={post} className={className} onDelete={onDelete} />
       ))}
