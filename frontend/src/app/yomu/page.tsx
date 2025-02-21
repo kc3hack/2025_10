@@ -16,7 +16,11 @@ import { calcFileSize } from '@/lib/CalcFileSize';
 import FileUploadButton from '@/components/FileUploadButton';
 
 const MAX_LENGTH = 140; // 最大文字数
-const MIN_LENGTH = 40; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
+
+// 絶対戻す↓
+// ぜったいもどす↓
+const MIN_LENGTH = 1; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
+// ぜったいもどす↑
 const MAX_IMAGE_SIZE = 5; // 最大画像サイズ
 
 enum PostStatus {
@@ -242,6 +246,8 @@ const SignedInPage = (): React.ReactNode => {
             {!canPost && (
               <p className='mt-2 text-center text-sm text-red-500'>
                 ※{MIN_LENGTH}文字以上{MAX_LENGTH}文字以内で投稿できます。
+                <br />
+                ※実験中 : 1文字以上で投稿できます。
               </p>
             )}
 
