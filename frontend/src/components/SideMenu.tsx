@@ -93,11 +93,8 @@ const SideMenu = ({ className, style, setIsOpen }: SideMenuProps) => {
       )}
       <div
         onClick={() => {
-          if (isLoggedIn) {
-            if (setIsOpen) setIsOpen(false);
-            router.push(PATHNAME.RANKING);
-          } else {
-          }
+          if (setIsOpen) setIsOpen(false);
+          router.push(PATHNAME.RANKING);
         }}
         className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
           pathname === PATHNAME.RANKING ? 'bg-orange-200' : 'bg-transparent'
