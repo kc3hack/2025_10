@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import Dialog from './Dialog';
 import LoginDialog from './LoginDialog';
 import { useRouter } from 'next/navigation';
-import fetchUserId from '@/app/timeline/actions/fetchUserId';
+import fetchUserId from '@/app/(main)/timeline/actions/fetchUserId';
 
 // props の型定義
 interface SideMenuProps {

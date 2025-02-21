@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Noto_Serif_JP } from 'next/font/google';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
 import Image from 'next/image';
-import HeaderAndMenu from '@/components/HeaderAndMenu';
 
 import TypekitLoader from '@/loader/TypekitLoader';
 
@@ -24,7 +23,7 @@ const notoSerifJP = Noto_Serif_JP({
 
 export const metadata: Metadata = {
   title: 'Tankalizer',
-  description: 'Tankalizer',
+  description: '投稿したつぶやきが短歌に!?新感覚SNS Tankalizer(タンカライザー)',
 };
 
 export default function RootLayout({
@@ -39,7 +38,6 @@ export default function RootLayout({
         <body
           className={`${notoSerifJP.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <HeaderAndMenu />
           {/* 背景画像 */}
           <div className='fixed left-0 top-0 z-[-1] h-lvh w-full opacity-20'>
             <Image src='/bg.jpg' fill alt='Background' className='object-cover'></Image>

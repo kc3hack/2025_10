@@ -8,13 +8,13 @@ import { PostTypes } from '@/types/postTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
-import { formatDateKanji } from '@/app/timeline/utils/kanjiNumber';
+import { formatDateKanji } from '@/app/(main)/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import Dialog from '@/components/Dialog';
 import LoginDialog from './LoginDialog';
-import { addMiyabi, removeMiyabi } from '@/app/timeline/actions/countMiyabi';
-import deletePost from '@/app/timeline/actions/deletePost';
+import { addMiyabi, removeMiyabi } from '@/app/(main)/timeline/actions/countMiyabi';
+import deletePost from '@/app/(main)/timeline/actions/deletePost';
 import { useRouter } from 'next/navigation';
 
 // props の型定義
