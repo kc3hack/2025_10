@@ -102,7 +102,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
       200
     );
   } catch (err) {
-    console.log('投稿に失敗しました．');
+    console.log('投稿に失敗しました．' + err);
     return c.json(
       {
         message: '投稿に失敗しました．',
