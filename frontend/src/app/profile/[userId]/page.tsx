@@ -50,19 +50,47 @@ const Profile = () => {
           </div>
           <div className='space-y-6 p-6'>
             <div className='flex flex-col items-center space-y-4'>
-              <Image
-                src={profile?.iconUrl ?? '/iconDefault.png'}
-                alt='プロフィール画像'
-                width={100}
-                height={100}
-                className='rounded-full border-2 border-gray-300'
-              />
+              <div className='relative'>
+                {/* 中心のプロフィールアイコン */}
+                <Image
+                  src={profile?.iconUrl ?? '/iconDefault.png'}
+                  alt='プロフィール画像'
+                  width={100}
+                  height={100}
+                  className='z-10 rounded-full border-2 border-gray-300'
+                />
+                {/* 周囲の画像を配置 */}
+                <div className='absolute inset-0 flex items-center justify-center'>
+                  <Image
+                    src='/syodou_fude.png'
+                    alt='筆'
+                    width={80}
+                    height={80}
+                    className='absolute left-[-140px] top-[-20px]'
+                  />
+                  <Image
+                    src='/syodou_sumi_bou.png'
+                    alt='墨棒'
+                    width={100}
+                    height={100}
+                    className='absolute right-[-140px]'
+                  />
+                  <Image
+                    src='/syodou_suzuri.png'
+                    alt='硯'
+                    width={80}
+                    height={80}
+                    className='absolute bottom-[-100px] left-[-140px]'
+                  />
+                </div>
+              </div>
+
               <div className='w-full space-y-2 text-center'>
                 <label htmlFor='name' className='block text-lg text-gray-700'>
                   {profile?.name ?? '取得中'}
                 </label>
                 <div className='mt-4 text-gray-600'>
-                  <p>雅獲得数: {profile?.totalMiyabi ?? '取得中'}</p>
+                  <p>総獲得雅数: {profile?.totalMiyabi ?? '取得中'}</p>
                   <p>総詠歌数: {profile?.totalPost ? `${profile.totalPost}首` : '取得中'}</p>
                 </div>
               </div>
