@@ -38,7 +38,6 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     const original = originalValue;
 
     const response = await generateTanka(original);
-    console.log(response);
 
     // gemini APIのエラー確認
     if (response.isSuccess == false) {
@@ -54,6 +53,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     }
 
     const tanka = JSON.stringify(response.tanka);
+    //console.log(tanka);
 
     // imageがnullならimage_pathをnullにする．
     let image_path;
@@ -97,7 +97,7 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     return c.json(
       {
         message: '投稿しました．',
-        tanka: tankaArray,
+        tanka: response.tanka,
       },
       200
     );
