@@ -148,7 +148,7 @@ const Post = ({ post, className, onDelete }: PostProps) => {
       <div className='mt-3 flex items-center text-black'>
         {formatDateKanji(post.date)}
         <div className='ml-auto flex items-center'>
-          <p className='mr-2 text-sm'>{miyabiCount.toLocaleString()}</p>
+          <p className='mr-2 text-sm'>{toKanjiNumber(miyabiCount)}</p>
           <MiyabiButton
             size='small'
             onClick={async () => {
