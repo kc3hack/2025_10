@@ -69,7 +69,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        {profile?.iconUrl && <Timeline limit={10} max={100} targetUserId={userId ?? ''} />}
+        <Timeline limit={10} max={100} targetUserId={userId ?? ''} />
       </div>
     </div>
   );

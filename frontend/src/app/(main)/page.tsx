@@ -23,7 +23,7 @@ const Page = () => {
   return (
     <div className='relative min-h-screen'>
       {/* タイムライン */}
-      <div className='mx-auto max-w-lg'>
+      <div className='mx-auto max-w-sm lg:max-w-lg'>
         <Timeline limit={LIMIT} max={MAX} />
       </div>
 

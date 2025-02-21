@@ -12,7 +12,7 @@ export default async function SignInPage({ searchParams }: Props) {
   const { callbackUrl } = await searchParams;
 
   return (
-    <div className='flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-gray-100 to-gray-300'>
+    <div className='flex min-h-screen flex-col items-center justify-center '>
       {/* ヘッダ */}
       <div className='fixed top-0 z-40 flex h-12 w-full items-center justify-center bg-white font-kokuryu text-2xl'>
         <div className=''>Tankalizer</div>

@@ -8,7 +8,7 @@ import { PostTypes } from '@/types/postTypes';
 import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
-import { formatDateKanji } from '@/app/(main)/timeline/utils/kanjiNumber';
+import { formatDateKanji, toKanjiNumber } from '@/app/(main)/timeline/utils/kanjiNumber';
 import { MdDeleteForever } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import Dialog from '@/components/Dialog';
@@ -72,8 +72,25 @@ const Post = ({ post, className, onDelete }: PostProps) => {
 
   const router = useRouter();
 
+  const getRankBackground = (rank: number | undefined): string => {
+    switch (rank) {
+      case 1:
+        return 'bg-[#E6B422]/75 my-3 mx-4 rounded-xl shadow-lg';
+      case 2:
+        return 'bg-[#C9CACA]/75 my-3 mx-4 rounded-xl shadow-lg';
+      case 3:
+        return 'bg-[#B87333]/75 my-3 mx-4 rounded-xl shadow-lg';
+      default:
+        return 'border-b border-gray-500';
+    }
+  };
+
   return (
-    <div className={`${className} border-b border-gray-500 p-4`}>
+    <div className={`${className} p-4 ${getRankBackground(post.rank)}`}>
+      {/* 雅ランキングでの順位表記 */}
+      {post.rank && (
+        <p className='text-center text-2xl font-bold text-black'>第{toKanjiNumber(post.rank)}位</p>
+      )}
       {/* プロフィールアイコン */}
       <div className='mb-3 flex items-center'>
         <Image
@@ -131,7 +148,7 @@ const Post = ({ post, className, onDelete }: PostProps) => {
       <div className='mt-3 flex items-center text-black'>
         {formatDateKanji(post.date)}
         <div className='ml-auto flex items-center'>
-          <p className='mr-2 text-sm'>{miyabiCount.toLocaleString()}</p>
+          <p className='mr-2 text-sm'>{toKanjiNumber(miyabiCount)}</p>
           <MiyabiButton
             size='small'
             onClick={async () => {
