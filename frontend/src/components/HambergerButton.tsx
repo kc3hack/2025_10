@@ -21,13 +21,11 @@ const HambergerButton = ({ onClick, isOpen, className }: HambergerButtonProps): 
   };
 
   const openMenuAnimation = () => {
-    console.log('openMenuAnimation');
     dotlottie?.setMode('forward');
     dotlottie?.play();
   };
 
   const closeMenuAnimation = () => {
-    console.log('closeMenuAnimation');
     dotlottie?.setMode('reverse');
     dotlottie?.play();
   };
@@ -49,7 +47,7 @@ const HambergerButton = ({ onClick, isOpen, className }: HambergerButtonProps): 
         segment={[0, 30]}
         autoplay={false}
         loop={false}
-        speed={1.2}
+        speed={1.0}
         mode='forward'
         dotLottieRefCallback={dotLottieRefCallback}
       />
