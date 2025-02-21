@@ -131,7 +131,7 @@ const Timeline = ({ limit, max, targetUserId, mode = 'timeline', className }: Ti
 
   return (
     <div className={`${className}`}>
-      <PostList posts={posts} className='mx-auto max-w-sm lg:max-w-lg' onDelete={deletePost} />
+      <PostList posts={posts} onDelete={deletePost} />
       {hasMore && <p className='py-3 text-center'>短歌を取得中...</p>}
       <div ref={targetRef} className='h-px' />
       {!hasMore && <p className='py-3 text-center'>これ以上短歌を取得できません。</p>}

@@ -75,11 +75,11 @@ const Post = ({ post, className, onDelete }: PostProps) => {
   const getRankBackground = (rank: number | undefined): string => {
     switch (rank) {
       case 1:
-        return 'bg-[#E6B422]/75 my-3 mx-2 rounded-xl shadow-lg';
+        return 'bg-[#E6B422]/75 my-3 mx-4 rounded-xl shadow-lg';
       case 2:
-        return 'bg-[#C9CACA]/75 my-3 mx-2 rounded-xl shadow-lg';
+        return 'bg-[#C9CACA]/75 my-3 mx-4 rounded-xl shadow-lg';
       case 3:
-        return 'bg-[#B87333]/75 my-3 mx-2 rounded-xl shadow-lg';
+        return 'bg-[#B87333]/75 my-3 mx-4 rounded-xl shadow-lg';
       default:
         return 'border-b border-gray-500';
     }
