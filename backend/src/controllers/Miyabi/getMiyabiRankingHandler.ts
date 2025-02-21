@@ -45,6 +45,7 @@ const getMiyabiRankingHandler: RouteHandler<typeof getMiyabiRankingRoute, {}> = 
     results = results.map((row: any, index: number) => ({
       ...row,
       rank: index + 1,
+      user_id: row.user_icon.match(/\/u\/(\d+)/)[1],
       is_miyabi: row.is_miyabi ? true : false,
     }));
 
