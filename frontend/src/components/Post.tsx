@@ -9,19 +9,22 @@ import ImageModal from '@/components/ImageModal';
 import MiyabiButton from '@/components/MiyabiButton';
 import DropDownButton from './DropDownButton';
 import { formatDateKanji, toKanjiNumber } from '@/app/(main)/timeline/utils/kanjiNumber';
-import { MdDeleteForever } from 'react-icons/md';
+import { MdDeleteForever, MdShare } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import Dialog from '@/components/Dialog';
 import LoginDialog from './LoginDialog';
 import { addMiyabi, removeMiyabi } from '@/app/(main)/timeline/actions/countMiyabi';
 import deletePost from '@/app/(main)/timeline/actions/deletePost';
 import { useRouter } from 'next/navigation';
+import { AnimatePresence, motion } from 'framer-motion';
+
+const baseUrl = process.env.BASE_URL ?? 'http://localhost:3000';
 
 // props の型定義
 interface PostProps {
   post: PostTypes;
   className?: string;
-  onDelete: (postId: string) => void;
+  onDelete?: (postId: string) => void;
 }
 
 /**
@@ -41,12 +44,31 @@ const Post = ({ post, className, onDelete }: PostProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   // 削除確認ダイアログの表示状態
   const [dialogOpen, setDialogOpen] = useState(false);
+  // コピートーストの表示状態
+  const [toastOpen, setToastOpen] = useState(false);
   // 削除失敗ダイアログの表示状態
   const [deleteFailedDialogOpen, setDeleteFailedDialogOpen] = useState(false);
   // ユーザアイコンURLが一致するなら自分の投稿
   const isMyPost = useSession().data?.user?.image === post.user.iconUrl;
   // ドロップダウンメニューの要素
   const dropDownItems = [];
+  // ドロップダウンメニューの投稿共有ボタン
+  const dropDownShareButton = {
+    label: '投稿を共有',
+    onClick: async () => {
+      const link = `${baseUrl}/post/${post.id}`;
+      try {
+        await navigator.clipboard.writeText(link);
+        setToastOpen(true);
+        setTimeout(() => setToastOpen(false), 2000);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    className: '',
+    icon: <MdShare />,
+    color: 'black',
+  };
   // ドロップダウンメニューの投稿削除ボタン
   const dropDownDeleteButton = {
     label: '投稿を削除',
@@ -55,6 +77,8 @@ const Post = ({ post, className, onDelete }: PostProps) => {
     icon: <MdDeleteForever />,
     color: 'red',
   };
+  // ドロップダウンに共有ボタン追加
+  dropDownItems.push(dropDownShareButton);
   // 自分の投稿ならドロップダウンに削除ボタン追加
   if (isMyPost) {
     dropDownItems.push(dropDownDeleteButton);
@@ -67,7 +91,7 @@ const Post = ({ post, className, onDelete }: PostProps) => {
   const [loginDialogOpen, setLoginDialogOpen] = useState(false);
   // 親の持つPostsから自身を削除する
   const handleDelete = () => {
-    onDelete(post.id);
+    onDelete?.(post.id);
   };
 
   const router = useRouter();
@@ -208,6 +232,20 @@ const Post = ({ post, className, onDelete }: PostProps) => {
         yesText='はい'
         isOnlyOK
       />
+      {/* リンクをコピーした場合，トーストを表示する */}
+      <AnimatePresence mode='wait'>
+        {toastOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className='fixed bottom-5 left-1/2 z-40 -translate-x-1/2 rounded-lg bg-orange-400 p-2 shadow-lg'
+          >
+            <p className='text-center text-sm text-white'>リンクをコピーしました</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* ログイン確認ダイアログ表示が有効の場合，ダイアログを表示する */}
       <LoginDialog isOpen={loginDialogOpen} setIsOpen={setLoginDialogOpen} />
     </div>

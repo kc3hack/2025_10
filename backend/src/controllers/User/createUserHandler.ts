@@ -54,7 +54,7 @@ const createUserHandler: RouteHandler<typeof createUserRoute, {}> = async (c: Co
       200
     );
   } catch (err) {
-    console.log('ユーザの追加に失敗しました．');
+    console.log('ユーザの追加に失敗しました．' + err);
     return c.json(
       {
         message: 'ユーザの追加に失敗しました．',
