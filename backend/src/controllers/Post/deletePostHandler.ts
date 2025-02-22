@@ -56,7 +56,7 @@ const deletePostHandler: RouteHandler<typeof deletePostRoute, {}> = async (c: Co
       200
     );
   } catch (err) {
-    console.log('投稿の削除に失敗しました．');
+    console.log('投稿の削除に失敗しました．' + err);
     return c.json(
       {
         message: '投稿の削除に失敗しました．',

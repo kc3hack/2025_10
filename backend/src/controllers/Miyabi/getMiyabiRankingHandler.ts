@@ -61,7 +61,7 @@ const getMiyabiRankingHandler: RouteHandler<typeof getMiyabiRankingRoute, {}> = 
       200
     );
   } catch (err) {
-    console.log('雅ランキングの取得に失敗しました．');
+    console.log('雅ランキングの取得に失敗しました．' + err);
     return c.json(
       {
         message: '雅ランキングの取得に失敗しました．',
