@@ -48,10 +48,12 @@ const postNews = async (requestApiKey: string) => {
   try {
     const formData = new FormData();
     formData.append('original', originalText);
-    formData.append('user_icon', 'https://avatars.githubusercontent.com/u/200390078?v=4');
-    formData.append('user_name', 'NEWS');
+    formData.append(
+      'user_icon',
+      `https://avatars.githubusercontent.com/u/${env.NEWS_USER_ICON}?v=4`
+    );
+    formData.append('user_name', '風聞');
 
-    // そうたさんが作った関数呼ぶ？　原文、画像（不要）、newsユーザーのアイコン画像リンク、ユーザー名（news）
     const postResponse = await fetch(`http://localhost:8080/post`, {
       method: 'POST',
       body: formData,
