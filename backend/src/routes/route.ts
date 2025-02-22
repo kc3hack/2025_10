@@ -7,6 +7,8 @@ import { deletePostRoute } from './Post/deletePostRoute.js';
 import deletePostHandler from '../controllers/Post/deletePostHandler.js';
 import { getPostRoute } from './Post/getPostRoute.js';
 import getPostHandler from '../controllers/Post/getPostHandler.js';
+import { getOnePostRoute } from './Post/getOnePostRoute.js';
+import getOnePostHandler from '../controllers/Post/getOnePostHandler.js';
 import { createMiyabiRoute } from './Miyabi/createMiyabiRoute.js';
 import createMiyabiHandler from '../controllers/Miyabi/createMiyabiHandler.js';
 import { deleteMiyabiRoute } from './Miyabi/deleteMiyabiRoute.js';
@@ -33,6 +35,7 @@ export default router
   .openapi(createPostRoute, createPostHandler)
   .openapi(deletePostRoute, deletePostHandler)
   .openapi(getPostRoute, getPostHandler)
+  .openapi(getOnePostRoute, getOnePostHandler)
   .openapi(createMiyabiRoute, createMiyabiHandler)
   .openapi(deleteMiyabiRoute, deleteMiyabiHandler)
   .openapi(getMiyabiRankingRoute, getMiyabiRankingHandler)
