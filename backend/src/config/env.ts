@@ -8,6 +8,9 @@ const envSchema = z.object({
   FRONTEND_URL: z.string().url(),
   PORT: z.coerce.number().optional(),
   GEMINI_API_KEY: z.string(),
+  CURRENTS_API_KEY: z.string(),
+  NEWS_POST_API_KEY: z.string(),
+  NEWS_USER_ID: z.string(),
   RDB_HOST: z.string(),
   RDB_USER: z.string(),
   RDB_PASSWORD: z.string(),
@@ -18,6 +21,7 @@ const envSchema = z.object({
   S3_ACCESS_KEY_ID: z.string(),
   S3_SECRET_ACCESS_KEY: z.string(),
   S3_BUCKET_NAME: z.string(),
+  OUR_ID: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

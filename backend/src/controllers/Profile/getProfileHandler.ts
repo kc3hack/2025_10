@@ -54,7 +54,7 @@ const getProfileHandler: RouteHandler<typeof getProfileRoute, {}> = async (c: Co
       200
     );
   } catch (err) {
-    console.log('プロフィールの取得に失敗しました．');
+    console.log('プロフィールの取得に失敗しました．' + err);
     return c.json(
       {
         message: 'プロフィールの取得に失敗しました．',

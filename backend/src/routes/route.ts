@@ -7,6 +7,8 @@ import { deletePostRoute } from './Post/deletePostRoute.js';
 import deletePostHandler from '../controllers/Post/deletePostHandler.js';
 import { getPostRoute } from './Post/getPostRoute.js';
 import getPostHandler from '../controllers/Post/getPostHandler.js';
+import { getOnePostRoute } from './Post/getOnePostRoute.js';
+import getOnePostHandler from '../controllers/Post/getOnePostHandler.js';
 import { createMiyabiRoute } from './Miyabi/createMiyabiRoute.js';
 import createMiyabiHandler from '../controllers/Miyabi/createMiyabiHandler.js';
 import { deleteMiyabiRoute } from './Miyabi/deleteMiyabiRoute.js';
@@ -19,12 +21,16 @@ import { getProfileRoute } from './Profile/getProfileRoute.js';
 import getProfileHandler from '../controllers/Profile/getProfileHandler.js';
 import { idiconConverterRoute } from './idiconConverterRoute.js';
 import idiconConverterHandler from '../controllers/idiconConverterHandler.js';
+import { isOurAccountRoute } from './isOurAccountRoute.js';
+import isOurAccountHandler from '../controllers/isOurAccountHandler.js';
 import { sampleS3UploadRoute } from './sampleS3Route.js';
 import sampleS3UploadHandler from '../controllers/sampleS3UploadHandler.js';
 import { sampleS3DownloadRoute } from './sampleS3Route.js';
 import sampleS3DownloadHandler from '../controllers/sampleS3DownloadHandler.js';
 import { sampleGeminiRoute } from './Sample/sampleGeminiRoute.js';
 import sampleGeminiHandler from '../controllers/Sample/sampleGeminiHandler.js';
+import { sampleNewsTankaRoute } from './Sample/sampleNewsTankaRoute.js';
+import sampleNewsTankaHandler from '../controllers/Sample/sampleNewsTankaHandler.js';
 
 const router = new OpenAPIHono();
 
@@ -33,13 +39,16 @@ export default router
   .openapi(createPostRoute, createPostHandler)
   .openapi(deletePostRoute, deletePostHandler)
   .openapi(getPostRoute, getPostHandler)
+  .openapi(getOnePostRoute, getOnePostHandler)
   .openapi(createMiyabiRoute, createMiyabiHandler)
   .openapi(deleteMiyabiRoute, deleteMiyabiHandler)
   .openapi(getMiyabiRankingRoute, getMiyabiRankingHandler)
   .openapi(createUserRoute, createUserHandler)
   .openapi(getProfileRoute, getProfileHandler)
   .openapi(idiconConverterRoute, idiconConverterHandler)
+  .openapi(isOurAccountRoute, isOurAccountHandler)
   .openapi(sampleS3UploadRoute, sampleS3UploadHandler)
   .openapi(sampleS3DownloadRoute, sampleS3DownloadHandler)
-  .openapi(sampleGeminiRoute, sampleGeminiHandler);
+  .openapi(sampleGeminiRoute, sampleGeminiHandler)
+  .openapi(sampleNewsTankaRoute, sampleNewsTankaHandler);
 // .openapi(helloRoute, helloWorldHandler); //こういう感じで足していく

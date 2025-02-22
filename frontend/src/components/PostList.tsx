@@ -3,6 +3,7 @@
 
 import { PostTypes } from '@/types/postTypes';
 import Post from '@/components/Post';
+import { motion } from 'framer-motion';
 
 // props の型定義
 interface PostListProps {
@@ -21,7 +22,15 @@ const PostList = ({ posts, className, onDelete }: PostListProps) => {
   return (
     <div>
       {posts.map((post, i) => (
-        <Post key={i} post={post} className={className} onDelete={onDelete} />
+        <motion.div
+          key={i}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Post post={post} className={className} onDelete={onDelete} />
+        </motion.div>
       ))}
     </div>
   );
