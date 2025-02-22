@@ -47,7 +47,7 @@ const PostPage = () => {
             transition={{ duration: 0.5 }}
             className='mx-auto max-w-sm pt-5 lg:max-w-lg'
           >
-            {post && <Post post={post} />}
+            {post && <Post post={post} onDelete={() => router.push('/')} />}
           </motion.div>
         )}
       </AnimatePresence>
