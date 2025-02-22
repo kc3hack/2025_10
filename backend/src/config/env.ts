@@ -8,6 +8,7 @@ const envSchema = z.object({
   FRONTEND_URL: z.string().url(),
   PORT: z.coerce.number().optional(),
   GEMINI_API_KEY: z.string(),
+  CURRENTS_API_KEY: z.string(),
   RDB_HOST: z.string(),
   RDB_USER: z.string(),
   RDB_PASSWORD: z.string(),
