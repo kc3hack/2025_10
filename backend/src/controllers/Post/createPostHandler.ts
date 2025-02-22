@@ -37,22 +37,23 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     }
     const original = originalValue;
 
-    const tankaArray = await generateTanka(original);
+    const response = await generateTanka(original);
 
-    // tankaArrayが空([])ならエラーを返す
-    if (tankaArray.length == 0) {
-      console.log('tankaが空です．');
+    // gemini APIのエラー確認
+    if (response.isSuccess == false) {
+      console.log(response.message);
       return c.json(
         {
-          message: 'tankaが空です．',
+          message: response.message,
           statusCode: 500,
-          error: 'Internal Server Error',
+          error: response.message,
         },
         500
       );
     }
 
-    const tanka = JSON.stringify(tankaArray);
+    const tanka = JSON.stringify(response.tanka);
+    //console.log(tanka);
 
     // imageがnullならimage_pathをnullにする．
     let image_path;
@@ -78,9 +79,9 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
           console.error('画像圧縮エラー:', err);
           return c.json(
             {
-              message: '画像の圧縮に失敗しました．',
+              message: '画像のアップロードに失敗しました．',
               statusCode: 500,
-              error: 'Internal Server Error',
+              error: '画像のアップロードに失敗しました．',
             },
             500
           );
@@ -96,17 +97,17 @@ const createPostHandler: RouteHandler<typeof createPostRoute, {}> = async (c: Co
     return c.json(
       {
         message: '投稿しました．',
-        tanka: tankaArray,
+        tanka: response.tanka,
       },
       200
     );
   } catch (err) {
-    console.log('投稿に失敗しました．');
+    console.log('投稿に失敗しました．' + err);
     return c.json(
       {
         message: '投稿に失敗しました．',
         statusCode: 500,
-        error: 'Internal Server Error',
+        error: '投稿に失敗しました．',
       },
       500
     );
