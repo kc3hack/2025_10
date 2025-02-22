@@ -14,13 +14,10 @@ import Loading from '@/components/Loading';
 import AfterYomu from './AfterYomu';
 import { calcFileSize } from '@/lib/CalcFileSize';
 import FileUploadButton from '@/components/FileUploadButton';
-
+import { checkAuthUser } from './CheckAuthUser';
 const MAX_LENGTH = 140; // 最大文字数
 
-// 絶対戻す↓
-// ぜったいもどす↓
 const MIN_LENGTH = 1; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
-// ぜったいもどす↑
 const MAX_IMAGE_SIZE = 5; // 最大画像サイズ
 
 enum PostStatus {
@@ -68,6 +65,7 @@ const SignedInPage = (): React.ReactNode => {
   const [canPost, setCanPost] = useState(false); // 投稿可能か: 文字数から計算する
   const [isDialogOpen, setIsDialogOpen] = useState(false); // 下書き削除のダイアログの表示状態
   const [isErrorDialogOpen, setIsErrorDialogOpen] = useState(false); // 投稿失敗のダイアログの表示状態
+  const [notAuthorizedDialogOpen, setNotAuthorizedDialogOpen] = useState(false); // 当日デモ用 : 事前に認可されたユーザーかどうか
   const session = useSession();
   const [file, setFile] = useState<UploadedFile | null>(null);
 
@@ -139,6 +137,14 @@ const SignedInPage = (): React.ReactNode => {
   // 投稿ボタンを押した時の処理
   const onClickYomuButton = async () => {
     setPostStatus(PostStatus.POSTING);
+
+    // デモ用 : 事前に認可されたユーザーかどうかを確認
+    const isAuthorized = await checkAuthUser({ iconUrl: session.data?.user?.image ?? '' });
+    if (!isAuthorized) {
+      setNotAuthorizedDialogOpen(true);
+      return;
+    }
+
     // console.log('投稿');
     const res = await postYomu({
       originalText: text,
@@ -245,9 +251,8 @@ const SignedInPage = (): React.ReactNode => {
 
             {!canPost && (
               <p className='mt-2 text-center text-sm text-red-500'>
-                ※{MIN_LENGTH}文字以上{MAX_LENGTH}文字以内で投稿できます。
+                ※{MAX_LENGTH}文字以内で投稿できます。
                 <br />
-                ※実験中 : 1文字以上で投稿できます。
               </p>
             )}
 
@@ -271,6 +276,17 @@ const SignedInPage = (): React.ReactNode => {
               isOnlyOK={true}
               yesCallback={() => {
                 setIsErrorDialogOpen(false);
+                setPostStatus(PostStatus.INITIAL);
+              }}
+              yesText='はい'
+            />
+
+            <Dialog
+              isOpen={notAuthorizedDialogOpen}
+              description='本日は事前に認可されたユーザーのみが投稿できます。'
+              isOnlyOK={true}
+              yesCallback={() => {
+                setNotAuthorizedDialogOpen(false);
                 setPostStatus(PostStatus.INITIAL);
               }}
               yesText='はい'
