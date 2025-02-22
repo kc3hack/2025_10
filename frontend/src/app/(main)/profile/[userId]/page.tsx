@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Timeline from '@/components/Timeline';
 import fetchProfile from './actions/fetchProfile';
 import { ProfileTypes } from '@/types/profileTypes';
@@ -15,15 +15,18 @@ import { ProfileTypes } from '@/types/profileTypes';
 const Profile = () => {
   const { userId } = useParams() as { userId: string };
   const [profile, setProfile] = useState<ProfileTypes | null>(null);
+  const router = useRouter();
 
   // ユーザIDからプロフィールをFetchする
   useEffect(() => {
     const getProfile = async () => {
+      if (profile) return;
       const data = await fetchProfile({ userId: userId as string });
+      if (!data) router.push('/user-not-found');
       setProfile(data);
     };
     getProfile();
-  }, [userId]);
+  }, [userId, router, profile]);
 
   // totalPost に応じた背景色のクラスを決定
   const getBackgroundClass = () => {
