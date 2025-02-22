@@ -66,21 +66,21 @@ const Profile = () => {
                     alt='筆'
                     width={80}
                     height={80}
-                    className='absolute left-[-140px] top-[-20px]'
+                    className='absolute left-[-80px] top-[-20px] size-[80px] md:left-[-80px]  lg:left-[-140px] '
                   />
                   <Image
                     src='/syodou_sumi_bou.png'
                     alt='墨棒'
                     width={100}
                     height={100}
-                    className='absolute right-[-140px]'
+                    className='absolute bottom-[-40px] right-[-100px] size-[100px] md:right-[-100px] lg:right-[-140px]'
                   />
                   <Image
                     src='/syodou_suzuri.png'
                     alt='硯'
                     width={80}
                     height={80}
-                    className='absolute bottom-[-100px] left-[-140px]'
+                    className='absolute bottom-[-100px] left-[-80px] size-[80px] md:left-[-80px]  lg:left-[-140px] '
                   />
                 </div>
               </div>
