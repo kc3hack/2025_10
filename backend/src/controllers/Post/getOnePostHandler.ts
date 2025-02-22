@@ -70,7 +70,7 @@ const getOnePostHandler: RouteHandler<typeof getOnePostRoute, {}> = async (c: Co
         tanka: results[0].tanka,
         image_path: results[0].image_path,
         created_at: results[0].created_at,
-        user_id: results[0].user_icon,
+        user_id: results[0].user_id,
         user_name: results[0].user_name,
         user_icon: results[0].user_icon,
         miyabi_count: results[0].miyabi_count,
