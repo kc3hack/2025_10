@@ -1,7 +1,7 @@
 // クライアントコンポーネント
 'use client';
 
-import { CiUser, CiSettings, CiLogout, CiLogin, CiClock2 } from 'react-icons/ci';
+import { CiUser, CiLogout, CiLogin, CiClock2 } from 'react-icons/ci';
 import { PiRankingLight } from 'react-icons/pi';
 import Image from 'next/image';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -104,22 +104,6 @@ const SideMenu = ({ className, style, setIsOpen }: SideMenuProps) => {
         <a className={`pl-1 text-xl ${pathname === PATHNAME.RANKING ? 'font-bold' : ''}`}>
           雅ランキング
         </a>
-      </div>
-      <div
-        onClick={() => {
-          if (isLoggedIn) {
-            if (setIsOpen) setIsOpen(false);
-            router.push(PATHNAME.SETTINGS);
-          } else {
-            setLoginDialogOpen(true);
-          }
-        }}
-        className={`flex items-center rounded-lg hover:cursor-pointer hover:bg-black/5 ${
-          pathname === PATHNAME.SETTINGS ? 'bg-orange-200' : 'bg-transparent'
-        }`}
-      >
-        <CiSettings size={28} />
-        <a className={`pl-1 text-xl ${pathname === PATHNAME.SETTINGS ? 'font-bold' : ''}`}>設定</a>
       </div>
       {!isLoggedIn && (
         <div
