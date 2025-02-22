@@ -2,8 +2,9 @@
 'use client';
 
 import { useState } from 'react';
-import { MdOutlineMenu } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 import SideMenu from '@/components/SideMenu';
+import { MdOutlineMenu } from 'react-icons/md';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
@@ -15,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const HeaderAndMenu = () => {
   // ハンバーガーメニューの開閉状態
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <div>
@@ -27,7 +29,14 @@ const HeaderAndMenu = () => {
           }}
           className='absolute left-3 lg:hidden'
         />
-        <div className=''>Tankalizer</div>
+        <div
+          onClick={() => {
+            router.push('/');
+          }}
+          className='hover:cursor-pointer hover:underline'
+        >
+          Tankalizer
+        </div>
       </div>
       {/* サイドメニュー */}
       <div className='pt-12'>
