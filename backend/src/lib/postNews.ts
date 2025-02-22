@@ -48,10 +48,7 @@ const postNews = async (requestApiKey: string) => {
   try {
     const formData = new FormData();
     formData.append('original', originalText);
-    formData.append(
-      'user_icon',
-      `https://avatars.githubusercontent.com/u/${env.NEWS_USER_ICON}?v=4`
-    );
+    formData.append('user_icon', `https://avatars.githubusercontent.com/u/${env.NEWS_USER_ID}?v=4`);
     formData.append('user_name', '風聞');
 
     const postResponse = await fetch(`http://localhost:8080/post`, {
