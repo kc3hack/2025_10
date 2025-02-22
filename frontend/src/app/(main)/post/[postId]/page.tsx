@@ -22,6 +22,7 @@ const PostPage = () => {
 
   // 投稿IDから投稿をFetchする
   useEffect(() => {
+    let isMounted = true;
     const getPost = async () => {
       if (session.status === 'loading') return;
       if (post) return;
@@ -29,10 +30,14 @@ const PostPage = () => {
         postId: postId as string,
         iconUrl: session.data?.user?.image ?? '',
       });
+      if (!isMounted) return;
       if (!data) router.push('/post-not-found');
       setPost(data);
     };
     getPost();
+    return () => {
+      isMounted = false;
+    };
   }, [postId, session.data?.user?.image, session.status, router, post]);
 
   return (
