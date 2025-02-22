@@ -11,12 +11,12 @@ export const checkAuthUser = async ({ iconUrl }: { iconUrl: string }): Promise<b
   try {
     console.log(iconUrl);
 
-    const res = await fetch(`${backendUrl}/check-auth-user`, {
+    const res = await fetch(`${backendUrl}/isOurAccount`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ iconUrl }),
+      body: JSON.stringify({ icon_url: iconUrl }),
     });
 
     console.log(res);
@@ -27,7 +27,7 @@ export const checkAuthUser = async ({ iconUrl }: { iconUrl: string }): Promise<b
 
     const json = await res.json();
 
-    return json.isAuthorized;
+    return json.isOurAccount;
   } catch (error) {
     console.error(error);
     return false;
