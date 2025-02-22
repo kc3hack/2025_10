@@ -9,6 +9,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().optional(),
   GEMINI_API_KEY: z.string(),
   CURRENTS_API_KEY: z.string(),
+  NEWS_POST_API_KEY: z.string(),
   RDB_HOST: z.string(),
   RDB_USER: z.string(),
   RDB_PASSWORD: z.string(),
