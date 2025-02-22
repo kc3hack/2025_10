@@ -103,7 +103,7 @@ const getPostHandler: RouteHandler<typeof getPostRoute, {}> = async (c: Context)
       200
     );
   } catch (err) {
-    console.log('投稿の取得に失敗しました．');
+    console.log('投稿の取得に失敗しました．' + err);
     return c.json(
       {
         message: '投稿の取得に失敗しました．',

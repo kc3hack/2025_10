@@ -40,7 +40,7 @@ const deleteMiyabiHandler: RouteHandler<typeof deleteMiyabiRoute, {}> = async (c
       200
     );
   } catch (err) {
-    console.log('雅の削除に失敗しました．');
+    console.log('雅の削除に失敗しました．' + err);
     return c.json(
       {
         message: '雅の削除に失敗しました．',
