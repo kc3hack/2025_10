@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import SideMenu from '@/components/SideMenu';
 import { motion, AnimatePresence } from 'framer-motion';
 import HambergerButton from './HambergerButton';
@@ -15,6 +16,7 @@ import HambergerButton from './HambergerButton';
 const HeaderAndMenu = () => {
   // ハンバーガーメニューの開閉状態
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <div>
@@ -28,7 +30,14 @@ const HeaderAndMenu = () => {
           isOpen={isMenuOpen}
           className='fixed -left-3 h-12 w-20 lg:hidden'
         />
-        <div className=''>Tankalizer</div>
+        <div
+          onClick={() => {
+            router.push('/');
+          }}
+          className='hover:cursor-pointer hover:underline'
+        >
+          Tankalizer
+        </div>
       </div>
       {/* サイドメニュー */}
       <div className='pt-12'>
