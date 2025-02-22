@@ -19,19 +19,14 @@ const Profile = () => {
 
   // ユーザIDからプロフィールをFetchする
   useEffect(() => {
-    let isMounted = true;
     const getProfile = async () => {
-      if (profile) return;
+      if (!userId) return;
       const data = await fetchProfile({ userId: userId as string });
-      if (!isMounted) return;
       if (!data) router.push('/user-not-found');
       setProfile(data);
     };
     getProfile();
-    return () => {
-      isMounted = false;
-    };
-  }, [userId, router, profile]);
+  }, [userId, router]);
 
   // totalPost に応じた背景色のクラスを決定
   const getBackgroundClass = () => {
