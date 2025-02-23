@@ -1,13 +1,13 @@
 import { z } from '@hono/zod-openapi';
 
-export const sampleNewsTankaSchema = z.object({
+export const newsTankaSchema = z.object({
   apiKey: z.string().openapi({
     example: 'abc123',
     description: 'APIキー',
   }),
 });
 
-export const sampleNewsTankaResponseSchema = z.object({
+export const newsTankaResponseSchema = z.object({
   isSuccess: z.boolean().openapi({
     example: true,
     description: '短歌の生成に成功したかどうか',
