@@ -24,7 +24,7 @@ const HeaderAndMenu = () => {
           setIsMenuOpen((prev) => !prev);
         }}
         isOpen={isMenuOpen}
-        className='absolute left-3 z-50 size-12 lg:hidden'
+        className='fixed left-3 z-50 h-12 lg:hidden'
       />
       {/* ヘッダ */}
       <div className='fixed top-0 z-30 flex h-12 w-full items-center justify-center bg-white font-kokuryu text-2xl'>
