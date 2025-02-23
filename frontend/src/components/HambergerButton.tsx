@@ -1,7 +1,7 @@
 // クライアントコンポーネント
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { DotLottie } from '@lottiefiles/dotlottie-react';
 
@@ -21,34 +21,40 @@ const HambergerButton = ({ onClick, isOpen, className }: HambergerButtonProps): 
   };
 
   const openMenuAnimation = () => {
+    console.log('open');
     dotlottie?.setMode('forward');
     dotlottie?.play();
   };
 
   const closeMenuAnimation = () => {
+    console.log('close');
     dotlottie?.setMode('reverse');
     dotlottie?.play();
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      openMenuAnimation();
+    } else {
+      closeMenuAnimation();
+    }
+  }, [isOpen]);
+
   return (
     <button
       onClick={() => {
-        if (isOpen) {
-          closeMenuAnimation();
-        } else {
-          openMenuAnimation();
-        }
         onClick?.();
       }}
-      className={`${className} mx-auto block transition-all duration-300 hover:scale-110`}
+      className={`${className} mx-auto`}
     >
       <DotLottieReact
         src={'/lottie/hamberger.lottie'}
-        segment={[0, 30]}
+        segment={[12, 30]}
         autoplay={false}
         loop={false}
-        speed={1.0}
+        speed={1.2}
         mode='forward'
+        className='size-full'
         dotLottieRefCallback={dotLottieRefCallback}
       />
     </button>

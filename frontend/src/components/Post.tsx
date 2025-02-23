@@ -18,7 +18,7 @@ import deletePost from '@/app/(main)/timeline/actions/deletePost';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const baseUrl = process.env.BASE_URL ?? 'http://localhost:3000';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000';
 
 // props の型定義
 interface PostProps {

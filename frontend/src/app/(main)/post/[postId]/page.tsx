@@ -1,55 +1,48 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useParams } from 'next/navigation';
-import { PostTypes } from '@/types/postTypes';
-import Post from '@/components/Post';
+import React from 'react';
 import fetchOnePost from './actions/fetchOnePost';
-import { AnimatePresence, motion } from 'framer-motion';
+import PostPage from './PostPage';
+import { notFound } from 'next/navigation';
 
+const tankaToString = (tanka: string[]) => {
+  return tanka.join(' ');
+};
+
+export const generateMetadata = async (context: { params: Promise<{ postId: string }> }) => {
+  const params = await context.params;
+
+  const post = await fetchOnePost({
+    postId: params.postId,
+    iconUrl: '',
+  });
+
+  if (!post) return { title: '投稿が見つかりません' };
+
+  return {
+    title: `Tankalizer: ${post.user.name}さんの短歌`,
+    description: tankaToString(post.tanka),
+  };
+};
 /**
  * 指定されたIDの投稿を表示する．
  * @async
  * @function Post
  * @returns {JSX.Element} プロフィールを表示するReactコンポーネント
  */
-const PostPage = () => {
-  const { postId } = useParams() as { postId: string };
-  const [post, setPost] = useState<PostTypes | null>(null);
-  // セッションの取得
-  const session = useSession();
+const Page = async (context: { params: Promise<{ postId: string }> }) => {
+  const params = await context.params;
 
-  // 投稿IDから投稿をFetchする
-  useEffect(() => {
-    const getPost = async () => {
-      if (session.status === 'loading') return;
-      const data = await fetchOnePost({
-        postId: postId as string,
-        iconUrl: session.data?.user?.image ?? '',
-      });
-      setPost(data);
-    };
-    getPost();
-  }, [postId, session.data?.user?.image, session.status]);
+  const post = await fetchOnePost({
+    postId: params.postId,
+    iconUrl: '',
+  });
+
+  if (!post) notFound();
 
   return (
     <div>
-      {!post && <p className='py-3 text-center'>短歌を取得中...</p>}
-      <AnimatePresence mode='wait'>
-        {post && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className='mx-auto max-w-sm pt-5 lg:max-w-lg'
-          >
-            {post && <Post post={post} />}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <PostPage post={post} />
     </div>
   );
 };
 
-export default PostPage;
+export default Page;
