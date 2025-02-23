@@ -6,6 +6,7 @@ import { PostTypes } from '@/types/postTypes';
 import Post from '@/components/Post';
 import fetchOnePost from './actions/fetchOnePost';
 import { AnimatePresence, motion } from 'framer-motion';
+import Head from 'next/head';
 
 /**
  * 指定されたIDの投稿を表示する．
@@ -35,8 +36,19 @@ const PostPage = () => {
     getPost();
   }, [postId, session.data?.user?.image, session.status, router]);
 
+  const tankaToString = (tanka: string[]) => {
+    return tanka.join('\n');
+  };
+
   return (
     <div>
+      {post && (
+        <Head>
+          <title>Tankalizer:{`${post.user.name}さんの短歌`}</title>
+          <meta name='description' content={tankaToString(post.tanka)} />
+        </Head>
+      )}
+
       {!post && <p className='py-3 text-center'>短歌を取得中...</p>}
       <AnimatePresence mode='wait'>
         {post && (
