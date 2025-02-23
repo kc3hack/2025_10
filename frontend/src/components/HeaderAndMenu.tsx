@@ -4,9 +4,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SideMenu from '@/components/SideMenu';
-import { MdOutlineMenu } from 'react-icons/md';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import HambergerButton from '@/components/HambergerButton';
 /**
  * サイドメニューを表示するコンポーネント
  * @component HeaderAndMenu
@@ -20,15 +19,15 @@ const HeaderAndMenu = () => {
 
   return (
     <div>
+      <HambergerButton
+        onClick={() => {
+          setIsMenuOpen((prev) => !prev);
+        }}
+        isOpen={isMenuOpen}
+        className='absolute left-3 z-50 size-12 lg:hidden'
+      />
       {/* ヘッダ */}
-      <div className='fixed top-0 z-40 flex h-12 w-full items-center justify-center bg-white font-kokuryu text-2xl'>
-        <MdOutlineMenu
-          onClick={() => {
-            setIsMenuOpen(true);
-            console.log('open');
-          }}
-          className='absolute left-3 lg:hidden'
-        />
+      <div className='fixed top-0 z-30 flex h-12 w-full items-center justify-center bg-white font-kokuryu text-2xl'>
         <div
           onClick={() => {
             router.push('/');
@@ -47,7 +46,7 @@ const HeaderAndMenu = () => {
       {/* ハンバーガーメニュー */}
       <AnimatePresence mode='wait'>
         {isMenuOpen && (
-          <div className='fixed inset-0 z-50 justify-center lg:hidden'>
+          <div className='fixed inset-0 z-40 justify-center lg:hidden'>
             <motion.div
               initial={{ opacity: 0, x: '-30%' }}
               animate={{ opacity: 1, x: 0 }}
