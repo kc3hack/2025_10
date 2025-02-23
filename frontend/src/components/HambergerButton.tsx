@@ -54,6 +54,7 @@ const HambergerButton = ({ onClick, isOpen, className }: HambergerButtonProps): 
         loop={false}
         speed={1.2}
         mode='forward'
+        className='size-full'
         dotLottieRefCallback={dotLottieRefCallback}
       />
     </button>
