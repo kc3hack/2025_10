@@ -11,7 +11,7 @@ const getNews = async () => {
       `https://api.currentsapi.services/v1/latest-news?language=ja&apiKey=${env.CURRENTS_API_KEY}`
     );
 
-    // HTTPエラーが発生した場合
+    // HTTPエラーが発生した場合（たまにここでエラーが起きる）
     if (!response.ok) {
       throw new Error(`【getNews】HTTPエラー: ${response.status}`);
     }
