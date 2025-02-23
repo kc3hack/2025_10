@@ -25,20 +25,29 @@ const getNews = async () => {
       throw new Error(`【getNews】ニュースの取得に失敗しました。（status: ${data.status}）`);
     }
 
-    const newsArray = data.news;
+    // ニュースの配列
+    const newsAllArray = data.news;
 
-    let news;
-    for (let i = 0; i < newsArray.length; i++) {
-      const newsTemp = newsArray[i];
-      if (newsTemp.title !== '' && newsTemp.description !== '' && newsTemp.url !== '') {
-        news = newsTemp;
-        break;
+    // 表示できるニュースの配列
+    let satisfiedNewsArray = [];
+    for (let i = 0; i < newsAllArray.length; i++) {
+      if (
+        newsAllArray[i].title !== '' &&
+        newsAllArray[i].description !== '' &&
+        newsAllArray[i].url !== ''
+      ) {
+        satisfiedNewsArray.push(newsAllArray[i]);
       }
     }
 
-    if (!news) {
+    if (satisfiedNewsArray.length === 0) {
       throw new Error('【getNews】表示できるニュースがありません。');
     }
+
+    // 表示できるニュースの配列からランダムに1つ選択
+    const randomIndex = Math.floor(Math.random() * satisfiedNewsArray.length);
+    const news = satisfiedNewsArray[randomIndex];
+
     return {
       isSuccess: true,
       news: {
