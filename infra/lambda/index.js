@@ -23,8 +23,11 @@ export const handler = async (event, context) => {
 		const text = await response.text();
 
 		if (!response.ok) {
+			console.error(`HTTP error! status: ${response.status}`);
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
+
+		console.log(`Fetched ${targetUrl} successfully.: ${text}`);
 
 		return {
 			statusCode: 200,
@@ -35,6 +38,7 @@ export const handler = async (event, context) => {
 			}),
 		};
 	} catch (error) {
+		console.error(`Error fetching ${targetUrl}: ${error}`);
 		return {
 			statusCode: 500,
 			body: JSON.stringify(`Error fetching ${targetUrl}: ${error}`),
