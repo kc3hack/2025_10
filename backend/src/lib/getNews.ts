@@ -13,16 +13,16 @@ const getNews = async () => {
 
     // HTTPエラーが発生した場合
     if (!response.ok) {
-      throw new Error(`HTTPエラー: ${response.status}`);
+      throw new Error(`【getNews】HTTPエラー: ${response.status}`);
     }
 
     const data = await response.json();
 
-    console.log(data);
+    // console.log(data);
 
     // ニュースの取得に失敗した場合
     if (data.status !== 'ok') {
-      throw new Error('ニュースの取得に失敗しました。');
+      throw new Error(`【getNews】ニュースの取得に失敗しました。（status: ${data.status}）`);
     }
 
     const newsArray = data.news;
@@ -37,7 +37,7 @@ const getNews = async () => {
     }
 
     if (!news) {
-      throw new Error('表示できるニュースがありません。');
+      throw new Error('【getNews】表示できるニュースがありません。');
     }
     return {
       isSuccess: true,

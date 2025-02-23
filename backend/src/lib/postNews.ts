@@ -29,7 +29,7 @@ const postNews = async (requestApiKey: string) => {
     return {
       isSuccess: false,
       tanka: {
-        line0: 'ニュースの取得に失敗しました',
+        line0: newsResponse.message,
         line1: '',
         line2: '',
         line3: '',
@@ -56,33 +56,31 @@ const postNews = async (requestApiKey: string) => {
       body: formData,
     });
 
-    console.log('postResponse', postResponse);
+    // console.log('postResponse', postResponse);
 
     if (!postResponse.ok) {
-      return {
-        isSuccess: false,
-        tanka: {
-          line0: '',
-          line1: '',
-          line2: '',
-          line3: '',
-          line4: '',
-        },
-      };
+      throw new Error(`【postNews】HTTPエラー: ${postResponse.status}`);
     }
 
-    const json = await postResponse.json();
+    const jsonPostResponse = await postResponse.json();
+    // console.log('jsonPostResponse', jsonPostResponse);
+
+    if (jsonPostResponse.message !== '投稿しました．') {
+      throw new Error(
+        `【postNews】ニュースの投稿に失敗しました。（status: ${jsonPostResponse.message}）`
+      );
+    }
 
     return {
       isSuccess: true,
-      tanka: json.tanka,
+      tanka: jsonPostResponse.tanka,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     return {
       isSuccess: false,
       tanka: {
-        line0: '投稿に失敗しました',
+        line0: error.message,
         line1: '',
         line2: '',
         line3: '',
