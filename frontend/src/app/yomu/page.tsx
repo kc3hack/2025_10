@@ -14,7 +14,7 @@ import Loading from '@/components/Loading';
 import AfterYomu from './AfterYomu';
 import { calcFileSize } from '@/lib/CalcFileSize';
 import FileUploadButton from '@/components/FileUploadButton';
-import { checkAuthUser } from './CheckAuthUser';
+// import { checkAuthUser } from './CheckAuthUser';
 const MAX_LENGTH = 140; // 最大文字数
 
 const MIN_LENGTH = 1; // 最小文字数→短歌にいい感じに変換するにはこれくらい必要
@@ -139,11 +139,11 @@ const SignedInPage = (): React.ReactNode => {
     setPostStatus(PostStatus.POSTING);
 
     // デモ用 : 事前に認可されたユーザーかどうかを確認
-    const isAuthorized = await checkAuthUser({ iconUrl: session.data?.user?.image ?? '' });
-    if (!isAuthorized) {
-      setNotAuthorizedDialogOpen(true);
-      return;
-    }
+    // const isAuthorized = await checkAuthUser({ iconUrl: session.data?.user?.image ?? '' });
+    // if (!isAuthorized) {
+    //   setNotAuthorizedDialogOpen(true);
+    //   return;
+    // }
 
     // console.log('投稿');
     const res = await postYomu({
