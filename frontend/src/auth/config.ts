@@ -22,6 +22,17 @@ export const providerMap = providers
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   providers,
+  cookies: {
+    pkceCodeVerifier: {
+      name: '__Secure-next-auth.pkce.code_verifier',
+      options: {
+        httpOnly: true,
+        path: '/',
+        secure: true,
+        sameSite: 'lax',
+      },
+    },
+  },
   pages: {
     signIn: '/login',
   },
